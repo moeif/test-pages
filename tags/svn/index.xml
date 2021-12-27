@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>SVN on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/svn/</link>
+    <description>Recent content in SVN on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 13 Feb 2020 14:51:31 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/svn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SVN Cleanup错误 Faild to run the wc db work queue associated with</title>
+      <link>https://blog.moeif.com/posts/solve-svn-clean-up-error/</link>
+      <pubDate>Thu, 13 Feb 2020 14:51:31 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/solve-svn-clean-up-error/</guid>
+      <description>今天svn更新时，因为一个文件问题，导致了 Faild to run the wc db work queue associated with.... 的错误，无法 Cleanup，也无法 Update，无法 Revert，现在记录一下解决方法，很简单，只需要三个 sqlite 命令即可。
+这个过程要用到 sqlite3 的命令行工具，可以在官网下载。找到 Precompiled Binaries for WIndows 中的 sqlite-tools-win32-x86-xxxxxx.zip，点击下载即可，xxxxxx 是指版本号，下载官网上的最新版本即可。
+要在 cmd 中运行，还要将下载并解压后的 sqlite 目录加到环境变量的 Path 中，这样就可以直接在 cmd 中使用 sqlite 命令了。
+下面是解决问题的流程
+ 在 cmd 中通过 cd 命令进入到 svn 工程中的 .svn 目录中 执行命令 sqlite3 wc.db &amp;quot;select * from work_queue&amp;quot; 查看有哪些文件报错 执行命令 sqlite3 wc.db &amp;quot;delete from work_queue&amp;quot; 执行命令 sqlite3 wc.db &amp;quot;delete from wc_lock&amp;quot;  好了，现在工程已经恢复正常。</description>
+    </item>
+    
+  </channel>
+</rss>

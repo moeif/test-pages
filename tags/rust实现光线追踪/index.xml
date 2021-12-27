@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Rust实现光线追踪 on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/</link>
+    <description>Recent content in Rust实现光线追踪 on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 11 Dec 2021 20:40:15 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rust 光线追踪 14: 最终汇总效果</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-14/</link>
+      <pubDate>Sat, 11 Dec 2021 20:40:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-14/</guid>
+      <description>这一节没有新的知识，只是将之前知识汇总起来，然后生成一张最终的图，最终生成的图如下
+首先，将创建世界及添加物体的代码从 main 函数中删除，然后抽象成一个函数 random_scene，在这个函数中，会随机生成一些球体，并且根据规则，随机使用我们的已有的三个材质。
+// src/main.rs fn random_scene() -&amp;gt; HittableList { let mut world = HittableList::new(); let ground_material = Lambertian::new(Color::new(0.5, 0.5, 0.5)); world.add(Box::new(Sphere::new( Vec3::new(0.0, -1000.0, 0.0), 1000.0, ground_material, ))); let mut rng = rand::thread_rng(); // 生成一些小球  for a in -11..11 { for b in -11..11 { let choose_mat: f64 = rng.gen(); let x_offset: f64 = rng.gen(); let z_offset: f64 = rng.gen(); let center = Vec3::new(a as f64 + 0.</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 13: 散焦模糊</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-13/</link>
+      <pubDate>Fri, 10 Dec 2021 20:19:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-13/</guid>
+      <description>&lt;p&gt;散焦模糊，通俗来讲就是在聚焦区域外的东西，都是模糊的。通常这种效果被称为 Depth Of Field（DOF)，也就是景深。最终效果如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 12: 正交相机</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-12/</link>
+      <pubDate>Wed, 08 Dec 2021 23:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-12/</guid>
+      <description>正交相机所看到的东西大小，与远近无关，只与正交相机的视野（FOV）有关。FOV越大，能看到的世界范围就大，也就是能看到更多的东西，而FOV越小，能看到的世界范围就越小，也就是只能看到较少的东西。
+由于FOV越小，看到的范围就越小，从而，相机的上下界，所发出的射线，所能覆盖的范围，就小。也就是相当于所有的射线，都集中在世界中一个小范围，从这个小范围中取得颜色，填充画布（最后渲染的图片），所以看到的东西就大。而如果FOV很大，射线所能覆盖的世界范围就大，用这个大范围来填充画布，自然同一个物体就会看起来小。
+可以想象一个两个盒子，一个大的，假设口径是50厘米，扣在一把键盘上，可以扣住整个键盘，相当于摄像机看到了整个键盘。而将一个1厘米口径的盒子，扣在键盘上，可能只能覆盖其中一个键，也就是相机只能看到这一个键范围的东西。但最后都会将扣到的东西填充到画布上，所以，就相当于FOV越小，看到的东西就越大。
+添加相机FOV逻辑 在本文中，相机的FOV，我们使用角度来表示，上图中，$\theta$ 就是相机的开口大小，而 $h = \tan(\frac{\theta}{2})$，$2 * h$就是视口的高度，而视口的宽度，通过自定义的宽高比，来动态计算出来。
+下面修改 camera.rs 的代码，添加 fov 和 宽高比。
+// src/camera.rs impl Camera { pub fn new(vfov: f64, aspect_ratio: f64) -&amp;gt; Self { let theta = vfov * std::f64::consts::PI / 180.0; let h = (theta / 2.0).tan(); let viewport_height = 2.0 * h; let viewport_width = aspect_ratio * viewport_height; let focal_length = 1.0; let origin = Vec3::zero(); let horizontal = Vec3::new(viewport_width, 0.0, 0.</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 11: 折射</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/</link>
+      <pubDate>Tue, 07 Dec 2021 15:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/</guid>
+      <description>关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。
+下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。
+斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：
+$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$
+其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。
+要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知
+$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$
+我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$
+$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$
+由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$
+根据上面的规则，可以使用新的方式来表示垂直向量
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $
+综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 10: 材质</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/</link>
+      <pubDate>Sat, 04 Dec 2021 12:44:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/</guid>
+      <description>&lt;p&gt;在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。&lt;/p&gt;
+&lt;p&gt;最终的渲染图如下&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://blog.moeif.com/postimages/rtiowrs/1001.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 09: 理想散射</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-09/</link>
+      <pubDate>Wed, 01 Dec 2021 13:26:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-09/</guid>
+      <description>上一节生成的图看起来很暗，有一个问题是因为有些物体反射的光线，会在 t = 0 时再次击中自己，而由于浮点数精度的问题，这些值可能是 0.00000001 或 -0.0000001 之类的任意接近0的浮点数，所以我们 hit 函数的 t_min 参数，需要忽略掉 0 附近的一小部分范围，防止物体发出的光线再次与自己相交。这样也就避免了阴影痤疮（Shadow ance）的产生。
+修改 main.rs 中 ray_color 函数中的 word.hit()，改为 if let Some(hit_record) = world.hit(r, 0.001, f64::INFINITY)，也就是 t_min 参数传值 0.001。
+cargo run --release &amp;gt; diffuse_random_in_sphere.ppm 生成图如下
+可以看到，已经比上一节生成的图亮了很多。
+我们上一节使用的漫反射光线散射的方法，是在球体内部生成一个随机的点。然后，这样生成的向量，有很大的概率会和法线方向相近，并且及小概率会沿着入射方向反射回去。然而，真正的理想散射（Lambertian 反射）后的光线距离法向量比较近的概率会更高，但是分布规律会更加均衡，而实现这个方法，就是在球面上选取一个点，而不是在球内。我们可以通过在球内选取一个点，然后将其标准化，来得到球面上的点，因为我们的球是单位球。
+在 vec3.rs 中 Vec3 的实现里，添加一个新的方法 random_unit_vector，代码如下
+// src/vec3.rs pub fn random_unit_vector() -&amp;gt; Vec3 { let point = Vec3::random_in_unit_sphere(); return Vec3::unit_vector(point); } 然后修改 main.rs 中的 ray_color 函数，将原来调用 random_in_unit_sphere 的代码改成调用 random_unit_vector。</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 08: 漫反射和伽马校正</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-08/</link>
+      <pubDate>Tue, 30 Nov 2021 13:50:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-08/</guid>
+      <description>&lt;p&gt;漫反射的通俗理解是，当一个光线打到某一个物体的某一个点上，这条光线一部分会被吸收，一部分会被随机的反射出去，而反射出去的光线，又可能会打到另一个物体面上的一个点，然后又会被吸收，以及随机的反射出去。现实中的光线可能会无限递归下去，但是我们在程序中实现，不可能无限递归，会设置一个反射次数，达到了那个次数，就停止。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 07: 抗锯齿和相机抽象</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-07/</link>
+      <pubDate>Wed, 24 Nov 2021 20:50:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-07/</guid>
+      <description>&lt;p&gt;将上一节生成的图放大来看，可以看到球体的边缘与存在着很明显的锯齿，这一节我们首先将相机的代码进行抽象，写在一个 Camera 结构体里，然后加入抗锯齿的逻辑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 06: 代码抽象</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-06/</link>
+      <pubDate>Tue, 23 Nov 2021 20:15:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-06/</guid>
+      <description>&lt;p&gt;这一节的内容修改的比较多，我们会把前面的逻辑重新整理一下，将可光线可交互的世界物体，抽象成一个 &lt;code&gt;Hittable Object&lt;/code&gt;，然后可以在场景中添加多个物体。也使用了 Rust 的 Trait，Vec 等。最终效果图如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 05: 简化 hit_sphere 函数</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-05/</link>
+      <pubDate>Mon, 22 Nov 2021 22:06:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-05/</guid>
+      <description>&lt;p&gt;这一节比较简单，就是将上一节的 &lt;code&gt;hit_sphere&lt;/code&gt; 函数进行一定的简化，直接看代码。代码中简化之前的已经注释，可以直接对比一下，不同的计算方式，最终算出来的值都是一样的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 04: 显示球体的法线</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-04/</link>
+      <pubDate>Sun, 21 Nov 2021 15:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-04/</guid>
+      <description>&lt;p&gt;法线的定义是垂直于面的向量。对于一个球体来说，法线的向量，就是球上某个点，减去球心坐标，所得到的向量。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 03: 渲染一个圆</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-03/</link>
+      <pubDate>Sat, 20 Nov 2021 22:10:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-03/</guid>
+      <description>下面的公式有点多，只是把原教程中的公式详细展开了，一步一步来，很简单，相信我。
+给定一个点，判断一个点是否在一个半径为 $R$ 的圆或者圆外、圆内，我们可以使用下面的公式来判断。这里假设圆心在 $(0，0，0)$ 点，半径为 $R$
+如果一个点 $(x, y, z)$ 在圆上，则 $x^2 + y^2 + z^2 = R^2$
+如果一个点 $(x, y, z)$ 在圆内，则 $x^2 + y^2 + z^2 &amp;lt; R^2$
+如果一个点 $(x, y, z)$ 在圆外，则 $x^2 + y^2 + z^2 &amp;gt; R^2$
+假设圆心在点 $C = (C_x, C_y, C_z)$，半径为 r，则根据上面的第一个公式，可以得到
+$(x - C_x)^2 + (y - C_y)^2 + (z - C_z)^2 = r^2$
+我们可以将点 $(x, y, z)$ 使用之前的 Vec3 向量表示，例如设 $点P = (x, y, z)$，则可以将上面的公式，换一种表达形式，也就是</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 02: 使用光线生成渐变图</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-02/</link>
+      <pubDate>Sat, 20 Nov 2021 11:58:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-02/</guid>
+      <description>&lt;p&gt;这个小节的目标是添加光线相光内容，根据光线打在屏幕上不同的位置，生成一张蓝白渐变图。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 01: 输出PPM</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-01/</link>
+      <pubDate>Thu, 18 Nov 2021 17:30:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-01/</guid>
+      <description>&lt;p&gt;这个系列的博客是使用 Rust 来实现 《Ray Tracing in One Weekend》相关的内容，我们把整本书拆开，来分篇实现，这们可以进一步降低难度。PPM是一个简单的图片格式，它将RGB的颜色使用 ASCII 的形式记录在文件中。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

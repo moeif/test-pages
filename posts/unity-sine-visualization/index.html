@@ -1,0 +1,248 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>使用Unity3D展示Sin函数动画 | 萌一小栈</title>
+<meta name=keywords content="游戏开发">
+<meta name=description content="今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 Sin 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 Shader 来实现。">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/unity-sine-visualization/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="使用Unity3D展示Sin函数动画">
+<meta property="og:description" content="今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 Sin 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 Shader 来实现。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/unity-sine-visualization/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-01-06T13:05:08+08:00">
+<meta property="article:modified_time" content="2020-01-06T13:05:08+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="使用Unity3D展示Sin函数动画">
+<meta name=twitter:description content="今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 Sin 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 Shader 来实现。">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"使用Unity3D展示Sin函数动画","item":"https://blog.moeif.com/posts/unity-sine-visualization/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用Unity3D展示Sin函数动画","name":"使用Unity3D展示Sin函数动画","description":"今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 Sin 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 Shader 来实现。\n","keywords":["游戏开发"],"articleBody":"今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 Sin 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 Shader 来实现。\n接下来，我们一步一步实现。\n我们先来分析一下这个效果，把问题拆成一个一个小问题，然后逐个解决掉。我们先来考虑一下 Sin 函数的样子，看下面的图\nSin 函数是一个周期函数，也就是说，按照一定的长度去将这个图形切成一段一段的，那每一段都是相同的，而这个长度，就是2π。就像上图中的从 -π 到 π 就是一个周期。假设我们把这条 Sin 函数的曲线看成由一个个很小的点连起来构成的，而每一个点的位置，可以表示成 (x, y)，很明显，x 的范围就是 [-π , π]，而每一个点 y 的值是由 Sin(x) 算出来的。\n那如何让曲线动起来呢？只要 x 的值不断地加上时间增量，就可以了。我们直接来看下代码，注意代码里的注释。\nusing System.Collections; using System.Collections.Generic; using UnityEngine; public class Graph : MonoBehaviour { // 建立一个 Cube  public Transform pointPrefab; // 设定一个值，表示要用多少个 Cube 表示出这条曲线来，值越大，点就越细 [Range(10, 100)] public int resolution = 10; private Transform[] points; private void Awake() { // 求出步长，相当于每一个 cube 的 x 轴相距多远  float step = 2f / resolution; // 缩放一个 Cube  Vector3 scale = Vector3.one * step; Vector3 position; position.y = 0; position.z = 0f; points = new Transform[resolution]; for(int i = 0; i // 将 x 轴限制在 [-1, 1] 之间，这里 + 0.5是偏移半个方块  position.x = (i + 0.5f) * step - 1f; point.localPosition = position; point.localScale = scale; point.SetParent(transform, false); points[i] = point; } } private void Update() { for(int i = 0; i // 每个方块的 x 轴是确定的，y 轴的计算就是不断地用 x 轴坐标加上时间增量，  // 来做到周期移动的效果。这里之乘以 Mathf.PI 是为了将整个图像压缩在一定范围  position.y = Mathf.Sin((position.x + Time.time) * Mathf.PI); point.localPosition = position; } } } 建立一个 Cube，做成 Prefab，在场景中建立一个空物体，坐标归0，然后挂上上面的脚本。将 Prefab 拖到脚本的变量上，然后运行即可看到效果。\n下面再来说一下如何动态改变颜色。颜色的变化，文章开始的图片中的颜色是由点的坐标位置决定的。坐标 x 值决定颜色的 r 通道，坐标 y 值决定颜色的 g 通道。所以，在 Shader 中首先要知道方块的坐标，然后坐标 x，y 值后，就可以设定颜色。(先写一个 Shader，然后新建一个 Material，并且使用我们写的 Shader，然后将 Material 赋予 Cube 的 Prefab)\n注意：对于 Shader 来说 ，INPUT 结构中的 worldPos 是方块每一个顶点的位置\no.Albedo.rg = IN.worldPos.xy * 0.5 + 0.5; 这一句就是根据坐标值设定颜色的 Shader 代码。这里为什么要乘 0.5 加 0.5 呢？因为上面的C#代码中，我们将每一个 Cube 的位置设置为了[-1, 1]之间，但是颜色的值不能为负，所以这里的乘 0.5 加 0.5 其实就是将坐标值映射为 [0, 1] 之间，从而作为颜色值来用。\n下面的 Shader 代码是在 Unity 2018 中新建一个 Surface Shader，然后删除里面一些不必要的代码，然后添加我们自己的代码，大部分都是 Unity 自己生成的，大家可以对比一下不同。\nShader \"Custom/ColoredPoint\" { Properties { _Glossiness (\"Smoothness\", Range(0,1)) = 0.5 _Metallic (\"Metallic\", Range(0,1)) = 0.0 } SubShader { Tags { \"RenderType\"=\"Opaque\" } LOD 200 CGPROGRAM // Physically based Standard lighting model, and enable shadows on all light types #pragma surface surf Standard fullforwardshadows // Use shader model 3.0 target, to get nicer looking lighting #pragma target 3.0 struct Input { // 这一句是我们自己写的 float3 worldPos; }; half _Glossiness; half _Metallic; // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader. // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing. // #pragma instancing_options assumeuniformscaling UNITY_INSTANCING_BUFFER_START(Props) // put more per-instance properties here UNITY_INSTANCING_BUFFER_END(Props) void surf (Input IN, inout SurfaceOutputStandard o) { // 这一句也是我们自己写的 o.Albedo.rg = IN.worldPos.xy * 0.5 + 0.5; // Metallic and smoothness come from slider variables o.Metallic = _Metallic; o.Smoothness = _Glossiness; // 这一句也是我们自己写的 o.Alpha = 1; } ENDCG } FallBack \"Diffuse\" } 现在再次运行一下，是不是已经做到了文章一开始的那个图的效果。\n","wordCount":"406","inLanguage":"en","datePublished":"2020-01-06T13:05:08+08:00","dateModified":"2020-01-06T13:05:08+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/unity-sine-visualization/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+使用Unity3D展示Sin函数动画
+</h1>
+<div class=post-meta><span title="2020-01-06 13:05:08 +0800 CST">January 6, 2020</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 <code>Sin</code> 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 <code>Shader</code> 来实现。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U76235038e84646938c8136733f4d2c81J.gif alt=p002101_Sin>
+</p>
+<p>接下来，我们一步一步实现。</p>
+<p>我们先来分析一下这个效果，把问题拆成一个一个小问题，然后逐个解决掉。我们先来考虑一下 Sin 函数的样子，看下面的图</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U90e9c98b148b4a179ea563d1fcff8fc4H.gif alt=p002102_sin21>
+</p>
+<p>Sin 函数是一个周期函数，也就是说，按照一定的长度去将这个图形切成一段一段的，那每一段都是相同的，而这个长度，就是2π。就像上图中的从 -π 到 π 就是一个周期。假设我们把这条 Sin 函数的曲线看成由一个个很小的点连起来构成的，而每一个点的位置，可以表示成 (x, y)，很明显，x 的范围就是 [-π , π]，而每一个点 y 的值是由 Sin(x) 算出来的。</p>
+<p>那如何让曲线动起来呢？只要 x 的值不断地加上时间增量，就可以了。我们直接来看下代码，注意代码里的注释。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>using</span> System.Collections;
+<span style=color:#66d9ef>using</span> System.Collections.Generic;
+<span style=color:#66d9ef>using</span> UnityEngine;
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Graph</span> : MonoBehaviour
+{
+    <span style=color:#75715e>// 建立一个 Cube
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> Transform pointPrefab;
+
+    <span style=color:#75715e>// 设定一个值，表示要用多少个 Cube 表示出这条曲线来，值越大，点就越细
+</span><span style=color:#75715e></span><span style=color:#a6e22e>    [Range(10, 100)]</span>
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> resolution = <span style=color:#ae81ff>10</span>;
+
+    <span style=color:#66d9ef>private</span> Transform[] points;
+
+    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> Awake()
+    {
+        <span style=color:#75715e>// 求出步长，相当于每一个 cube 的 x 轴相距多远
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>float</span> step = <span style=color:#ae81ff>2f</span> / resolution;
+
+        <span style=color:#75715e>// 缩放一个 Cube
+</span><span style=color:#75715e></span>        Vector3 scale = Vector3.one * step;
+
+        Vector3 position;
+        position.y = <span style=color:#ae81ff>0</span>;
+        position.z = <span style=color:#ae81ff>0f</span>;
+
+        points = <span style=color:#66d9ef>new</span> Transform[resolution];
+        <span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>int</span> i = <span style=color:#ae81ff>0</span>; i &lt; resolution; ++i)
+        {
+            Transform point = Instantiate(pointPrefab);
+            <span style=color:#75715e>// 将 x 轴限制在 [-1, 1] 之间，这里 + 0.5是偏移半个方块
+</span><span style=color:#75715e></span>            position.x = (i + <span style=color:#ae81ff>0.5f</span>) * step - <span style=color:#ae81ff>1f</span>;
+            point.localPosition = position;
+            point.localScale = scale;
+            point.SetParent(transform, <span style=color:#66d9ef>false</span>);
+            points[i] = point;
+        }
+    }
+
+    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> Update()
+    {
+        <span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>int</span> i = <span style=color:#ae81ff>0</span>; i &lt; points.Length; ++i)
+        {
+            Transform point = points[i];
+            Vector3 position = point.localPosition;
+
+            <span style=color:#75715e>// 每个方块的 x 轴是确定的，y 轴的计算就是不断地用 x 轴坐标加上时间增量，
+</span><span style=color:#75715e></span>            <span style=color:#75715e>// 来做到周期移动的效果。这里之乘以 Mathf.PI 是为了将整个图像压缩在一定范围
+</span><span style=color:#75715e></span>            position.y = Mathf.Sin((position.x + Time.time) * Mathf.PI);
+            point.localPosition = position;
+        }
+    }
+}
+</code></pre></div><p>建立一个 Cube，做成 Prefab，在场景中建立一个空物体，坐标归0，然后挂上上面的脚本。将 Prefab 拖到脚本的变量上，然后运行即可看到效果。</p>
+<p>下面再来说一下如何动态改变颜色。颜色的变化，文章开始的图片中的颜色是由点的坐标位置决定的。坐标 x 值决定颜色的 r 通道，坐标 y 值决定颜色的 g 通道。所以，在 Shader 中首先要知道方块的坐标，然后坐标 x，y 值后，就可以设定颜色。(先写一个 Shader，然后新建一个 Material，并且使用我们写的 Shader，然后将 Material 赋予 Cube 的 Prefab)</p>
+<p><strong>注意：对于 Shader 来说 ，INPUT 结构中的 worldPos 是方块每一个顶点的位置</strong></p>
+<p><code>o.Albedo.rg = IN.worldPos.xy * 0.5 + 0.5;</code> 这一句就是根据坐标值设定颜色的 Shader 代码。这里为什么要乘 0.5 加 0.5 呢？因为上面的C#代码中，我们将每一个 Cube 的位置设置为了[-1, 1]之间，但是颜色的值不能为负，所以这里的乘 0.5 加 0.5 其实就是将坐标值映射为 [0, 1] 之间，从而作为颜色值来用。</p>
+<p>下面的 Shader 代码是在 Unity 2018 中新建一个 Surface Shader，然后删除里面一些不必要的代码，然后添加我们自己的代码，大部分都是 Unity 自己生成的，大家可以对比一下不同。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-glsl data-lang=glsl>Shader <span style=color:#960050;background-color:#1e0010>&#34;</span>Custom<span style=color:#f92672>/</span>ColoredPoint<span style=color:#960050;background-color:#1e0010>&#34;</span>
+{
+    Properties
+    {
+        _Glossiness (<span style=color:#960050;background-color:#1e0010>&#34;</span>Smoothness<span style=color:#960050;background-color:#1e0010>&#34;</span>, Range(<span style=color:#ae81ff>0</span>,<span style=color:#ae81ff>1</span>)) <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span>
+        _Metallic (<span style=color:#960050;background-color:#1e0010>&#34;</span>Metallic<span style=color:#960050;background-color:#1e0010>&#34;</span>, Range(<span style=color:#ae81ff>0</span>,<span style=color:#ae81ff>1</span>)) <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.0</span>
+    }
+    SubShader
+    {
+        Tags { <span style=color:#960050;background-color:#1e0010>&#34;</span>RenderType<span style=color:#960050;background-color:#1e0010>&#34;</span><span style=color:#f92672>=</span><span style=color:#960050;background-color:#1e0010>&#34;</span>Opaque<span style=color:#960050;background-color:#1e0010>&#34;</span> }
+        LOD <span style=color:#ae81ff>200</span>
+
+        CGPROGRAM
+        <span style=color:#75715e>// Physically based Standard lighting model, and enable shadows on all light types</span>
+        <span style=color:#960050;background-color:#1e0010>#</span>pragma surface surf Standard fullforwardshadows
+
+        <span style=color:#75715e>// Use shader model 3.0 target, to get nicer looking lighting</span>
+        <span style=color:#960050;background-color:#1e0010>#</span>pragma target <span style=color:#ae81ff>3.0</span>
+
+        <span style=color:#66d9ef>struct</span> Input
+        {
+            <span style=color:#75715e>// 这一句是我们自己写的</span>
+            float3 worldPos;
+        };
+
+        <span style=color:#66d9ef>half</span> _Glossiness;
+        <span style=color:#66d9ef>half</span> _Metallic;
+
+        <span style=color:#75715e>// Add instancing support for this shader. You need to check &#39;Enable Instancing&#39; on materials that use the shader.</span>
+        <span style=color:#75715e>// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.</span>
+        <span style=color:#75715e>// #pragma instancing_options assumeuniformscaling</span>
+        UNITY_INSTANCING_BUFFER_START(Props)
+            <span style=color:#75715e>// put more per-instance properties here</span>
+        UNITY_INSTANCING_BUFFER_END(Props)
+
+        <span style=color:#66d9ef>void</span> surf (Input IN, <span style=color:#66d9ef>inout</span> SurfaceOutputStandard o)
+        {
+            <span style=color:#75715e>// 这一句也是我们自己写的</span>
+            o.Albedo.rg <span style=color:#f92672>=</span> IN.worldPos.xy <span style=color:#f92672>*</span> <span style=color:#ae81ff>0.5</span> <span style=color:#f92672>+</span> <span style=color:#ae81ff>0.5</span>;
+            
+            <span style=color:#75715e>// Metallic and smoothness come from slider variables</span>
+            o.Metallic <span style=color:#f92672>=</span> _Metallic;
+            o.Smoothness <span style=color:#f92672>=</span> _Glossiness;
+
+            <span style=color:#75715e>// 这一句也是我们自己写的</span>
+            o.Alpha <span style=color:#f92672>=</span> <span style=color:#ae81ff>1</span>;
+        }
+        ENDCG
+    }
+    FallBack <span style=color:#960050;background-color:#1e0010>&#34;</span>Diffuse<span style=color:#960050;background-color:#1e0010>&#34;</span>
+}
+</code></pre></div><p>现在再次运行一下，是不是已经做到了文章一开始的那个图的效果。</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/>游戏开发</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/data-structure-08-hash/>
+<span class=title>« Prev Page</span>
+<br>
+<span>哈希</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/unity-basis-01-clock/>
+<span class=title>Next Page »</span>
+<br>
+<span>制作一个会动的时钟</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on twitter" href="https://twitter.com/intent/tweet/?text=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f&hashtags=%e6%b8%b8%e6%88%8f%e5%bc%80%e5%8f%91"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f&title=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb&summary=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb&source=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f&title=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on whatsapp" href="https://api.whatsapp.com/send?text=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用Unity3D展示Sin函数动画 on telegram" href="https://telegram.me/share/url?text=%e4%bd%bf%e7%94%a8Unity3D%e5%b1%95%e7%a4%baSin%e5%87%bd%e6%95%b0%e5%8a%a8%e7%94%bb&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-sine-visualization%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

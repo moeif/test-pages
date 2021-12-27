@@ -1,0 +1,322 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Rust 光线追踪 11: 折射 | 萌一小栈</title>
+<meta name=keywords content="Rust实现光线追踪">
+<meta name=description content="关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。
+下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。
+斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：
+$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$
+其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。
+要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知
+$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$
+我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$
+$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$
+由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$
+根据上面的规则，可以使用新的方式来表示垂直向量
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $
+综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="Rust 光线追踪 11: 折射">
+<meta property="og:description" content="关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。
+下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。
+斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：
+$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$
+其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。
+要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知
+$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$
+我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$
+$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$
+由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$
+根据上面的规则，可以使用新的方式来表示垂直向量
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $
+综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-12-07T15:01:15+08:00">
+<meta property="article:modified_time" content="2021-12-07T15:01:15+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="Rust 光线追踪 11: 折射">
+<meta name=twitter:description content="关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。
+下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。
+斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：
+$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$
+其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。
+要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知
+$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$
+我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$
+$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$
+由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$
+根据上面的规则，可以使用新的方式来表示垂直向量
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $
+综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"Rust 光线追踪 11: 折射","item":"https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Rust 光线追踪 11: 折射","name":"Rust 光线追踪 11: 折射","description":"关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。\n下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。\n斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：\n$n_{1}\\sin\\theta_{1} = n_{2}\\sin\\theta_{2}$\n其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\\theta_{1}$、$\\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。\n要求折射光线的方向，就需要解出 $\\sin\\theta_{2}$ 来。根据上面的公式可知\n$\\sin\\theta_{2} = \\frac{n_{1}}{n_{2}} \\cdot \\sin\\theta_{1}$\n我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。\n$ 垂直向量 = \\frac{n_{1}}{n_{2}}(入射向量 + \\cos\\theta_{1}*法向量)$\n$ 平行向量 = - \\sqrt{1 - |垂直向量|^2 * 法向量}$\n由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \\cdot b = |a||b|\\cos\\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \\cdot b = \\cos\\theta$\n根据上面的规则，可以使用新的方式来表示垂直向量\n$ 垂直向量 = \\frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \\cdot 法向量) * 法向量) $\n综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract","keywords":["Rust实现光线追踪"],"articleBody":"关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。\n下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。\n斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：\n$n_{1}\\sin\\theta_{1} = n_{2}\\sin\\theta_{2}$\n其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\\theta_{1}$、$\\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。\n要求折射光线的方向，就需要解出 $\\sin\\theta_{2}$ 来。根据上面的公式可知\n$\\sin\\theta_{2} = \\frac{n_{1}}{n_{2}} \\cdot \\sin\\theta_{1}$\n我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。\n$ 垂直向量 = \\frac{n_{1}}{n_{2}}(入射向量 + \\cos\\theta_{1}*法向量)$\n$ 平行向量 = - \\sqrt{1 - |垂直向量|^2 * 法向量}$\n由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \\cdot b = |a||b|\\cos\\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \\cdot b = \\cos\\theta$\n根据上面的规则，可以使用新的方式来表示垂直向量\n$ 垂直向量 = \\frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \\cdot 法向量) * 法向量) $\n综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract\n// src/vec3.rs pub fn refract(unit_in_v: Vec3, n: Vec3, etai_over_etat: f64) - Vec3 { let cos_theta = Vec3::dot(-unit_in_v, n).min(1.0); let r_out_perp = etai_over_etat * (unit_in_v + cos_theta * n); let r_out_parallel = -((1.0 - r_out_perp.length_squared()).abs().sqrt()) * n; return r_out_perp + r_out_parallel; } 然后添加 Dielectric 材质\n// src/material.rs pub struct Dielectric { pub ir: f64, // 不同介质的折射率 } impl Dielectric { pub fn new(ir: f64) - Self { Self { ir } } } impl Material for Dielectric { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let attenuation = Color::one(); let refraction_ratio = if hit_record.front_face { 1.0 / self.ir } else { self.ir }; let unit_in_direction = Vec3::unit_vector(r_in.direction); let refracted = Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio); let scattered = Ray::new(hit_record.p, refracted); return Some((scattered, attenuation)); } } 然后修改 main 函数中的 material_center 和 material_left 材质\n// src/main.rs let material_center = Dielectric::new(1.5); let material_left = Dielectric::new(1.5); 使用 cargo run --release  refracts.ppm 可以得到下面的图\n全内反射与临界角 假设光线从折射率较大的价质传播进入折射率较小的价质，则入射角越大，光线的折射角也越大，直至当入射角大于临界角时，由于折射角不能大于90度，这时会出现全内反射。\n由于 $ \\sin\\theta_{2} = \\frac{n_{1}}{n_{2}} \\cdot \\sin\\theta_{1} $，假设 $n_{1} = 1.5，n_{2} = 1.0 $ 也就是 $\\sin\\theta_{2} = \\frac{1.5}{1.0} \\cdot \\sin\\theta_{1}$。由于 $\\sin\\theta_{2}$ 的值不能大于 1.0，所以如果 $\\frac{1.5}{1.0} \\cdot \\sin\\theta_{1}  1.0$ 则会发生全内反射。\n根据三角函数可以求出 $\\sin\\theta_{1}$ 的值。$\\sin\\theta_{1} = \\sqrt{1 - \\cos^2\\theta_{1}} $。\n而 $\\cos\\theta_{1} = 入射向量 \\cdot 法向量$\n修改 Dielectric 材质的代码，将全内反射的逻辑添加进去。\n// src/material.rs impl Material for Dielectric { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let attenuation = Color::one(); let refraction_ratio = if hit_record.front_face { 1.0 / self.ir } else { self.ir }; let unit_in_direction = Vec3::unit_vector(r_in.direction); let cos_theta = Vec3::dot(-unit_in_direction, hit_record.normal).min(1.0); let sin_theta = (1.0 - cos_theta * cos_theta).sqrt(); let cannot_refract = refraction_ratio * sin_theta  1.0; let direction = if cannot_refract { Vec3::reflect(unit_in_direction, hit_record.normal) } else { Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio) }; let scattered = Ray::new(hit_record.p, direction); return Some((scattered, attenuation)); } } 修改 main 函数中的材质代码，将四个材质的代码修改如下\n// src/main.rs let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0)); let material_center = Lambertian::new(Color::new(0.1, 0.2, 0.5)); let material_left = Dielectric::new(1.5); let material_right = Metal::new(Color::new(0.8, 0.6, 0.2), 0.0); 使用 cargo run --release  dielectric_and_shinny_sphere.ppm 可以得到下面的图\nSchlick 近似 现实世界中，不同的角度，会导致不同的反射率，以陡峭的角度看玻璃，它会产生镜子的特性。对于这一点的实现比较复杂，但是大家都会使用一种简单并且能达到近似效果的方法，也就是 Schlick 近似，具体的原理，请查看 Wiki，我们直接修改代码，添加逻辑。\n在 Dielectric 的实现中，添加一个函数 reflectance\n// src/material.rs impl Dielectric { pub fn new(ir: f64) - Self { Self { ir } } pub fn reflectance(cosine: f64, ref_idx: f64) - f64 { let mut r0 = (1.0 - ref_idx) / (1.0 + ref_idx); r0 = r0 * r0; return r0 + (1.0 - r0) * (1.0 - cosine).powf(5.0); } } 然后修改 Dielectric 的 Material Trait 的实现\n// src/material.rs impl Material for Dielectric { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let attenuation = Color::one(); let refraction_ratio = if hit_record.front_face { 1.0 / self.ir } else { self.ir }; let unit_in_direction = Vec3::unit_vector(r_in.direction); let cos_theta = Vec3::dot(-unit_in_direction, hit_record.normal).min(1.0); let sin_theta = (1.0 - cos_theta * cos_theta).sqrt(); let cannot_refract = refraction_ratio * sin_theta  1.0; let mut rng = rand::thread_rng(); let random_double = rng.gen(); let direction = if cannot_refract || Dielectric::reflectance(cos_theta, refraction_ratio)  random_double { Vec3::reflect(unit_in_direction, hit_record.normal) } else { Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio) }; let scattered = Ray::new(hit_record.p, direction); return Some((scattered, attenuation)); } } 通过上面的修改，我们可以实现一个空心玻璃球效果，修改 main 函数，添加一个新的材质和一个新的球体。这个球体的半径为负的，而对于它的几何形状没有影响，但是这将使它的法线向内，最终形成一个空心玻璃球效果。\n// main.rs let material_left2 = Dielectric::new(1.5); world.add(Box::new(Sphere::new( Vec3::new(-1.0, 0.0, -1.0), -0.4, material_left2, ))); 使用 cargo run --release  hollow_glass_sphere.ppm 可以得到下面的图\n完整代码: https://github.com/moeif/rtiow-rs/tree/11\n","wordCount":"581","inLanguage":"en","datePublished":"2021-12-07T15:01:15+08:00","dateModified":"2021-12-07T15:01:15+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+Rust 光线追踪 11: 折射
+</h1>
+<div class=post-meta><span title="2021-12-07 15:01:15 +0800 CST">December 7, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。</p>
+<p>下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。</p>
+<h3 id=斯涅尔定律>斯涅尔定律<a hidden class=anchor aria-hidden=true href=#斯涅尔定律>#</a></h3>
+<p>斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：</p>
+<p>$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$</p>
+<p>其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做<strong>入射角</strong>和<strong>折射角</strong>。</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1101.svg alt>
+</p>
+<p>要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知</p>
+<p>$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$</p>
+<p>我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。</p>
+<p>$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$</p>
+<p>$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$</p>
+<p>由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $
+，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$</p>
+<p>根据上面的规则，可以使用新的方式来表示垂直向量</p>
+<p>$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $</p>
+<p>综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 <code>refract</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/vec3.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>refract</span>(unit_in_v: <span style=color:#a6e22e>Vec3</span>, n: <span style=color:#a6e22e>Vec3</span>, etai_over_etat: <span style=color:#66d9ef>f64</span>) -&gt; <span style=color:#a6e22e>Vec3</span> {
+    <span style=color:#66d9ef>let</span> cos_theta <span style=color:#f92672>=</span> Vec3::dot(<span style=color:#f92672>-</span>unit_in_v, n).min(<span style=color:#ae81ff>1.0</span>);
+    <span style=color:#66d9ef>let</span> r_out_perp <span style=color:#f92672>=</span> etai_over_etat <span style=color:#f92672>*</span> (unit_in_v <span style=color:#f92672>+</span> cos_theta <span style=color:#f92672>*</span> n);
+    <span style=color:#66d9ef>let</span> r_out_parallel <span style=color:#f92672>=</span> <span style=color:#f92672>-</span>((<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> r_out_perp.length_squared()).abs().sqrt()) <span style=color:#f92672>*</span> n;
+    <span style=color:#66d9ef>return</span> r_out_perp <span style=color:#f92672>+</span> r_out_parallel;
+}
+</code></pre></div><p>然后添加 Dielectric 材质</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Dielectric</span> {
+    <span style=color:#66d9ef>pub</span> ir: <span style=color:#66d9ef>f64</span>,  <span style=color:#75715e>// 不同介质的折射率
+</span><span style=color:#75715e></span>}
+
+<span style=color:#66d9ef>impl</span> Dielectric {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(ir: <span style=color:#66d9ef>f64</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self { ir }
+    }
+}
+
+<span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Dielectric {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> Color::one();
+        <span style=color:#66d9ef>let</span> refraction_ratio <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> hit_record.front_face {
+            <span style=color:#ae81ff>1.0</span> <span style=color:#f92672>/</span> self.ir
+        } <span style=color:#66d9ef>else</span> {
+            self.ir
+        };
+
+        <span style=color:#66d9ef>let</span> unit_in_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r_in.direction);
+        <span style=color:#66d9ef>let</span> refracted <span style=color:#f92672>=</span> Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio);
+        <span style=color:#66d9ef>let</span> scattered <span style=color:#f92672>=</span> Ray::new(hit_record.p, refracted);
+        <span style=color:#66d9ef>return</span> Some((scattered, attenuation));
+    }
+}
+</code></pre></div><p>然后修改 main 函数中的 <code>material_center</code> 和 <code>material_left</code> 材质</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/main.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>let</span> material_center <span style=color:#f92672>=</span> Dielectric::new(<span style=color:#ae81ff>1.5</span>);
+<span style=color:#66d9ef>let</span> material_left <span style=color:#f92672>=</span> Dielectric::new(<span style=color:#ae81ff>1.5</span>);
+</code></pre></div><p>使用 <code>cargo run --release > refracts.ppm</code> 可以得到下面的图</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1102.png alt>
+</p>
+<h3 id=全内反射与临界角>全内反射与临界角<a hidden class=anchor aria-hidden=true href=#全内反射与临界角>#</a></h3>
+<p>假设光线从折射率较大的价质传播进入折射率较小的价质，则入射角越大，光线的折射角也越大，直至当入射角大于临界角时，由于折射角不能大于90度，这时会出现全内反射。</p>
+<p>由于 $ \sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1} $，假设 $n_{1} = 1.5，n_{2} = 1.0 $ 也就是 $\sin\theta_{2} = \frac{1.5}{1.0} \cdot \sin\theta_{1}$。由于 $\sin\theta_{2}$ 的值不能大于 1.0，所以如果 $\frac{1.5}{1.0} \cdot \sin\theta_{1} > 1.0$ 则会发生全内反射。</p>
+<p>根据三角函数可以求出 $\sin\theta_{1}$ 的值。$\sin\theta_{1} = \sqrt{1 - \cos^2\theta_{1}} $。</p>
+<p>而 $\cos\theta_{1} = 入射向量 \cdot 法向量$</p>
+<p>修改 Dielectric 材质的代码，将全内反射的逻辑添加进去。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Dielectric {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> Color::one();
+        <span style=color:#66d9ef>let</span> refraction_ratio <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> hit_record.front_face {
+            <span style=color:#ae81ff>1.0</span> <span style=color:#f92672>/</span> self.ir
+        } <span style=color:#66d9ef>else</span> {
+            self.ir
+        };
+        <span style=color:#66d9ef>let</span> unit_in_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r_in.direction);
+
+        <span style=color:#66d9ef>let</span> cos_theta <span style=color:#f92672>=</span> Vec3::dot(<span style=color:#f92672>-</span>unit_in_direction, hit_record.normal).min(<span style=color:#ae81ff>1.0</span>);
+        <span style=color:#66d9ef>let</span> sin_theta <span style=color:#f92672>=</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> cos_theta <span style=color:#f92672>*</span> cos_theta).sqrt();
+        <span style=color:#66d9ef>let</span> cannot_refract <span style=color:#f92672>=</span> refraction_ratio <span style=color:#f92672>*</span> sin_theta <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1.0</span>;
+        <span style=color:#66d9ef>let</span> direction <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> cannot_refract {
+            Vec3::reflect(unit_in_direction, hit_record.normal)
+        } <span style=color:#66d9ef>else</span> {
+            Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio)
+        };
+
+        <span style=color:#66d9ef>let</span> scattered <span style=color:#f92672>=</span> Ray::new(hit_record.p, direction);
+        <span style=color:#66d9ef>return</span> Some((scattered, attenuation));
+    }
+}
+</code></pre></div><p>修改 main 函数中的材质代码，将四个材质的代码修改如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/main.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>let</span> material_ground <span style=color:#f92672>=</span> Lambertian::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.0</span>));
+<span style=color:#66d9ef>let</span> material_center <span style=color:#f92672>=</span> Lambertian::new(Color::new(<span style=color:#ae81ff>0.1</span>, <span style=color:#ae81ff>0.2</span>, <span style=color:#ae81ff>0.5</span>));
+<span style=color:#66d9ef>let</span> material_left <span style=color:#f92672>=</span> Dielectric::new(<span style=color:#ae81ff>1.5</span>);
+<span style=color:#66d9ef>let</span> material_right <span style=color:#f92672>=</span> Metal::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.6</span>, <span style=color:#ae81ff>0.2</span>), <span style=color:#ae81ff>0.0</span>);
+</code></pre></div><p>使用 <code>cargo run --release > dielectric_and_shinny_sphere.ppm</code> 可以得到下面的图</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1103.png alt>
+</p>
+<h3 id=schlick-近似>Schlick 近似<a hidden class=anchor aria-hidden=true href=#schlick-近似>#</a></h3>
+<p>现实世界中，不同的角度，会导致不同的反射率，以陡峭的角度看玻璃，它会产生镜子的特性。对于这一点的实现比较复杂，但是大家都会使用一种简单并且能达到近似效果的方法，也就是 <strong>Schlick 近似</strong>，具体的原理，请查看 Wiki，我们直接修改代码，添加逻辑。</p>
+<p>在 Dielectric 的实现中，添加一个函数 <code>reflectance</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>impl</span> Dielectric {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(ir: <span style=color:#66d9ef>f64</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self { ir }
+    }
+
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>reflectance</span>(cosine: <span style=color:#66d9ef>f64</span>, ref_idx: <span style=color:#66d9ef>f64</span>) -&gt; <span style=color:#66d9ef>f64</span> {
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> r0 <span style=color:#f92672>=</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> ref_idx) <span style=color:#f92672>/</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>+</span> ref_idx);
+        r0 <span style=color:#f92672>=</span> r0 <span style=color:#f92672>*</span> r0;
+        <span style=color:#66d9ef>return</span> r0 <span style=color:#f92672>+</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> r0) <span style=color:#f92672>*</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> cosine).powf(<span style=color:#ae81ff>5.0</span>);
+    }
+}
+</code></pre></div><p>然后修改 Dielectric 的 Material Trait 的实现</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Dielectric {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> Color::one();
+        <span style=color:#66d9ef>let</span> refraction_ratio <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> hit_record.front_face {
+            <span style=color:#ae81ff>1.0</span> <span style=color:#f92672>/</span> self.ir
+        } <span style=color:#66d9ef>else</span> {
+            self.ir
+        };
+        <span style=color:#66d9ef>let</span> unit_in_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r_in.direction);
+
+        <span style=color:#66d9ef>let</span> cos_theta <span style=color:#f92672>=</span> Vec3::dot(<span style=color:#f92672>-</span>unit_in_direction, hit_record.normal).min(<span style=color:#ae81ff>1.0</span>);
+        <span style=color:#66d9ef>let</span> sin_theta <span style=color:#f92672>=</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> cos_theta <span style=color:#f92672>*</span> cos_theta).sqrt();
+        <span style=color:#66d9ef>let</span> cannot_refract <span style=color:#f92672>=</span> refraction_ratio <span style=color:#f92672>*</span> sin_theta <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>1.0</span>;
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> rng <span style=color:#f92672>=</span> rand::thread_rng();
+        <span style=color:#66d9ef>let</span> random_double <span style=color:#f92672>=</span> rng.gen();
+        <span style=color:#66d9ef>let</span> direction <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> cannot_refract
+            <span style=color:#f92672>||</span> Dielectric::reflectance(cos_theta, refraction_ratio) <span style=color:#f92672>&gt;</span> random_double
+        {
+            Vec3::reflect(unit_in_direction, hit_record.normal)
+        } <span style=color:#66d9ef>else</span> {
+            Vec3::refract(unit_in_direction, hit_record.normal, refraction_ratio)
+        };
+
+        <span style=color:#66d9ef>let</span> scattered <span style=color:#f92672>=</span> Ray::new(hit_record.p, direction);
+        <span style=color:#66d9ef>return</span> Some((scattered, attenuation));
+    }
+}
+</code></pre></div><p>通过上面的修改，我们可以实现一个空心玻璃球效果，修改 main 函数，添加一个新的材质和一个新的球体。这个球体的半径为负的，而对于它的几何形状没有影响，但是这将使它的法线向内，最终形成一个空心玻璃球效果。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// main.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>let</span> material_left2 <span style=color:#f92672>=</span> Dielectric::new(<span style=color:#ae81ff>1.5</span>);
+
+world.add(Box::new(Sphere::new(
+    Vec3::new(<span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>0.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>),
+    <span style=color:#f92672>-</span><span style=color:#ae81ff>0.4</span>,
+    material_left2,
+)));
+</code></pre></div><p>使用 <code>cargo run --release > hollow_glass_sphere.ppm</code> 可以得到下面的图</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1104.png alt>
+</p>
+<p>完整代码: <a href=https://github.com/moeif/rtiow-rs/tree/11>https://github.com/moeif/rtiow-rs/tree/11</a></p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/>Rust实现光线追踪</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-12/>
+<span class=title>« Prev Page</span>
+<br>
+<span>Rust 光线追踪 12: 正交相机</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/this-week-in-moeif-24/>
+<span class=title>Next Page »</span>
+<br>
+<span>This Week In Moeif 24</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on twitter" href="https://twitter.com/intent/tweet/?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f&hashtags=Rust%e5%ae%9e%e7%8e%b0%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f&title=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84&summary=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84&source=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f&title=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on whatsapp" href="https://api.whatsapp.com/send?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 11: 折射 on telegram" href="https://telegram.me/share/url?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2011%3a%20%e6%8a%98%e5%b0%84&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-11%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

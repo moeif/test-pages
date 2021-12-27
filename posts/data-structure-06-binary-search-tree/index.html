@@ -1,0 +1,589 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>二叉查找树 | 萌一小栈</title>
+<meta name=keywords content="数据结构与算法">
+<meta name=description content="二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。
+上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。
+继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。
+整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。
+为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。
+看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。
+二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。
+下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）
+// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data < node.">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/data-structure-06-binary-search-tree/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="二叉查找树">
+<meta property="og:description" content="二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。
+上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。
+继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。
+整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。
+为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。
+看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。
+二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。
+下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）
+// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data < node.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/data-structure-06-binary-search-tree/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2019-12-26T13:18:06+08:00">
+<meta property="article:modified_time" content="2019-12-26T13:18:06+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="二叉查找树">
+<meta name=twitter:description content="二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。
+上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。
+继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。
+整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。
+为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。
+看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。
+二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。
+下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）
+// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data < node.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"二叉查找树","item":"https://blog.moeif.com/posts/data-structure-06-binary-search-tree/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"二叉查找树","name":"二叉查找树","description":"二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。\n上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。\n继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。\n整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。\n为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。\n看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。\n二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。\n下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）\n// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data \u0026lt; node.","keywords":["数据结构与算法"],"articleBody":"二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。\n上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。\n继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。\n整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。\n为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。\n看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。\n二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。\n下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）\n// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data else if (data  node.data) { node.right = RecursionInsert(node.right, data); node.right.parent = node; } return node; } // 对外开放的 插入 接口  public void Insert(int data) { if (root == null) { root = RecursionInsert(root, data); } else { RecursionInsert(root, data); } } // 按层序打印二叉树  public void LevelOrderTraversal() { Queue q = new Queue(); q.Enqueue(root); while (q.Count  0) { Node currNode = q.Dequeue(); if (currNode.left != null) { q.Enqueue(currNode.left); } if (currNode.right != null) { q.Enqueue(currNode.right); } // 括号里面是父节点的值  string msg = string.Format(\"{0}({1})\", currNode.data, currNode.parent != null ? currNode.parent.data.ToString() : \"null\"); Debug.Log(msg); } } } // 创建一个二叉搜索树 class Program { /* Let us create following BST 50 / \\ 30 70 / \\ / \\ 20 40 60 80 */ static void Main(string[] args) { BST bst = new BST(); bst.Insert(50); bst.Insert(30); bst.Insert(20); bst.Insert(40); bst.Insert(70); bst.Insert(60); bst.Insert(80); bst.LevelOrderTraversal(); } } 上面的代码，首先定义了每一个 Node 节点的数据结构，然后定义了二叉查找树的结构类，最后是C#调用BST的插入和打印方法。插入节点这里使用了递归的机结构，还可以使用非递归，循环的形式去插入。\n从最简单的开始，删除一个节点 从 BST 中删除节点，是相比来说比较复杂的，复杂，也只是相对于插入来说。只要理清几种不同的情况，也就不复杂了。看过很多教程，一上来就是罗列各个情况，然后上代码展示，如果是第一次学习 BST，可能会有一点抽象。我们先不考虑代码怎么实现，先从语言上把这个事情讲明白，最后再看代码。\n从 BST 中删除节点其实很容易，只要改变一下指针就可以了，重点是，删除了一个节点后，还要让整棵 BST 依然保持一个正确的结构，这就是我们要做的。一切从最简单开始。\n上面的图中，我们要删除一个叶子节点，就是左边的数据为3的那个节点。这个节点的父节点是4，我们只需要将4这个节点中指向左子树的指针设置为空，就可以了。这是很容易理解的。而删除右边的叶子节点，也是一样的。就像下面的图。\n我们删除18这个节点，只需要将13这个节点中指向右子树的指针设置为空，即可。\n上面说的，就是删除操作中最简单的一种情况，删除叶子节点。还有一个很重要的点要注意，在删除的时候，要判断要删除的节点是不是 Root 节点，也就是说，整棵树只有一个节点的情况，这样的话还需要将 Root 节点设为空。Root节点的父节点，是永远为空的。\n 注意: 记住，现在不要考虑代码实现的问题，一定要先理解思路，文章的最后，会上代码的。\n 关于节点删除，加大一点点难度 接下来我们加大一点点难度。看下面的图 (可以忽略图中的红色字，只看树的节点结构)\n我们要删除左边图中5这个节点，而5这个节点只拥有一个子树，就是左子树。而5的父节点是2，它是2的右子树。我们要删除5，只需要将2的右子树，指向5的子树就可以 (这里其实不太关心5的子树是左子树还是右子树)。简单来说，就是将2原本指向5的指针，改为指向5的子树，即可。就是右边图的样子。\n我们刚才删除的5节点，只有左子树，再看一个要删除的节点只有右子树的情况。\n上面的图中， 我们要删除3这个节点，而这个节点只有右子树。3的父亲节点是2，所以，我们只需要将2原本指向3节点的指针，改为指向3的子树即可。就像右边的图那样。\n不要着急，慢慢体会一下。在上面两种情况没有彻底理解思路之前，先不要往下看，否则可能会更困惑。\n 注意: 因为我们的 Node 结构中加入了一个指向父节点的指针，所以在删除节点的时候，还要注意更新某些节点的 parent 指针指向。\n 更复杂的情况，先聊一下后继节点 如果上面只是小打小闹，那接下来，就是直面恐惧，噢不，直面复杂时刻啦，哈哈哈~\n最复杂的一种情况，就是要删除的节点，即有左子树，又有右子树。在说这种情况怎么操作之前，我们先来说一个前提概念，叫做后继节点。一个节点的后继节点，严肃点说就是在中序遍历的时候，遍历完当前节点后，下一个要访问的节点，就是当前的节点的后继节点。好吧，通俗点来讲，就是假设在遍历一棵树时，访问完 1 号节点，如果接下来访问的是3号节点，那3号节点就是1的后继节点。\n那一个点的后继节点怎么找呢？这个就很简单了。假设我们要找节点 A 的后继节点，那就是从 A 这个点的右子树开始，一路向左走，走到某一个节点没有左子树可以往下走了，那这个节点，就是 A 的后继节点 (注意，这个后继节点有可能是叶子节点，也有可能不是)。看下面的图。\n我们先看左边部分的图，我们要找节点 9 的后继节点。按上面的规则，从节点 9 的右子树 15 开始，依次往左走，先到达 15 判断一下是否可以走，可以，我们走到 13，再判断一下是否可以继续往左走，可以，走到 11，然后再看是否可以继续往左走，发现不可以了，那 11 就是节点 9 的后继节点。\n再看右边部分的图，我们要找节点 6 的后继节点。按上面的规则从右子树 11 开始，判断是否可以往左走，可以，走到 8，再判断是一下是否可以继续往左走，发现 8 已经没有左子树可以往下走了，所以 8 就是节点 6 的后继节点。\n最后一种删除节点的情况 理解了后继节点，就可以来说最后一种，也是最复杂的一种删除节点的情况了。就是要删除的节点，即有左子树，又有右子树。操作的流程是这样的。假设我们要删除的节点是 A，第一步，我们要找到 A 的后继节点。第二步，用 A 的后继节点数据，替换要删除的节点 A 的数据。第三步，删除后继节点。（因为后继节点要么是叶子节点，要么只有右子树，所以删除比较简单，就按之前聊过的删除方法即可）。下面用示例解释\n上图中，从第一个图开始看，我们要删除数据为 9 的节点。第一步，将要删除的节点使用一个指针指向。第二步，看第二个图，找到 9 节点的后继节点，也就是 11。第三步，看第三张图，用后继节点的数据，替换要删除的节点的数据，也就是用 11 替换 9。第四步，也就是最后一个图，删除后继节点 11。到此，删除操作完成。\n接下来再看一个示例\n上图中，我们要删除节点 6，还是先找到 6 的后继节点 8，然后用节点 8 的数据，替换我们要删除的节点 6 的数据(第三个小图)。接下来就是删除后继节点 8，这里要注意，我们跟着箭头的方向，看第四个小图。在删除后继节点 8 时，我们发现节点 8 不是叶子节点，而是有右子树，所以我们需要将节点 8 的父节点，原本指向 8 的指针，改为指向 8 的右子树。也就是上图中将节点 11 的左指针，改为指向节点 9，然后就是最后一个小图的情况。（因为我们的 Node 结构中拥有 parent 指针，所以要记得把节点 9 的parent 指针从原来指向 8 改为现在指向 9）。到此，删除节点结束。\n接下来，我们展示完整的代码\nusing System; using System.Collections.Generic; static class Debug { public static void Log(string msg) { Console.WriteLine(msg); } } class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; Console.WriteLine(\"Insert: \" + this.data); } } class BST { private Node root; private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data else if (data  node.data) { node.right = RecursionInsert(node.right, data); node.right.parent = node; } return node; } // 插入一个数据  public void Insert(int data) { if (root == null) { root = RecursionInsert(root, data); } else { RecursionInsert(root, data); } } // 删除节点  public void DeleteNode(int data) { Node delNode = root; // 首先要找到待删除的节点  while (delNode != null) { if (delNode.data == data) { break; } if (data else if (data  delNode.data) { delNode = delNode.right; } } if (delNode == null) { Debug.Log(\"Not found \" + data); return; } // 要删除的节点即没有左子树，也没有右子树，是叶子节点，或者是 Root 节点  if (delNode.left == null \u0026\u0026 delNode.right == null) { Node parent = delNode.parent; if (parent == null) { root = null; } else { if (parent.left == delNode) { parent.left = null; } else { parent.right = null; } } } else if (delNode.left != null \u0026\u0026 delNode.right == null) { // 要删除的节点只有左子树的情况  Node parent = delNode.parent; Node child = delNode.left; if (parent == null) { root = child; root.parent = null; } else { if (parent.left == delNode) { parent.left = child; } else { parent.right = child; } child.parent = parent; } } else if (delNode.right != null \u0026\u0026 delNode.left == null) { // 要删除的节点只有右子树的情况  Node parent = delNode.parent; Node child = delNode.right; if (parent == null) { root = child; root.parent = null; } else { if (parent.left == delNode) { parent.left = child; } else { parent.right = child; } child.parent = parent; } } else if (delNode.left != null \u0026\u0026 delNode.right != null) { // 要删除的节点即有左子树，也有右子树的情况  // 首先找到后继节点  Node successorNode = FindMinimumLeftValue(delNode.right); delNode.data = successorNode.data; // 如果后继节点是叶子节点，则直接删除即可  if (successorNode.left == null \u0026\u0026 successorNode.right == null) { if (successorNode.parent.left == successorNode) { successorNode.parent.left = null; } else { successorNode.parent.right = null; } } else { // 如果后继节点不是叶子节点，要将后继节点的父节点指向后继节点的子树，  // 同时，修改子树父节点的指针  Node successorChild = successorNode.left != null ? successorNode.left : successorNode.right; Node parent = successorNode.parent; if (parent.left == successorNode) { parent.left = successorChild; } else { parent.right = successorChild; } successorChild.parent = parent; } } } // 找到一颗子树的最小左节点  public Node FindMinimumLeftValue(Node fromNode) { Node opt = fromNode; while (opt.left != null) { opt = opt.left; } return opt; } public void LevelOrderTraversal() { Queue q = new Queue(); q.Enqueue(root); while (q.Count  0) { Node currNode = q.Dequeue(); if (currNode.left != null) { q.Enqueue(currNode.left); } if (currNode.right != null) { q.Enqueue(currNode.right); } string msg = string.Format(\"{0}({1})\", currNode.data, currNode.parent != null ? currNode.parent.data.ToString() : \"null\"); Debug.Log(msg); } } } class Program { /* Let us create following BST 50 / \\ 30 70 / \\ / \\ 20 40 60 80 */ static void Main(string[] args) { BST bst = new BST(); bst.Insert(50); bst.Insert(50); bst.Insert(30); bst.Insert(20); bst.Insert(40); bst.Insert(70); bst.Insert(60); bst.Insert(80); bst.LevelOrderTraversal(); bst.DeleteNode(70); bst.LevelOrderTraversal(); } } 好了，终于讲完了二叉查找树最基本的知识。这篇博客内容很长，如果第一遍没读懂，也没关系，先休息一下，过段时间再读一遍，可能就会更容易理解。\n","wordCount":"909","inLanguage":"en","datePublished":"2019-12-26T13:18:06+08:00","dateModified":"2019-12-26T13:18:06+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/data-structure-06-binary-search-tree/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+二叉查找树
+</h1>
+<div class=post-meta><span title="2019-12-26 13:18:06 +0800 CST">December 26, 2019</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U045c9c24d1e84ce5875ffeec82ebbbe2r.png alt=p001801_BSTSearch>
+</p>
+<p>上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。</p>
+<p>继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。</p>
+<p>整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。</p>
+<h2 id=为什么叫做-binary-search-tree呢>为什么叫做 Binary Search Tree呢？<a hidden class=anchor aria-hidden=true href=#为什么叫做-binary-search-tree呢>#</a></h2>
+<p>因为在BST中搜索一个值是非常简单和高效的。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ua63110ae23ca486f8583b3ac3c39e846m.png alt=p001802_BST-Delete1>
+</p>
+<p>看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。</p>
+<h2 id=二叉树的一些性质>二叉树的一些性质<a hidden class=anchor aria-hidden=true href=#二叉树的一些性质>#</a></h2>
+<ul>
+<li>将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree</li>
+<li>将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree</li>
+<li>Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的)</li>
+<li>Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)</li>
+</ul>
+<h2 id=怎样构建和插入节点>怎样构建和插入节点<a hidden class=anchor aria-hidden=true href=#怎样构建和插入节点>#</a></h2>
+<p>向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。</p>
+<p>下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 这里先定义出节点的结构
+</span><span style=color:#75715e></span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Node</span>
+{
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> data;
+    <span style=color:#66d9ef>public</span> Node parent;
+    <span style=color:#66d9ef>public</span> Node left;
+    <span style=color:#66d9ef>public</span> Node right;
+
+    <span style=color:#66d9ef>public</span> Node(<span style=color:#66d9ef>int</span> <span style=color:#ae81ff>_d</span>ata)
+    {
+        <span style=color:#66d9ef>this</span>.data = <span style=color:#ae81ff>_d</span>ata;
+    }
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 定义二叉搜索树结构
+</span><span style=color:#75715e></span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BST</span>
+{
+    <span style=color:#66d9ef>private</span> Node root;
+
+    <span style=color:#75715e>// 这个函数是 private 的，递归调用，插入节点
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>private</span> Node RecursionInsert(Node node, <span style=color:#66d9ef>int</span> data)
+    {
+        <span style=color:#66d9ef>if</span> (node == <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> Node(data);
+        }
+
+        <span style=color:#66d9ef>if</span> (data &lt; node.data)
+        {
+            node.left = RecursionInsert(node.left, data);
+            node.left.parent = node;
+        }
+        <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (data &gt; node.data)
+        {
+            node.right = RecursionInsert(node.right, data);
+            node.right.parent = node;
+        }
+
+        <span style=color:#66d9ef>return</span> node;
+    }
+
+    <span style=color:#75715e>// 对外开放的 插入 接口
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> Insert(<span style=color:#66d9ef>int</span> data)
+    {
+        <span style=color:#66d9ef>if</span> (root == <span style=color:#66d9ef>null</span>)
+        {
+            root = RecursionInsert(root, data);
+        }
+        <span style=color:#66d9ef>else</span>
+        {
+            RecursionInsert(root, data);
+        }
+    }
+
+    <span style=color:#75715e>// 按层序打印二叉树
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> LevelOrderTraversal()
+    {
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+
+        <span style=color:#66d9ef>while</span> (q.Count &gt; <span style=color:#ae81ff>0</span>)
+        {
+            Node currNode = q.Dequeue();
+
+            <span style=color:#66d9ef>if</span> (currNode.left != <span style=color:#66d9ef>null</span>)
+            {
+                q.Enqueue(currNode.left);
+            }
+
+            <span style=color:#66d9ef>if</span> (currNode.right != <span style=color:#66d9ef>null</span>)
+            {
+                q.Enqueue(currNode.right);
+            }
+            <span style=color:#75715e>// 括号里面是父节点的值
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>string</span> msg = <span style=color:#66d9ef>string</span>.Format(<span style=color:#e6db74>&#34;{0}({1})&#34;</span>, currNode.data, currNode.parent != <span style=color:#66d9ef>null</span> ? currNode.parent.data.ToString() : <span style=color:#e6db74>&#34;null&#34;</span>);
+            Debug.Log(msg);
+        }
+    }
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 创建一个二叉搜索树
+</span><span style=color:#75715e></span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Program</span>
+{
+    <span style=color:#75715e>/* Let us create following BST 
+</span><span style=color:#75715e>          50 
+</span><span style=color:#75715e>       /     \ 
+</span><span style=color:#75715e>      30      70 
+</span><span style=color:#75715e>     /  \    /  \ 
+</span><span style=color:#75715e>   20   40  60   80 */</span>
+
+    <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> Main(<span style=color:#66d9ef>string</span>[] args)
+    {
+        BST bst = <span style=color:#66d9ef>new</span> BST();
+        bst.Insert(<span style=color:#ae81ff>50</span>);
+        bst.Insert(<span style=color:#ae81ff>30</span>);
+        bst.Insert(<span style=color:#ae81ff>20</span>);
+        bst.Insert(<span style=color:#ae81ff>40</span>);
+        bst.Insert(<span style=color:#ae81ff>70</span>);
+        bst.Insert(<span style=color:#ae81ff>60</span>);
+        bst.Insert(<span style=color:#ae81ff>80</span>);
+
+        bst.LevelOrderTraversal();
+    }
+}
+</code></pre></div><p>上面的代码，首先定义了每一个 Node 节点的数据结构，然后定义了二叉查找树的结构类，最后是C#调用BST的插入和打印方法。插入节点这里使用了递归的机结构，还可以使用非递归，循环的形式去插入。</p>
+<h2 id=从最简单的开始删除一个节点>从最简单的开始，删除一个节点<a hidden class=anchor aria-hidden=true href=#从最简单的开始删除一个节点>#</a></h2>
+<p>从 BST 中删除节点，是相比来说比较复杂的，复杂，也只是相对于插入来说。只要理清几种不同的情况，也就不复杂了。看过很多教程，一上来就是罗列各个情况，然后上代码展示，如果是第一次学习 BST，可能会有一点抽象。我们先不考虑代码怎么实现，先从语言上把这个事情讲明白，最后再看代码。</p>
+<p>从 BST 中删除节点其实很容易，只要改变一下指针就可以了，重点是，删除了一个节点后，还要让整棵 BST 依然保持一个正确的结构，这就是我们要做的。一切从最简单开始。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U622a15395ad744b7874f006a9dbd3eadl.png alt=p001803_BST-Delete2>
+</p>
+<p>上面的图中，我们要删除一个叶子节点，就是左边的数据为3的那个节点。这个节点的父节点是4，我们只需要将4这个节点中指向左子树的指针设置为空，就可以了。这是很容易理解的。而删除右边的叶子节点，也是一样的。就像下面的图。</p>
+<p><img loading=lazy src=https://i.ibb.co/Rj3CxXR/BST-Delete2.png alt>
+</p>
+<p>我们删除18这个节点，只需要将13这个节点中指向右子树的指针设置为空，即可。</p>
+<p>上面说的，就是删除操作中最简单的一种情况，删除叶子节点。还有一个很重要的点要注意，在删除的时候，要判断要删除的节点是不是 Root 节点，也就是说，整棵树只有一个节点的情况，这样的话还需要将 Root 节点设为空。Root节点的父节点，是永远为空的。</p>
+<blockquote>
+<p><strong>注意: 记住，现在不要考虑代码实现的问题，一定要先理解思路，文章的最后，会上代码的。</strong></p>
+</blockquote>
+<h2 id=关于节点删除加大一点点难度>关于节点删除，加大一点点难度<a hidden class=anchor aria-hidden=true href=#关于节点删除加大一点点难度>#</a></h2>
+<p>接下来我们加大一点点难度。看下面的图 (可以忽略图中的红色字，只看树的节点结构)</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ucff6007d4826401b98a79647c1d7da394.png alt=p001804_BST-Delete3>
+</p>
+<p>我们要删除左边图中5这个节点，而5这个节点只拥有一个子树，就是左子树。而5的父节点是2，它是2的右子树。我们要删除5，只需要将2的<code>右子树</code>，指向5的子树就可以 (这里其实不太关心5的子树是左子树还是右子树)。简单来说，就是将2原本指向5的指针，改为指向5的子树，即可。就是右边图的样子。</p>
+<p>我们刚才删除的5节点，只有左子树，再看一个要删除的节点只有右子树的情况。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U8ade5dfe93d5409f8d502d4ab78a91be2.png alt=p001805_BST-Delete4>
+</p>
+<p>上面的图中， 我们要删除3这个节点，而这个节点只有右子树。3的父亲节点是2，所以，我们只需要将2原本指向3节点的指针，改为指向3的子树即可。就像右边的图那样。</p>
+<p>不要着急，慢慢体会一下。在上面两种情况没有彻底理解思路之前，先不要往下看，否则可能会更困惑。</p>
+<blockquote>
+<p><strong>注意: 因为我们的 Node 结构中加入了一个指向父节点的指针，所以在删除节点的时候，还要注意更新某些节点的 parent 指针指向。</strong></p>
+</blockquote>
+<h2 id=更复杂的情况先聊一下后继节点>更复杂的情况，先聊一下后继节点<a hidden class=anchor aria-hidden=true href=#更复杂的情况先聊一下后继节点>#</a></h2>
+<p>如果上面只是小打小闹，那接下来，就是直面恐惧，噢不，直面复杂时刻啦，哈哈哈~</p>
+<p>最复杂的一种情况，就是要删除的节点，即有左子树，又有右子树。在说这种情况怎么操作之前，我们先来说一个前提概念，叫做后继节点。一个节点的后继节点，严肃点说就是在中序遍历的时候，遍历完当前节点后，下一个要访问的节点，就是当前的节点的后继节点。好吧，通俗点来讲，就是假设在遍历一棵树时，访问完 1 号节点，如果接下来访问的是3号节点，那3号节点就是1的后继节点。</p>
+<p>那一个点的后继节点怎么找呢？这个就很简单了。假设我们要找节点 A 的后继节点，那就是从 A 这个点的右子树开始，一路向左走，走到某一个节点没有左子树可以往下走了，那这个节点，就是 A 的后继节点 (注意，这个后继节点有可能是叶子节点，也有可能不是)。看下面的图。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U988f6a40263746b59785b2c6673e393dT.png alt=p001806_BST-Delete5>
+</p>
+<p>我们先看左边部分的图，我们要找节点 9 的后继节点。按上面的规则，从节点 9 的右子树 15 开始，依次往左走，先到达 15 判断一下是否可以走，可以，我们走到 13，再判断一下是否可以继续往左走，可以，走到 11，然后再看是否可以继续往左走，发现不可以了，那 11 就是节点 9 的后继节点。</p>
+<p>再看右边部分的图，我们要找节点 6 的后继节点。按上面的规则从右子树 11 开始，判断是否可以往左走，可以，走到 8，再判断是一下是否可以继续往左走，发现 8 已经没有左子树可以往下走了，所以 8 就是节点 6 的后继节点。</p>
+<h2 id=最后一种删除节点的情况>最后一种删除节点的情况<a hidden class=anchor aria-hidden=true href=#最后一种删除节点的情况>#</a></h2>
+<p>理解了后继节点，就可以来说最后一种，也是最复杂的一种删除节点的情况了。就是要删除的节点，即有左子树，又有右子树。操作的流程是这样的。假设我们要删除的节点是 A，第一步，我们要找到 A 的后继节点。第二步，用 A 的后继节点数据，替换要删除的节点 A 的数据。第三步，删除后继节点。（因为后继节点要么是叶子节点，要么只有右子树，所以删除比较简单，就按之前聊过的删除方法即可）。下面用示例解释</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U55653b5575d94469bd65a40023458376i.png alt=p001807_BST-Delete6>
+</p>
+<p>上图中，从第一个图开始看，我们要删除数据为 9 的节点。第一步，将要删除的节点使用一个指针指向。第二步，看第二个图，找到 9 节点的后继节点，也就是 11。第三步，看第三张图，用后继节点的数据，替换要删除的节点的数据，也就是用 11 替换 9。第四步，也就是最后一个图，删除后继节点 11。到此，删除操作完成。</p>
+<p>接下来再看一个示例</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U48c8151a06e14a8d809c4067e0ea59d0N.png alt=p001808_BST-Delete7>
+</p>
+<p>上图中，我们要删除节点 6，还是先找到 6 的后继节点 8，然后用节点 8 的数据，替换我们要删除的节点 6 的数据(第三个小图)。接下来就是删除后继节点 8，这里要注意，我们跟着箭头的方向，看第四个小图。在删除后继节点 8 时，我们发现节点 8 不是叶子节点，而是有右子树，所以我们需要将节点 8 的父节点，原本指向 8 的指针，改为指向 8 的右子树。也就是上图中将节点 11 的左指针，改为指向节点 9，然后就是最后一个小图的情况。（因为我们的 Node 结构中拥有 parent 指针，所以要记得把节点 9 的parent 指针从原来指向 8 改为现在指向 9）。到此，删除节点结束。</p>
+<p>接下来，我们展示完整的代码</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>using</span> System;
+<span style=color:#66d9ef>using</span> System.Collections.Generic;
+
+<span style=color:#66d9ef>static</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Debug</span>
+{
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> Log(<span style=color:#66d9ef>string</span> msg)
+    {
+        Console.WriteLine(msg);
+    }
+}
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Node</span>
+{
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> data;
+    <span style=color:#66d9ef>public</span> Node parent;
+    <span style=color:#66d9ef>public</span> Node left;
+    <span style=color:#66d9ef>public</span> Node right;
+
+    <span style=color:#66d9ef>public</span> Node(<span style=color:#66d9ef>int</span> <span style=color:#ae81ff>_d</span>ata)
+    {
+        <span style=color:#66d9ef>this</span>.data = <span style=color:#ae81ff>_d</span>ata;
+        Console.WriteLine(<span style=color:#e6db74>&#34;Insert: &#34;</span> + <span style=color:#66d9ef>this</span>.data);
+    }
+}
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BST</span>
+{
+    <span style=color:#66d9ef>private</span> Node root;
+
+
+    <span style=color:#66d9ef>private</span> Node RecursionInsert(Node node, <span style=color:#66d9ef>int</span> data)
+    {
+        <span style=color:#66d9ef>if</span> (node == <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>new</span> Node(data);
+        }
+
+        <span style=color:#66d9ef>if</span> (data &lt; node.data)
+        {
+            node.left = RecursionInsert(node.left, data);
+            node.left.parent = node;
+        }
+        <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (data &gt; node.data)
+        {
+            node.right = RecursionInsert(node.right, data);
+            node.right.parent = node;
+        }
+
+        <span style=color:#66d9ef>return</span> node;
+    }
+
+    <span style=color:#75715e>// 插入一个数据
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> Insert(<span style=color:#66d9ef>int</span> data)
+    {
+        <span style=color:#66d9ef>if</span> (root == <span style=color:#66d9ef>null</span>)
+        {
+            root = RecursionInsert(root, data);
+        }
+        <span style=color:#66d9ef>else</span>
+        {
+            RecursionInsert(root, data);
+        }
+    }
+
+    <span style=color:#75715e>// 删除节点
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> DeleteNode(<span style=color:#66d9ef>int</span> data)
+    {
+        Node delNode = root;
+
+        <span style=color:#75715e>// 首先要找到待删除的节点
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>while</span> (delNode != <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#66d9ef>if</span> (delNode.data == data)
+            {
+                <span style=color:#66d9ef>break</span>;
+            }
+
+            <span style=color:#66d9ef>if</span> (data &lt; delNode.data)
+            {
+                delNode = delNode.left;
+            }
+            <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (data &gt; delNode.data)
+            {
+                delNode = delNode.right;
+            }
+        }
+
+        <span style=color:#66d9ef>if</span> (delNode == <span style=color:#66d9ef>null</span>)
+        {
+            Debug.Log(<span style=color:#e6db74>&#34;Not found &#34;</span> + data);
+            <span style=color:#66d9ef>return</span>;
+        }
+
+        <span style=color:#75715e>// 要删除的节点即没有左子树，也没有右子树，是叶子节点，或者是 Root 节点
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span> (delNode.left == <span style=color:#66d9ef>null</span> &amp;&amp; delNode.right == <span style=color:#66d9ef>null</span>)
+        {
+            Node parent = delNode.parent;
+            <span style=color:#66d9ef>if</span> (parent == <span style=color:#66d9ef>null</span>)
+            {
+                root = <span style=color:#66d9ef>null</span>;
+            }
+            <span style=color:#66d9ef>else</span>
+            {
+                <span style=color:#66d9ef>if</span> (parent.left == delNode)
+                {
+                    parent.left = <span style=color:#66d9ef>null</span>;
+                }
+                <span style=color:#66d9ef>else</span>
+                {
+                    parent.right = <span style=color:#66d9ef>null</span>;
+                }
+            }
+        }
+        <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (delNode.left != <span style=color:#66d9ef>null</span> &amp;&amp; delNode.right == <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#75715e>// 要删除的节点只有左子树的情况
+</span><span style=color:#75715e></span>            Node parent = delNode.parent;
+            Node child = delNode.left;
+            <span style=color:#66d9ef>if</span> (parent == <span style=color:#66d9ef>null</span>)
+            {
+                root = child;
+                root.parent = <span style=color:#66d9ef>null</span>;
+            }
+            <span style=color:#66d9ef>else</span>
+            {
+                <span style=color:#66d9ef>if</span> (parent.left == delNode)
+                {
+                    parent.left = child;
+                }
+                <span style=color:#66d9ef>else</span>
+                {
+                    parent.right = child;
+                }
+                child.parent = parent;
+            }
+        }
+        <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (delNode.right != <span style=color:#66d9ef>null</span> &amp;&amp; delNode.left == <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#75715e>// 要删除的节点只有右子树的情况
+</span><span style=color:#75715e></span>            Node parent = delNode.parent;
+            Node child = delNode.right;
+
+            <span style=color:#66d9ef>if</span> (parent == <span style=color:#66d9ef>null</span>)
+            {
+                root = child;
+                root.parent = <span style=color:#66d9ef>null</span>;
+            }
+            <span style=color:#66d9ef>else</span>
+            {
+                <span style=color:#66d9ef>if</span> (parent.left == delNode)
+                {
+                    parent.left = child;
+                }
+                <span style=color:#66d9ef>else</span>
+                {
+                    parent.right = child;
+                }
+                child.parent = parent;
+            }
+        }
+        <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span> (delNode.left != <span style=color:#66d9ef>null</span> &amp;&amp; delNode.right != <span style=color:#66d9ef>null</span>)
+        {
+            <span style=color:#75715e>// 要删除的节点即有左子树，也有右子树的情况
+</span><span style=color:#75715e></span>
+            <span style=color:#75715e>// 首先找到后继节点
+</span><span style=color:#75715e></span>            Node successorNode = FindMinimumLeftValue(delNode.right);
+            delNode.data = successorNode.data;
+
+            <span style=color:#75715e>// 如果后继节点是叶子节点，则直接删除即可
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>if</span> (successorNode.left == <span style=color:#66d9ef>null</span> &amp;&amp; successorNode.right == <span style=color:#66d9ef>null</span>)
+            {
+                <span style=color:#66d9ef>if</span> (successorNode.parent.left == successorNode)
+                {
+                    successorNode.parent.left = <span style=color:#66d9ef>null</span>;
+                }
+                <span style=color:#66d9ef>else</span>
+                {
+                    successorNode.parent.right = <span style=color:#66d9ef>null</span>;
+                }
+            }
+            <span style=color:#66d9ef>else</span>
+            {
+                <span style=color:#75715e>// 如果后继节点不是叶子节点，要将后继节点的父节点指向后继节点的子树，
+</span><span style=color:#75715e></span>                <span style=color:#75715e>// 同时，修改子树父节点的指针
+</span><span style=color:#75715e></span>                Node successorChild = successorNode.left != <span style=color:#66d9ef>null</span> ? successorNode.left : successorNode.right;
+                Node parent = successorNode.parent;
+                <span style=color:#66d9ef>if</span> (parent.left == successorNode)
+                {
+                    parent.left = successorChild;
+                }
+                <span style=color:#66d9ef>else</span>
+                {
+                    parent.right = successorChild;
+                }
+                successorChild.parent = parent;
+            }
+        }
+
+    }
+
+    <span style=color:#75715e>// 找到一颗子树的最小左节点
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> Node FindMinimumLeftValue(Node fromNode)
+    {
+        Node opt = fromNode;
+        <span style=color:#66d9ef>while</span> (opt.left != <span style=color:#66d9ef>null</span>)
+        {
+            opt = opt.left;
+        }
+
+        <span style=color:#66d9ef>return</span> opt;
+    }
+
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> LevelOrderTraversal()
+    {
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+
+        <span style=color:#66d9ef>while</span> (q.Count &gt; <span style=color:#ae81ff>0</span>)
+        {
+            Node currNode = q.Dequeue();
+
+            <span style=color:#66d9ef>if</span> (currNode.left != <span style=color:#66d9ef>null</span>)
+            {
+                q.Enqueue(currNode.left);
+            }
+
+            <span style=color:#66d9ef>if</span> (currNode.right != <span style=color:#66d9ef>null</span>)
+            {
+                q.Enqueue(currNode.right);
+            }
+            <span style=color:#66d9ef>string</span> msg = <span style=color:#66d9ef>string</span>.Format(<span style=color:#e6db74>&#34;{0}({1})&#34;</span>, currNode.data, currNode.parent != <span style=color:#66d9ef>null</span> ? currNode.parent.data.ToString() : <span style=color:#e6db74>&#34;null&#34;</span>);
+            Debug.Log(msg);
+        }
+    }
+}
+
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Program</span>
+{
+
+    <span style=color:#75715e>/* Let us create following BST 
+</span><span style=color:#75715e>          50 
+</span><span style=color:#75715e>       /     \ 
+</span><span style=color:#75715e>      30      70 
+</span><span style=color:#75715e>     /  \    /  \ 
+</span><span style=color:#75715e>   20   40  60   80 */</span>
+
+    <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> Main(<span style=color:#66d9ef>string</span>[] args)
+    {
+        BST bst = <span style=color:#66d9ef>new</span> BST();
+        bst.Insert(<span style=color:#ae81ff>50</span>);
+        bst.Insert(<span style=color:#ae81ff>50</span>);
+        bst.Insert(<span style=color:#ae81ff>30</span>);
+        bst.Insert(<span style=color:#ae81ff>20</span>);
+        bst.Insert(<span style=color:#ae81ff>40</span>);
+        bst.Insert(<span style=color:#ae81ff>70</span>);
+        bst.Insert(<span style=color:#ae81ff>60</span>);
+        bst.Insert(<span style=color:#ae81ff>80</span>);
+
+        bst.LevelOrderTraversal();
+
+        bst.DeleteNode(<span style=color:#ae81ff>70</span>);
+
+        bst.LevelOrderTraversal();
+
+    }
+}
+
+</code></pre></div><p>好了，终于讲完了二叉查找树最基本的知识。这篇博客内容很长，如果第一遍没读懂，也没关系，先休息一下，过段时间再读一遍，可能就会更容易理解。</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/>数据结构与算法</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/algo-knuth-shuffle/>
+<span class=title>« Prev Page</span>
+<br>
+<span>一个公平的洗牌算法 | Knuth-Shuffle</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/data-structure-05-binary-tree/>
+<span class=title>Next Page »</span>
+<br>
+<span>二叉树</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on twitter" href="https://twitter.com/intent/tweet/?text=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f&hashtags=%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e4%b8%8e%e7%ae%97%e6%b3%95"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f&title=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91&summary=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91&source=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f&title=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on whatsapp" href="https://api.whatsapp.com/send?text=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉查找树 on telegram" href="https://telegram.me/share/url?text=%e4%ba%8c%e5%8f%89%e6%9f%a5%e6%89%be%e6%a0%91&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-06-binary-search-tree%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

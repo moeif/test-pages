@@ -1,0 +1,192 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Rust | 萌一小栈</title>
+<meta name=keywords content>
+<meta name=description content="ExampleSite description">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/tags/rust/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<link rel=alternate type=application/rss+xml href=https://blog.moeif.com/tags/rust/index.xml>
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="Rust">
+<meta property="og:description" content="ExampleSite description">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.moeif.com/tags/rust/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="Rust">
+<meta name=twitter:description content="ExampleSite description">
+</head>
+<body class=list id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<header class=page-header><div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/tags/>Tags</a></div>
+<h1>Rust</h1>
+</header>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>对比 Rust 和 Python 图片缩放速度
+</h2>
+</header>
+<section class=entry-content>
+<p>写博客时经常会用到 tinypng 这个网站进行图片压缩，所以今天就想用 Rust 试一下关于图片处理的东西。首先对比了一个 Rust 和 Python 的缩放速度，Rust 使用了 image-rs，Python 使用了 Image 中的 PIL，速度结果如下图。
+原图是一张 2.9M，4800x2500 的图片，缩小为 500x260。电脑CPU型号是 Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz。使用 release 编译。
+> 点击这里查看大图
+注意下图中每个图片文件的文件名，标注了 image-rs 中使用的 FilterType
+可以发现，除了 image-rs 中的 Nearest 模式比较快之外，其他模式均比 Python 的 PIL 慢，因为 PIL 是C写的。
+代码如下
+[dependencies] image = "0.23.4" stopwatch = "0.0.7" extern crate image; extern crate stopwatch; use image::RgbImage; use image::DynamicImage; use image::imageops::FilterType; use stopwatch::{Stopwatch}; fn resize_image(){ let origin_image = "1....</p>
+</section>
+<footer class=entry-footer><span title="2020-04-26 19:38:35 +0800 CST">April 26, 2020</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to 对比 Rust 和 Python 图片缩放速度" href=https://blog.moeif.com/posts/compare-rust-and-python-resize-image/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 常用集合数据类型
+</h2>
+</header>
+<section class=entry-content>
+<p>之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。
+Vec Vec&lt;T> 和数组一样，用于存储一系列相同类型的值。但是 Vec 可以动态地插入，删除。首先，是创建一个 Vec，可以使用 Vec::new()，或者使用宏 vec!。要注意的是，只有使用 mut，才能使 Vec 可变，也就是可以插入和删除值。
+fn main() { // 在定义时就标明数据类型为 i32 的 Vec let v1: Vec&lt;i32> = Vec::new(); // 在定义时不标明类型，而在首次插入值时，由Rust自动推断 let mut v2 = Vec::new(); // 这里插入了一个 i32 的值，所以Rust推断 v2 为存放 i32 的 Vec v2.push(2); let v3 = vec![1,2,3,4,5]; let v4 = vec!["hello", "rust"]; let mut v5: Vec&lt;String> = vec!["hello".to_string(), "rust".to_string()]; } 向 Vec 有两个操作函数，一个是 push，往里插入值，一个是 pop，往外弹出值，Pop返回的是最后插入的值。看下面的代码...</p>
+</section>
+<footer class=entry-footer><span title="2020-04-12 23:51:23 +0800 CST">April 12, 2020</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 常用集合数据类型" href=https://blog.moeif.com/posts/rust-syntax-summary-06/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 枚举、匹配
+</h2>
+</header>
+<section class=entry-content>
+<p>这篇博客涉及到的知识点有 枚举的定义、Option 枚举、match 语法、if let 语法。
+...</p>
+</section>
+<footer class=entry-footer><span title="2020-04-05 22:29:14 +0800 CST">April 5, 2020</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 枚举、匹配" href=https://blog.moeif.com/posts/rust-syntax-summary-05/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 结构体
+</h2>
+</header>
+<section class=entry-content>
+<p>在有类的编程语言中，组织数据的方式可以定义一个类，而在 Rust 中，组织数据的方式，使用 struct。struct 可以定义三种不同的类型，一种是带有字段名字的结构体，一种是没有字段名字的元组结构体，一种是没有任何字段的单元结构体。
+定义 struct 带有字段名字的结构体
+#[derive(Debug)] struct User { username: String, email: String, active: bool, } fn main() { let user1 = User { username: String::from("fred"), email: String::from("fred@outlook.com"), active: false, }; println!("{:?}", user1); } 注意上面的代码中 #[derive(Debug)]，简单理解就是加上这个，可以给我们自定义的结构体添加上可打印的功能，后面就可以使用 println! 来打印出结构体。
+上面的代码中定义了一个 User 结构体，里面的每一个字段，前面是字段名，后面是字段的数据类型。在 main 函数中的代码，是创建一个 User 实例。
+元组结构体
+#[derive(Debug)] struct Color(u8, u8, u8, u8); fn main() { let color = Color(255,255,255,255); println!("{:?}", color); } 上面的代码中，定义了一个元组结构体，用来存储颜色值。
+单元结构体
+#[derive(Debug)] struct Unit; fn main() { let unit = Unit; println!...</p>
+</section>
+<footer class=entry-footer><span title="2020-04-02 17:26:15 +0800 CST">April 2, 2020</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 结构体" href=https://blog.moeif.com/posts/rust-syntax-summary-04/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 引用、切片
+</h2>
+</header>
+<section class=entry-content>
+<p>在阅读Rust官方教程时，会看到两个词，引用和借用，也就是 References and Borrowing。这里很容易让人混乱，如果了解C/C++这类有指针的语言，则引用很容易理解，但是 Rust 中的借用这个词是什么意思呢？我觉得，在初学 Rust 时，可以忽略这个词，或者就简单理解为，它所涉及到的东西，就是引用，就是一个指针，就可以了，避免陷入进去。所以，接下来我就就聊一聊引用。
+什么是引用 简单来说，引用就是一个指针，这个指针指向了某个内存地址。在说所有权时，我们知道，当把一个 String 当作参数传到函数时，它的所有权也就会被移动到函数的参数上，如果在调用完函数时，我们依旧想使用这个 String，则需要将所有权再返回，这样就很麻烦，所以用引用，会方便很多，因为引用，并不会获得这个 String 的所有权。看下面的代码
+fn main() { let s1 = String::from("Hello"); print_name(s1); // 下面这一句再访问 s1 就会编译出错，因为 s1 的所有权已经没了 //println!("s1 again: {}", s1); } fn print_string(s: String) { println!("{}", s); } 下面是用引用作为参数
+fn main() { let s1 = String::from("Hello"); print_name(s1); println!("s1 again: {}", s1); } fn print_name(s: &String) { println!("{}", s); } 在上面的代码中，我们将参数从 String 改为 &String，这样函数的参数需要的就不是 String 的所有权，而是 String 的引用，所以在函数 print_name 结束时，main 函数中依然可以使用 name。下图是使用引用时的数据状态。...</p>
+</section>
+<footer class=entry-footer><span title="2020-04-01 12:13:24 +0800 CST">April 1, 2020</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 引用、切片" href=https://blog.moeif.com/posts/rust-syntax-summary-03/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 所有权
+</h2>
+</header>
+<section class=entry-content>
+<p>什么是所有权 Rust 的所有权，是 Rust 语言的一个核心概念。可以简单理解为，一种内存管理的方式。用现实中的东西举例，当你从图书管借了一本书时，这本书的所有权暂时归你所有，而当你把书给你的朋友时，此刻，书的所有权归你的朋友所有，而当你的朋友把书归还图书馆时，此时没有人拥有书的所有权，相当于内存释放。
+在使用有自动垃圾回收(GC)的编程语言时，我们并不需要考虑内存的释放问题，因为GC会帮我们释放。Rust是无GC的语言，一个变量占用的内存什么时候释放，由它的所有权决定，简单来说，当所有权所在的作用域结束时，内存将被释放。
+什么是作用域 Rust 的作用域和其他编程语言中的作用域概念是一样的，我们使用下面的代码说明
+// 整个 main 函数是一个作用域 fn main() { let a = 10; // 下面的花括号内，也是一个作用域 { let s = "hello"; println!("{}", s); } // 下面这句再次打印s，会编译出错，因为s所在的作用域已经结束，s 被释放掉了 //println!("s again: {}", s); } 关于堆内存和栈内存 我们知道，内存分为堆和栈。存在栈上的数据，必须是已知固定大小的数据。而存在堆上的数据，都是在编译时不知道大小的数据，例如用户自己输入的数据。栈比堆的访问快很多，这是因为栈的存取结构，都是操作栈顶，不需要去内存中找数据。而要将数据存在堆上，则需要向操作系统申请，由操作系统在内容中找到一块能够容纳你要存的数据大小的内存空间，然后将内存空间的指针返回给你。访问堆内存上的数据，都是要通过指针，找到指向的内存，然后再读取内存中的数据。
+哪些数据是存在栈上，哪些是存在堆上 let x = 10; let y = "hello"; let c = 'A'; let x2 = x; 像上面这些简单的数据类型，都是存在于栈上，对于 Rust 而言，整型，浮点型，布尔型，字符型等，都是存在于栈上。而对于Rust的 String，这种可变大小的数据类型，是存在于堆上的。看下面的代码
+let s1 = String::from("hello"); let s2 = "hello"....</p>
+</section>
+<footer class=entry-footer><span title="2020-03-29 20:38:00 +0800 CST">March 29, 2020</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 所有权" href=https://blog.moeif.com/posts/rust-syntax-summary-02/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 基础 | 基本语法
+</h2>
+</header>
+<section class=entry-content>
+<p>1. 变量和可变性 Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。
+let x = 10; x = 11; // 这里会编译出错， 如果要定义可变量，需要使用 mut
+let mut x = 10; x = 11; 用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing
+let x = 10; let x = "Hello"; 常量的定义使用 const，常量是永远不会变的量，常量必须在定义的时候注明数据类型
+const MAX_SCORE: i32 = 10000; 2. 标量数据类型 Rust 数据类型可以分为标量类型和复合类型，标量类型有四种 整型，浮点型，布尔型，字符型。而整型分为 8位、16位、32位、64位、128位，动态长度这几种，每一种又分为有符号型，无符号型。浮点数分为 32位、64位。
+关键字： 整型有符号型: i8 i16 i32 i64 i128 isize 整型无符号型: u8 u16 u32 u64 u128 usize
+整型默认类型为 i32。注意 isize usize 的长度是动态的，如果运行程序的计算机是32位的，则为32位，如果计算机为64位的，则为64位。另外，在Rust中遍历集合时，常用 isize 和 usize。...</p>
+</section>
+<footer class=entry-footer><span title="2020-03-28 22:45:24 +0800 CST">March 28, 2020</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 基础 | 基本语法" href=https://blog.moeif.com/posts/rust-syntax-summary-01/></a>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>去中心化 on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96/</link>
+    <description>Recent content in 去中心化 on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 26 Sep 2021 09:40:55 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/%E5%8E%BB%E4%B8%AD%E5%BF%83%E5%8C%96/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>为什么没有大公司推动 P2P 文件分享</title>
+      <link>https://blog.moeif.com/posts/sharing-files-without-tc/</link>
+      <pubDate>Sun, 26 Sep 2021 09:40:55 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/sharing-files-without-tc/</guid>
+      <description>&lt;p&gt;现在已经是2021年了，如果你拍摄了100张度假的照片，想分享给我，如何分享？&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,414 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>使用 Unity 实现漂亮的数学曲面(下) | 萌一小栈</title>
+<meta name=keywords content="游戏开发">
+<meta name=description content="上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。
+2.5 创建一个涟漪效果
+先来看一下最终要实现的效果图
+
+我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/unity-basis-03-math-curve2/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="使用 Unity 实现漂亮的数学曲面(下)">
+<meta property="og:description" content="上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。
+2.5 创建一个涟漪效果
+先来看一下最终要实现的效果图
+
+我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/unity-basis-03-math-curve2/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-01-16T15:51:00+08:00">
+<meta property="article:modified_time" content="2020-01-16T15:51:00+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="使用 Unity 实现漂亮的数学曲面(下)">
+<meta name=twitter:description content="上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。
+2.5 创建一个涟漪效果
+先来看一下最终要实现的效果图
+
+我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"使用 Unity 实现漂亮的数学曲面(下)","item":"https://blog.moeif.com/posts/unity-basis-03-math-curve2/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用 Unity 实现漂亮的数学曲面(下)","name":"使用 Unity 实现漂亮的数学曲面(下)","description":"上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。\n2.5 创建一个涟漪效果 先来看一下最终要实现的效果图\n我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\\sqrt{x^2 + z^2}$ 。\n","keywords":["游戏开发"],"articleBody":"上一篇博客我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。\n2.5 创建一个涟漪效果 先来看一下最终要实现的效果图\n我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\\sqrt{x^2 + z^2}$ 。\n在 Graph.cs 中添加一个新函数 Ripple，然后使用 Mathf.Sqrt 来计算距离。\npublic static float Ripple(float x, float z, float t) { float d = Mathf.Sqrt(x * x + z * z); float y = d; return y; } 然后别忘记将函数添加到数组中，名字添加到枚举中\nstatic GraphFunction[] functions = { SineFunction, MultiSineFunction, Sine2DFunction, MultiSine2DFunction, Ripple, }; public enum GraphFunctionName { Sine, MultiSine, Sine2D, MultiSine2D, Ripple, } 当前运行后效果图如下\n现在我们拥有了一个静态的圆锥体形状，要创建波纹，我们要使用 $f(x,z,t) = sin(πD)$，这里的 D 就是距离。\nfloat d = Mathf.Sqrt(x * x + z * z); float y = Mathf.Sin(pi * d); return y; 目前的结果并没有显示出太多的波形，所以我们提高频率\nfloat y = Mathf.Sin(4f * pi * d); 现在的形状已经开始接近最终目标效果，但是波动的幅度有点太极端了。我们要以通过降低振幅来调整图形的形状，但是由于我们的波形是依赖于距离的，所以我们直接调整距离即可。例如使用 $\\frac{1}{10D}$，为了避免因为距离为0而导致的除0错误，我们使用 $\\frac{1}{1 + 10D}$\npublic static float Ripple(float x, float z, float t) { float d = Mathf.Sqrt(x * x + z * z); float y = Mathf.Sin(4f * pi * d); y /= 1f + 10f * d; return y; } 现在的效果已经和最终的效果很像了对不对，接下来只需要将时间变量加上即可拥有动画效果。\npublic static float Ripple(float x, float z, float t) { float d = Mathf.Sqrt(x * x + z * z); float y = Mathf.Sin(pi * (4f * d - t)); y /= 1f + 10f * d; return y; } 运行看效果。\n3 从一维到三维 在此之前的代码中，我们都是通过X和Z去定义Y，这样可以表现出很多效果，但是，限制太大。所以我们接下来要修改之前的函数，使输出单一的 float 变为输出 Vector3。\n3.1 三维函数 如果我们的函数改为输出 Vector3，这将允许我们创建任意的曲面。\n例如，函数 $f(x,z) = \\begin{bmatrix} x \\\\ 0 \\\\ z \\end{bmatrix}$ 用来描述XZ平面。而函数 $f(x,z) = \\begin{bmatrix} x \\\\ z \\\\ 0 \\end{bmatrix}$ 用来描述XY平面。\n由于参数的输入值，并不一定是 X 和 Z，所以这里用用 x 和 z 来作为参数名就不太合适了，所以我们改为使用 u 和 v。函数就像 $f(u,v) = \\begin{bmatrix} u + v \\\\ uv \\\\ \\frac{u}{v} \\end{bmatrix}$ 这样。\n接下来统一修改一下我们之前的代码。\n首先修改 GraphFunction 的委托定义代码，将返回值类型改为 Vector3，形参名改为 u v。\npublic delegate Vector3 GraphFunction(float u, float v, float t); 接下来修改各个函数，对于Sine函数来说，它所要表现的公式已经变为 $f(u,v,t) = \\begin{bmatrix} u \\\\ sin(π(u + t)) \\\\ v \\end{bmatrix}$。\n修改我们已有的函数代码如下\npublic static Vector3 SineFunction(float x, float z, float t) { float y = Mathf.Sin(pi * (x + t)); Vector3 p = new Vector3(x, y, z); return p; } public static Vector3 MultiSineFunction(float x, float z, float t) { float y = Mathf.Sin(pi * (x + t)); y += Mathf.Sin(2f * pi * (x + 2f * t)) / 2f; y *= 2f / 3f; Vector3 p = new Vector3(x, y, z); return p; } public static Vector3 Sine2DFunction(float x, float z, float t) { float y = Mathf.Sin(pi * (x + t)); y += Mathf.Sin(pi * (z + t)); y *= 0.5f; Vector3 p = new Vector3(x, y, z); return p; } public static Vector3 MultiSine2DFunction(float x, float z, float t) { float y = 4f * Mathf.Sin(pi * x + z + t * 0.5f); y += Mathf.Sin(pi * (x + t)); y += Mathf.Sin(2f * pi * (z + 2f * t)) * 0.5f; y *= 1f / 5.5f; Vector3 p = new Vector3(x, y, z); return p; } public static Vector3 Ripple(float x, float z, float t) { float d = Mathf.Sqrt(x * x + z * z); float y = Mathf.Sin(pi * (4f * d - t)); y /= 1f + 10f * d; Vector3 p = new Vector3(x, y, z); return p; } 修改 Update 函数的代码如下\nvoid Update() { float t = Time.time; GraphFunction f = functions[(int)function]; float step = 2f / resolution; for(int i = 0, z = 0; z float v = (z + 0.5f) * step - 1f; for(int x = 0; x float u = (x + 0.5f) * step - 1f; points[i].localPosition = f(u, v, t); } } } 在初始化的时候，其实并不需要关心每一个点的位置，因为会在 Update 时重新计算，所以可以简化 Awake 函数，代码如下\nvoid Awake() { float step = 2f / resolution; Vector3 scale = Vector3.one * step; points = new Transform[resolution * resolution]; for(int i = 0; i false); points[i] = point; } } 3.2 创建一个圆柱体 为了证明我们已经可以不限于点的(X,Z)坐标，所以接下来我们创建一个圆柱体，以及动画。\n还是老路子，先添加一个函数 Cylinder，不要忘记加到函数数组以及枚举中。\npublic static Vector3 Cylinder (float u, float v, float t) { Vector3 p; p.x = 0f; p.y = 0f; p.z = 0f; return p; } 一个圆柱体，首先得是一个圆形的，对于一个圆来说，所有的点可以被定义为 $\\begin{bmatrix} sin(θ) \\\\ cos(θ) \\end{bmatrix}$，而θ的值是从0到2π。我们这里使用 u 来代替 θ。所以，在我们的例子中，创建一个XZ平面的圆，公式就变为了 $f(u) = \\begin{bmatrix} sin(πu) \\\\ 0 \\\\ cos(πu) \\end{bmatrix}$。代码如下\npublic static Vector3 Cylinder (float u, float v, float t) { Vector3 p; p.x = Mathf.Sin(pi * u); p.y = 0f; p.z = Mathf.Cos(pi * u); return p; } 当前的运行效果如下\n接下来，使y值等于v，这样我们就可以通过向上堆叠平面圆，而创造出一个圆柱\npublic static Vector3 Cylinder (float u, float v, float t) { Vector3 p; p.x = Mathf.Sin(pi * u); p.y = v; p.z = Mathf.Cos(pi * u); return p; } 在此之前，我们是以单位圆为基础，来创造圆柱的。其实可以通过一个权值R，来修改圆柱的直径，也就是x和z的值，来达到更多的效果，所以函数就变为了 $f(u,v) = \\begin{bmatrix} Rsin(πu) \\\\ v \\\\ Rcos(πu) \\end{bmatrix}$\npublic static Vector3 Cylinder (float u, float v, float t) { Vector3 p; float r = 1f; p.x = r * Mathf.Sin(pi * u); p.y = v; p.z = r * Mathf.Cos(pi * u); return p; } 通过修改 R 值，可以造成不同的效果，例如 $R = 1 + \\frac{sin(6πu)}{5}$\nfloat r = 1f + Mathf.Sin(6f * pi * u) * 0.2f; 我们也可以让 R 值 依赖说 v，例如 $R = 1 + \\frac{sin(2πv)}{5}$\nfloat r = 1f + Mathf.Sin(2f * pi * v) * 0.2f; 也可以同时使用 u 和 v 来创建一个倾斜的波浪，同时加上时间参数t，就可以有动画效果。\nfloat r = 0.8f + Mathf.Sin(pi * (6f * u + 2f * v + t)) * 0.2f; 3.3 创建一个球体 前面创建了圆柱体，接下来我们来创造一个球体。首先复制Cylinder函数，然后重命名为Sphere。我们可以通过将圆柱体的两级上的点挤压到一起，达到创造一个球体的目的。使用公式 $R = cos(\\frac{πv}{2})$\npublic static Vector3 Sphere (float u, float v, float t) { Vector3 p; float r = Mathf.Cos(pi * 0.5f * v); p.x = r * Mathf.Sin(pi * u); p.y = v; p.z = r * Mathf.Cos(pi * u); return p; } 有点接近了，但还不是个正常的球。这是因为，一个圆，需要同时使用sine和cosine，而我们目前只使用了cosine，也就是上面 r 的值。所以，还需要在Y上使用sine。也就是 $sin(\\frac{πv}{2})$\np.y = Mathf.Sin(pi * 0.5f * v); 上面的球体其实是不均匀的，因为我们是通过堆叠不同半径的圆而构造出来的。\n为了控制球体的半径，进而方便改变形状，我们将修改公式，使用 $f(u,v) = \\begin{bmatrix} Ssin(πu)\\\\Rsin(\\frac{πv}{2})\\\\Scos(πu)\\end{bmatrix}$。而 $S = Rcos(\\frac{πv}{2})$，R 是半径。\n为了使用动画控制球体的半径，这次我们将对u和v分开使用sine函数。 $R = \\frac{4}{5} + \\frac{sin(π(6u + t))}{10} + \\frac{sin(π(4v + t))}{10}$\nfloat r = 0.8f + Mathf.Sin(pi * (6f * u + t)) * 0.1f; r += Mathf.Sin(pi * (4f * v + t)) * 0.1f; float s = r * Mathf.Cos(pi * 0.5f * v); p.x = s * Mathf.Sin(pi * u); p.y = r * Mathf.Sin(pi * 0.5f * v); p.z = s * Mathf.Cos(pi * u); 3.4 创建一个环面 首先，复制 Sphere 函数，然后改名为 Torus\npublic static Vector3 Torus (float u, float v, float t) { Vector3 p; float s = Mathf.Cos(pi * 0.5f * v); p.x = s * Mathf.Sin(pi * u); p.y = Mathf.Sin(pi * 0.5f * v); p.z = s * Mathf.Cos(pi * u); return p; } 首先，给s添加一个常数，例如 0.5\nfloat s = Mathf.Cos(pi * 0.5f * v) + 0.5f; 现在，我们得到了半个环面，接下来，我们需要使用v来描述整个圆。\nfloat s = Mathf.Cos(pi * v) + 0.5f; p.x = s * Mathf.Sin(pi * u); p.y = Mathf.Sin(pi * v); p.z = s * Mathf.Cos(pi * u); 接下来，我们需要将公式变为，$f(u,v) = \\begin{bmatrix}Ssin(πu)\\\\sin(πv)\\\\Scos(πu)\\end{bmatrix}$，而 $S = cos(πv) + R_1$\nfloat r1 = 1f; float s = Mathf.Cos(pi * v) + r1; 使$R_1$大于等于1，将在环面的中间打开一个洞，也就是说会形成一个圆环。我们再添加一个值，$R_2$用于控制圆环半径。$f(u,v) = \\begin{bmatrix}Ssin(πu)\\\\R_2sin(πv)\\\\Scos(πu)\\end{bmatrix}$，而$S=R_2cos(πv) + R_1$\n我们将$R_1$设为1，$R_2$设为0.5\nfloat r1 = 1f; float r2 = 0.5f; float s = r2 * Mathf.Cos(pi * v) + r1; p.x = s * Mathf.Sin(pi * u); p.y = r2 * Mathf.Sin(pi * v); p.z = s * Mathf.Cos(pi * u); 接下来就是添加动画，要注意一点是，需要确保环面在[-1,1]之间\nfloat r1 = 0.65f + Mathf.Sin(pi * (6f * u + t)) * 0.1f; float r2 = 0.2f + Mathf.Sin(pi * (4f * v + t)) * 0.05f; 到此，使用Unity实现漂亮的数学曲面结束。\n 原文翻译自 Mathematical Surfaces Sculpting with Numbers Github 代码下载 leaving-the-grid\n","wordCount":"1162","inLanguage":"en","datePublished":"2020-01-16T15:51:00+08:00","dateModified":"2020-01-16T15:51:00+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/unity-basis-03-math-curve2/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+使用 Unity 实现漂亮的数学曲面(下)
+</h1>
+<div class=post-meta><span title="2020-01-16 15:51:00 +0800 CST">January 16, 2020</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p><a href=https://imoegirl.com/2020/01/10/unity-basis-03-math-curve1/>上一篇博客</a>我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。</p>
+<h2 id=25-创建一个涟漪效果>2.5 创建一个涟漪效果<a hidden class=anchor aria-hidden=true href=#25-创建一个涟漪效果>#</a></h2>
+<p>先来看一下最终要实现的效果图</p>
+<p></p>
+<p>我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。</p>
+<p>在 Graph.cs 中添加一个新函数 <code>Ripple</code>，然后使用 <code>Mathf.Sqrt</code> 来计算距离。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>float</span> Ripple(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> d = Mathf.Sqrt(x * x + z * z);
+    <span style=color:#66d9ef>float</span> y = d;
+    <span style=color:#66d9ef>return</span> y;
+}
+</code></pre></div><p>然后别忘记将函数添加到数组中，名字添加到枚举中</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>static</span> GraphFunction[] functions =
+{
+    SineFunction, 
+    MultiSineFunction, 
+    Sine2DFunction, 
+    MultiSine2DFunction,
+    Ripple,
+};
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>enum</span> GraphFunctionName
+{
+    Sine,
+    MultiSine,
+    Sine2D,
+    MultiSine2D,
+    Ripple,
+}
+</code></pre></div><p>当前运行后效果图如下</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U027cfe0c0e5e4540a12c83d6bff5366cT.png alt=p002401_distance>
+</p>
+<p>现在我们拥有了一个静态的圆锥体形状，要创建波纹，我们要使用 $f(x,z,t) = sin(πD)$，这里的 D 就是距离。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> d = Mathf.Sqrt(x * x + z * z);
+<span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * d);
+<span style=color:#66d9ef>return</span> y;
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/Uca685f44a3ad46eb9a3e47edcc1c436cw.png alt=p002402_sin-d>
+</p>
+<p>目前的结果并没有显示出太多的波形，所以我们提高频率</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> y = Mathf.Sin(<span style=color:#ae81ff>4f</span> * pi * d);
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U97179cfbd49247758335da893ef237e8B.png alt=p002403_sin-d-higher-frequency>
+</p>
+<p>现在的形状已经开始接近最终目标效果，但是波动的幅度有点太极端了。我们要以通过降低振幅来调整图形的形状，但是由于我们的波形是依赖于距离的，所以我们直接调整距离即可。例如使用 $\frac{1}{10D}$，为了避免因为距离为0而导致的除0错误，我们使用 $\frac{1}{1 + 10D}$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>float</span> Ripple(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> d = Mathf.Sqrt(x * x + z * z);
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(<span style=color:#ae81ff>4f</span> * pi * d);
+    y /= <span style=color:#ae81ff>1f</span> + <span style=color:#ae81ff>10f</span> * d;
+    <span style=color:#66d9ef>return</span> y;
+}
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U5ff00642307c45ff9ba6d6efc8d0cf61T.png alt=p002404_sin-d-scaled>
+</p>
+<p>现在的效果已经和最终的效果很像了对不对，接下来只需要将时间变量加上即可拥有动画效果。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>float</span> Ripple(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> d = Mathf.Sqrt(x * x + z * z);
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * (<span style=color:#ae81ff>4f</span> * d - t));
+    y /= <span style=color:#ae81ff>1f</span> + <span style=color:#ae81ff>10f</span> * d;
+    <span style=color:#66d9ef>return</span> y;
+}
+</code></pre></div><p>运行看效果。</p>
+<p></p>
+<h2 id=3-从一维到三维>3 从一维到三维<a hidden class=anchor aria-hidden=true href=#3-从一维到三维>#</a></h2>
+<p>在此之前的代码中，我们都是通过X和Z去定义Y，这样可以表现出很多效果，但是，限制太大。所以我们接下来要修改之前的函数，使输出单一的 <code>float</code> 变为输出 <code>Vector3</code>。</p>
+<h2 id=31-三维函数>3.1 三维函数<a hidden class=anchor aria-hidden=true href=#31-三维函数>#</a></h2>
+<p>如果我们的函数改为输出 <code>Vector3</code>，这将允许我们创建任意的曲面。</p>
+<p>例如，函数 $f(x,z) = \begin{bmatrix} x \\ 0 \\ z \end{bmatrix}$ 用来描述XZ平面。而函数 $f(x,z) = \begin{bmatrix} x \\ z \\ 0 \end{bmatrix}$ 用来描述XY平面。</p>
+<p>由于参数的输入值，并不一定是 X 和 Z，所以这里用用 x 和 z 来作为参数名就不太合适了，所以我们改为使用 u 和 v。函数就像 $f(u,v) = \begin{bmatrix} u + v \\ uv \\ \frac{u}{v} \end{bmatrix}$ 这样。</p>
+<p>接下来统一修改一下我们之前的代码。</p>
+<p>首先修改 GraphFunction 的委托定义代码，将返回值类型改为 <code>Vector3</code>，形参名改为 u v。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>delegate</span> Vector3 GraphFunction(<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t);
+</code></pre></div><p>接下来修改各个函数，对于Sine函数来说，它所要表现的公式已经变为 $f(u,v,t) = \begin{bmatrix} u \\ sin(π(u + t)) \\ v \end{bmatrix}$。</p>
+<p>修改我们已有的函数代码如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 SineFunction(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * (x + t));
+    Vector3 p = <span style=color:#66d9ef>new</span> Vector3(x, y, z);
+    <span style=color:#66d9ef>return</span> p;
+}
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 MultiSineFunction(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * (x + t));
+    y += Mathf.Sin(<span style=color:#ae81ff>2f</span> * pi * (x + <span style=color:#ae81ff>2f</span> * t)) / <span style=color:#ae81ff>2f</span>;
+    y *= <span style=color:#ae81ff>2f</span> / <span style=color:#ae81ff>3f</span>;
+    Vector3 p = <span style=color:#66d9ef>new</span> Vector3(x, y, z);
+    <span style=color:#66d9ef>return</span> p;
+}
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Sine2DFunction(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * (x + t));
+    y += Mathf.Sin(pi * (z + t));
+    y *= <span style=color:#ae81ff>0.5f</span>;
+    Vector3 p = <span style=color:#66d9ef>new</span> Vector3(x, y, z);
+    <span style=color:#66d9ef>return</span> p;
+}
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 MultiSine2DFunction(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> y = <span style=color:#ae81ff>4f</span> * Mathf.Sin(pi * x + z + t * <span style=color:#ae81ff>0.5f</span>);
+    y += Mathf.Sin(pi * (x + t));
+    y += Mathf.Sin(<span style=color:#ae81ff>2f</span> * pi * (z + <span style=color:#ae81ff>2f</span> * t)) * <span style=color:#ae81ff>0.5f</span>;
+    y *= <span style=color:#ae81ff>1f</span> / <span style=color:#ae81ff>5.5f</span>;
+    Vector3 p = <span style=color:#66d9ef>new</span> Vector3(x, y, z);
+    <span style=color:#66d9ef>return</span> p;
+}
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Ripple(<span style=color:#66d9ef>float</span> x, <span style=color:#66d9ef>float</span> z, <span style=color:#66d9ef>float</span> t)
+{
+    <span style=color:#66d9ef>float</span> d = Mathf.Sqrt(x * x + z * z);
+    <span style=color:#66d9ef>float</span> y = Mathf.Sin(pi * (<span style=color:#ae81ff>4f</span> * d - t));
+    y /= <span style=color:#ae81ff>1f</span> + <span style=color:#ae81ff>10f</span> * d;
+    Vector3 p = <span style=color:#66d9ef>new</span> Vector3(x, y, z);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p>修改 <code>Update</code> 函数的代码如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>void</span> Update()
+{
+    <span style=color:#66d9ef>float</span> t = Time.time;
+    GraphFunction f = functions[(<span style=color:#66d9ef>int</span>)function];
+    
+    <span style=color:#66d9ef>float</span> step = <span style=color:#ae81ff>2f</span> / resolution;
+    <span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>int</span> i = <span style=color:#ae81ff>0</span>, z = <span style=color:#ae81ff>0</span>; z &lt; resolution; ++z)
+    {
+        <span style=color:#66d9ef>float</span> v = (z + <span style=color:#ae81ff>0.5f</span>) * step - <span style=color:#ae81ff>1f</span>;
+        <span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>int</span> x = <span style=color:#ae81ff>0</span>; x &lt; resolution; ++x, ++i)
+        {
+            <span style=color:#66d9ef>float</span> u = (x + <span style=color:#ae81ff>0.5f</span>) * step - <span style=color:#ae81ff>1f</span>;
+            points[i].localPosition = f(u, v, t);
+        }
+    }
+}
+</code></pre></div><p>在初始化的时候，其实并不需要关心每一个点的位置，因为会在 Update 时重新计算，所以可以简化 <code>Awake</code> 函数，代码如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>void</span> Awake()
+{
+    <span style=color:#66d9ef>float</span> step = <span style=color:#ae81ff>2f</span> / resolution;
+    Vector3 scale = Vector3.one * step;
+    points = <span style=color:#66d9ef>new</span> Transform[resolution * resolution];
+
+    <span style=color:#66d9ef>for</span>(<span style=color:#66d9ef>int</span> i = <span style=color:#ae81ff>0</span>; i &lt; points.Length; ++i)
+    {
+        Transform point = Instantiate(pointPrefab);
+        point.localScale = scale;
+        point.SetParent(transform, <span style=color:#66d9ef>false</span>);
+        points[i] = point;
+    }
+}
+</code></pre></div><h2 id=32-创建一个圆柱体>3.2 创建一个圆柱体<a hidden class=anchor aria-hidden=true href=#32-创建一个圆柱体>#</a></h2>
+<p>为了证明我们已经可以不限于点的(X,Z)坐标，所以接下来我们创建一个圆柱体，以及动画。</p>
+<p>还是老路子，先添加一个函数 <code>Cylinder</code>，不要忘记加到函数数组以及枚举中。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Cylinder (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) 
+{
+    Vector3 p;
+    p.x = <span style=color:#ae81ff>0f</span>;
+    p.y = <span style=color:#ae81ff>0f</span>;
+    p.z = <span style=color:#ae81ff>0f</span>;
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p>一个圆柱体，首先得是一个圆形的，对于一个圆来说，所有的点可以被定义为 $\begin{bmatrix} sin(θ) \\ cos(θ) \end{bmatrix}$，而θ的值是从0到2π。我们这里使用 u 来代替 θ。所以，在我们的例子中，创建一个XZ平面的圆，公式就变为了 $f(u) = \begin{bmatrix} sin(πu) \\ 0 \\ cos(πu) \end{bmatrix}$。代码如下</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Cylinder (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) 
+{
+    Vector3 p;
+    p.x = Mathf.Sin(pi * u);
+    p.y = <span style=color:#ae81ff>0f</span>;
+    p.z = Mathf.Cos(pi * u);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p>当前的运行效果如下</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U9dd6ca8a87da4c1aa9f927bc884de036O.png alt=p002405_circle>
+</p>
+<p>接下来，使y值等于v，这样我们就可以通过向上堆叠平面圆，而创造出一个圆柱</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Cylinder (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) 
+{
+    Vector3 p;
+    p.x = Mathf.Sin(pi * u);
+    p.y = v;
+    p.z = Mathf.Cos(pi * u);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U9abcfba4406f4464a7fedc7962c367b0T.png alt=p002406_cylinder>
+</p>
+<p>在此之前，我们是以单位圆为基础，来创造圆柱的。其实可以通过一个权值R，来修改圆柱的直径，也就是x和z的值，来达到更多的效果，所以函数就变为了 $f(u,v) = \begin{bmatrix} Rsin(πu) \\ v \\ Rcos(πu) \end{bmatrix}$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Cylinder (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) 
+{
+    Vector3 p;
+    <span style=color:#66d9ef>float</span> r = <span style=color:#ae81ff>1f</span>;
+    p.x = r * Mathf.Sin(pi * u);
+    p.y = v;
+    p.z = r * Mathf.Cos(pi * u);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p>通过修改 R 值，可以造成不同的效果，例如 $R = 1 + \frac{sin(6πu)}{5}$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r = <span style=color:#ae81ff>1f</span> + Mathf.Sin(<span style=color:#ae81ff>6f</span> * pi * u) * <span style=color:#ae81ff>0.2f</span>;
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U3c402091ff1746e59766bda4f3495cafL.png alt=p002407_wobbly-u-cylinder>
+</p>
+<p>我们也可以让 R 值 依赖说 v，例如 $R = 1 + \frac{sin(2πv)}{5}$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r = <span style=color:#ae81ff>1f</span> + Mathf.Sin(<span style=color:#ae81ff>2f</span> * pi * v) * <span style=color:#ae81ff>0.2f</span>;
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U4f22a4c0d9524f54bf624e371d06f9bcl.png alt=p002408_wobbly-v-cylinder>
+</p>
+<p>也可以同时使用 u 和 v 来创建一个倾斜的波浪，同时加上时间参数t，就可以有动画效果。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r = <span style=color:#ae81ff>0.8f</span> + Mathf.Sin(pi * (<span style=color:#ae81ff>6f</span> * u + <span style=color:#ae81ff>2f</span> * v + t)) * <span style=color:#ae81ff>0.2f</span>;
+</code></pre></div><p></p>
+<h2 id=33-创建一个球体>3.3 创建一个球体<a hidden class=anchor aria-hidden=true href=#33-创建一个球体>#</a></h2>
+<p>前面创建了圆柱体，接下来我们来创造一个球体。首先复制<code>Cylinder</code>函数，然后重命名为<code>Sphere</code>。我们可以通过将圆柱体的两级上的点挤压到一起，达到创造一个球体的目的。使用公式 $R = cos(\frac{πv}{2})$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Sphere (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) {
+    Vector3 p;
+    <span style=color:#66d9ef>float</span> r = Mathf.Cos(pi * <span style=color:#ae81ff>0.5f</span> * v);
+    p.x = r * Mathf.Sin(pi * u);
+    p.y = v;
+    p.z = r * Mathf.Cos(pi * u);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U26d2eeacacbd42db96291aef7b8b8348A.png alt=p002409_sphere-almost>
+</p>
+<p>有点接近了，但还不是个正常的球。这是因为，一个圆，需要同时使用sine和cosine，而我们目前只使用了cosine，也就是上面 r 的值。所以，还需要在Y上使用sine。也就是 $sin(\frac{πv}{2})$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp>p.y = Mathf.Sin(pi * <span style=color:#ae81ff>0.5f</span> * v);
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U27b077a4b0a24085b7f6af246441082c7.png alt=p002410_sphere>
+</p>
+<p>上面的球体其实是不均匀的，因为我们是通过堆叠不同半径的圆而构造出来的。</p>
+<p>为了控制球体的半径，进而方便改变形状，我们将修改公式，使用 $f(u,v) = \begin{bmatrix} Ssin(πu)\\Rsin(\frac{πv}{2})\\Scos(πu)\end{bmatrix}$。而 $S = Rcos(\frac{πv}{2})$，R 是半径。</p>
+<p>为了使用动画控制球体的半径，这次我们将对u和v分开使用sine函数。 $R = \frac{4}{5} + \frac{sin(π(6u + t))}{10} + \frac{sin(π(4v + t))}{10}$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r = <span style=color:#ae81ff>0.8f</span> + Mathf.Sin(pi * (<span style=color:#ae81ff>6f</span> * u + t)) * <span style=color:#ae81ff>0.1f</span>;
+r += Mathf.Sin(pi * (<span style=color:#ae81ff>4f</span> * v + t)) * <span style=color:#ae81ff>0.1f</span>;
+<span style=color:#66d9ef>float</span> s = r * Mathf.Cos(pi * <span style=color:#ae81ff>0.5f</span> * v);
+p.x = s * Mathf.Sin(pi * u);
+p.y = r * Mathf.Sin(pi * <span style=color:#ae81ff>0.5f</span> * v);
+p.z = s * Mathf.Cos(pi * u);
+</code></pre></div><p></p>
+<h2 id=34-创建一个环面>3.4 创建一个环面<a hidden class=anchor aria-hidden=true href=#34-创建一个环面>#</a></h2>
+<p>首先，复制 <code>Sphere</code> 函数，然后改名为 <code>Torus</code></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Vector3 Torus (<span style=color:#66d9ef>float</span> u, <span style=color:#66d9ef>float</span> v, <span style=color:#66d9ef>float</span> t) {
+    Vector3 p;
+    <span style=color:#66d9ef>float</span> s = Mathf.Cos(pi * <span style=color:#ae81ff>0.5f</span> * v);
+    p.x = s * Mathf.Sin(pi * u);
+    p.y = Mathf.Sin(pi * <span style=color:#ae81ff>0.5f</span> * v);
+    p.z = s * Mathf.Cos(pi * u);
+    <span style=color:#66d9ef>return</span> p;
+}
+</code></pre></div><p>首先，给s添加一个常数，例如 0.5</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> s = Mathf.Cos(pi * <span style=color:#ae81ff>0.5f</span> * v) + <span style=color:#ae81ff>0.5f</span>;
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/Uc6a0934342ea4116af2c42a35dd44d51k.png alt=p002411_pulling-apart-sphere>
+</p>
+<p>现在，我们得到了半个环面，接下来，我们需要使用v来描述整个圆。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> s = Mathf.Cos(pi * v) + <span style=color:#ae81ff>0.5f</span>;
+p.x = s * Mathf.Sin(pi * u);
+p.y = Mathf.Sin(pi * v);
+p.z = s * Mathf.Cos(pi * u);
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U6d1a5e763dc1449299b5b9eb52a977ceC.png alt=p002412_torus-spindle>
+</p>
+<p>接下来，我们需要将公式变为，$f(u,v) = \begin{bmatrix}Ssin(πu)\\sin(πv)\\Scos(πu)\end{bmatrix}$，而 $S = cos(πv) + R_1$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r1 = <span style=color:#ae81ff>1f</span>;
+<span style=color:#66d9ef>float</span> s = Mathf.Cos(pi * v) + r1;
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U779a1323d1764f01a2f69746bc9a3237l.png alt=p002413_torus-horn>
+</p>
+<p>使$R_1$大于等于1，将在环面的中间打开一个洞，也就是说会形成一个圆环。我们再添加一个值，$R_2$用于控制圆环半径。$f(u,v) = \begin{bmatrix}Ssin(πu)\\R_2sin(πv)\\Scos(πu)\end{bmatrix}$，而$S=R_2cos(πv) + R_1$</p>
+<p>我们将$R_1$设为1，$R_2$设为0.5</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r1 = <span style=color:#ae81ff>1f</span>;
+<span style=color:#66d9ef>float</span> r2 = <span style=color:#ae81ff>0.5f</span>;
+<span style=color:#66d9ef>float</span> s = r2 * Mathf.Cos(pi * v) + r1;
+p.x = s * Mathf.Sin(pi * u);
+p.y = r2 * Mathf.Sin(pi * v);
+p.z = s * Mathf.Cos(pi * u);
+</code></pre></div><p><img loading=lazy src=https://ae01.alicdn.com/kf/U53cba3b664354e46a31fc38e95c8ed2di.png alt=p002414_torus-ring>
+</p>
+<p>接下来就是添加动画，要注意一点是，需要确保环面在[-1,1]之间</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>float</span> r1 = <span style=color:#ae81ff>0.65f</span> + Mathf.Sin(pi * (<span style=color:#ae81ff>6f</span> * u + t)) * <span style=color:#ae81ff>0.1f</span>;
+<span style=color:#66d9ef>float</span> r2 = <span style=color:#ae81ff>0.2f</span> + Mathf.Sin(pi * (<span style=color:#ae81ff>4f</span> * v + t)) * <span style=color:#ae81ff>0.05f</span>;
+</code></pre></div><p></p>
+<p>到此，使用Unity实现漂亮的数学曲面结束。</p>
+<blockquote>
+<p>原文翻译自 <a href=https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/>Mathematical Surfaces Sculpting with Numbers</a>
+Github 代码下载 <a href=https://catlikecoding.com/unity/tutorials/basics/mathematical-surfaces/leaving-the-grid/leaving-the-grid.unitypackage>leaving-the-grid</a></p>
+</blockquote>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/>游戏开发</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/ligin-google-vps/>
+<span class=title>« Prev Page</span>
+<br>
+<span>使用外部工具登录Google VPS</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/unity-basis-03-math-curve1/>
+<span class=title>Next Page »</span>
+<br>
+<span>使用 Unity 实现漂亮的数学曲面(上)</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on twitter" href="https://twitter.com/intent/tweet/?text=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f&hashtags=%e6%b8%b8%e6%88%8f%e5%bc%80%e5%8f%91"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f&title=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29&summary=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29&source=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f&title=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on whatsapp" href="https://api.whatsapp.com/send?text=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 使用 Unity 实现漂亮的数学曲面(下) on telegram" href="https://telegram.me/share/url?text=%e4%bd%bf%e7%94%a8%20Unity%20%e5%ae%9e%e7%8e%b0%e6%bc%82%e4%ba%ae%e7%9a%84%e6%95%b0%e5%ad%a6%e6%9b%b2%e9%9d%a2%28%e4%b8%8b%29&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-03-math-curve2%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Rust实现光线追踪 | 萌一小栈</title>
+<meta name=keywords content>
+<meta name=description content="ExampleSite description">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<link rel=alternate type=application/rss+xml href=https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/index.xml>
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="Rust实现光线追踪">
+<meta property="og:description" content="ExampleSite description">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="Rust实现光线追踪">
+<meta name=twitter:description content="ExampleSite description">
+</head>
+<body class=list id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<header class=page-header><div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/tags/>Tags</a></div>
+<h1>Rust实现光线追踪</h1>
+</header>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 光线追踪 04: 显示球体的法线
+</h2>
+</header>
+<section class=entry-content>
+<p>法线的定义是垂直于面的向量。对于一个球体来说，法线的向量，就是球上某个点，减去球心坐标，所得到的向量。
+...</p>
+</section>
+<footer class=entry-footer><span title="2021-11-21 15:01:15 +0800 CST">November 21, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 光线追踪 04: 显示球体的法线" href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-04/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 光线追踪 03: 渲染一个圆
+</h2>
+</header>
+<section class=entry-content>
+<p>下面的公式有点多，只是把原教程中的公式详细展开了，一步一步来，很简单，相信我。
+给定一个点，判断一个点是否在一个半径为 $R$ 的圆或者圆外、圆内，我们可以使用下面的公式来判断。这里假设圆心在 $(0，0，0)$ 点，半径为 $R$
+如果一个点 $(x, y, z)$ 在圆上，则 $x^2 + y^2 + z^2 = R^2$
+如果一个点 $(x, y, z)$ 在圆内，则 $x^2 + y^2 + z^2 &lt; R^2$
+如果一个点 $(x, y, z)$ 在圆外，则 $x^2 + y^2 + z^2 > R^2$
+假设圆心在点 $C = (C_x, C_y, C_z)$，半径为 r，则根据上面的第一个公式，可以得到
+$(x - C_x)^2 + (y - C_y)^2 + (z - C_z)^2 = r^2$
+我们可以将点 $(x, y, z)$ 使用之前的 Vec3 向量表示，例如设 $点P = (x, y, z)$，则可以将上面的公式，换一种表达形式，也就是...</p>
+</section>
+<footer class=entry-footer><span title="2021-11-20 22:10:15 +0800 CST">November 20, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 光线追踪 03: 渲染一个圆" href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-03/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 光线追踪 02: 使用光线生成渐变图
+</h2>
+</header>
+<section class=entry-content>
+<p>这个小节的目标是添加光线相光内容，根据光线打在屏幕上不同的位置，生成一张蓝白渐变图。
+...</p>
+</section>
+<footer class=entry-footer><span title="2021-11-20 11:58:15 +0800 CST">November 20, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 光线追踪 02: 使用光线生成渐变图" href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-02/></a>
+</article>
+<article class="post-entry tag-entry">
+<header class=entry-header>
+<h2>Rust 光线追踪 01: 输出PPM
+</h2>
+</header>
+<section class=entry-content>
+<p>这个系列的博客是使用 Rust 来实现 《Ray Tracing in One Weekend》相关的内容，我们把整本书拆开，来分篇实现，这们可以进一步降低难度。PPM是一个简单的图片格式，它将RGB的颜色使用 ASCII 的形式记录在文件中。
+...</p>
+</section>
+<footer class=entry-footer><span title="2021-11-18 17:30:15 +0800 CST">November 18, 2021</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;fred</footer>
+<a class=entry-link aria-label="post link to Rust 光线追踪 01: 输出PPM" href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-01/></a>
+</article>
+<footer class=page-footer>
+<nav class=pagination>
+<a class=prev href=https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/>« Prev Page</a>
+</nav>
+</footer>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

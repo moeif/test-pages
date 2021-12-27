@@ -1,0 +1,292 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>制作一个会动的时钟 | 萌一小栈</title>
+<meta name=keywords content="游戏开发">
+<meta name=description content="这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。
+今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。
+1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。
+你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。
+下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可
+1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图
+1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。
+Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。
+然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/unity-basis-01-clock/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="制作一个会动的时钟">
+<meta property="og:description" content="这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。
+今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。
+1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。
+你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。
+下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可
+1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图
+1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。
+Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。
+然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/unity-basis-01-clock/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2020-01-06T11:02:32+08:00">
+<meta property="article:modified_time" content="2020-01-06T11:02:32+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="制作一个会动的时钟">
+<meta name=twitter:description content="这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。
+今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。
+1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。
+你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。
+下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可
+1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图
+1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。
+Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。
+然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"制作一个会动的时钟","item":"https://blog.moeif.com/posts/unity-basis-01-clock/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"制作一个会动的时钟","name":"制作一个会动的时钟","description":"这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。\n今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。\n1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。\n你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。\n下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可\n1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图\n1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。\nCylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。\n然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。","keywords":["游戏开发"],"articleBody":"这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。\n今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。\n1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。\n你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。\n下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可\n1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图\n1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。\nCylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。\n然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。\n接下来要做的，就是把 Cylinder 重命名为 Face，然后把这个物体拖到我们一开始建立的 Clock 物体下面，作为它的子物体，并且把坐标归为 (0, 0, 0)，如下图。\n1.3 创建时钟刻度 表盘是 360 度，有 12 个小时，所以每个小时间隔的角度是 356 / 12 = 30 度。也就是说，我们需要每隔 30 度创建一个小时刻度。最终效果如下\n接下来我们一步一步来创建刻度。\n首先创建一个 Cube，将它的 Scale 设置为 (0.5, 0.2, 1)，然后设置它的位置为 (0, 0.2, 4)。如果没错的话，它现在应该处于 12 点位置。\n但是有一个问题，因为它默认是白色的，看不清，所以我们创建一个材质，命名为 Clock Dark，然后设置 Albedo 颜色值为 (73 73 73 255)，然后把这个材质拖到Cube上，现在应该是下图中的样子。\n接下来我们继续创建其他刻度，但是有一个问题，我们怎样才能精确地设置每一个刻度的位置呢？其实很简单，只需要旋转30度即可，但是，不是旋转刻度本身，而是要建立一个新的 GameObject。\n新建一个新的空 GameObject，坐标置为 (0, 0, 0)，然后将刚才创建的 Cube 拖动到新建立的 GameObject 下面，作为子物体，将 Cube 重命名为 Hour Indicator。如下图这样\n下面我们创建 1 点时的刻度，只需要复制上面的 “GameObject”，注意，不是复制 Hour Indicator，而是复制它的父物体，然后将复制后的物体 y 轴旋转 30 度即可。那 2 点的位置，就是再复制一个 GameObject，这只旋转为 60 度即可。其他的时间刻度也同样，只需要依次增加旋转角度。\n当所有刻度创建完毕后，我们将所有的 Hour Indicator 拖动到之前创建的 Clock 下面，然后删除掉为了旋转而临时创建的 “GameObject”，到此，刻度创建完毕。如下图\n1.4 创建时钟指针 创建指针，与上面创建刻度类似。首先新建一个 Cube，命名为 Arm，设置 Scale 为 (0.3, 0.2, 2.5)，设置坐标 (0, 0.2, 0.75)。然后将上面创建的材质 Clock Drak 也赋予我们刚建立的 Arm。现在状态如下\n为了后面旋转，我们还要创建一个空的GameObject，命名为 Hours Arm，然后将 Hours Arm 坐标设置为 (0, 0, 0)。然后将之前创建的 Arm 拖动到 Hours Arm 下面，作为其子物体。然后再将 Hours Arm 拖动到 Clock 下面。现在的层级如下\n接下来我们再创建分针和秒针，和上面创建时针基本类似。选中之前创建的 Hours Arm，然后按 Ctrl+D (如果是Mac，则是Command + D) 两次，复制两份 Hours Arm，重命名为 Minutes Arm 和 Seconds Arm，作为分针和秒针。\n设置 Minutes Arm 下面的 Arm 缩放和坐标，Scale 为 (0.2, 0.15, 4)，Position 为 (0, 0.375, 1)\n设置 Seconds Arm 下面的 Arm 绽放和坐标，Scale 为 (0.1, 0.1, 5)，Position 为 (0, 0.5, 1.25)\n为了使秒针更明显，我们创建一个新的材质，命名为 Clock Red，然后设置颜色值为 (197, 0, 0, 255)，然后将材质拖到 Seconds Arm 下面的 Arm 物体上。目前应该是下面的样子\n2 实时显示当前时间 接下来就是写代码的时间，我们先看代码，然后对代码作解释。代码中我们实现了两种指针行走的方式，一种是逐步方式，一步是持续方式。注意看代码中的注释\nusing UnityEngine; using System; public class Clock : MonoBehaviour { // 定义时针、分针、秒针步伐角度  const float degreesPerHour = 30f; const float degreesPerMinute = 6f; const float degreesPerSecond = 6f; // 时针、分针、秒针的旋转体 Transform  public Transform hoursTransform; public Transform minutesTransform; public Transform secondsTransform; // 指针行走模式  public bool continuous = false; private void Awake() { UpdateDiscrete(); } private void Update() { if (continuous) { UpdateContinuous(); } else { UpdateDiscrete(); } } // 逐步方式更新当前时间  private void UpdateDiscrete() { DateTime time = DateTime.Now; hoursTransform.localRotation = Quaternion.Euler(0f, time.Hour * degreesPerHour, 0f); minutesTransform.localRotation = Quaternion.Euler(0f, time.Minute * degreesPerMinute, 0f); secondsTransform.localRotation = Quaternion.Euler(0f, time.Second * degreesPerSecond, 0f); } // 持续方式更新当前时间  private void UpdateContinuous() { TimeSpan time = DateTime.Now.TimeOfDay; hoursTransform.localRotation = Quaternion.Euler(0f, (float)time.TotalHours * degreesPerHour, 0f); minutesTransform.localRotation = Quaternion.Euler(0f, (float)time.TotalMinutes * degreesPerMinute, 0f); secondsTransform.localRotation = Quaternion.Euler(0f, (float)time.TotalSeconds * degreesPerSecond, 0f); } } 上面代码中，首先我们定义了各指针每一步行走的角度，然后定义了三个变量，用于引用三个指针旋转体的Transform，最后写了两种方式的更新指针位置，通过 continuous 变量控制使用哪种方式更新指针。\n将脚本拖动到我们之前建立的 Clock 物体上面，然后将三个指针的旋转体 Transform 拖到脚本对应的变量区域，如下图所示\n接下来，运行即可看到效果\n下面是未勾选 continuous 的运行效果 下面是勾选了 continuous 的运行效果\n好了，这次的教程到这里就结束了，如果有什么问题，欢迎在下面留言~\n 原文翻译自 Game Objects and Scripts Creating a Clock Github 代码下载: animating-the-clock.unitypackage\n ","wordCount":"406","inLanguage":"en","datePublished":"2020-01-06T11:02:32+08:00","dateModified":"2020-01-06T11:02:32+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/unity-basis-01-clock/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+制作一个会动的时钟
+</h1>
+<div class=post-meta><span title="2020-01-06 11:02:32 +0800 CST">January 6, 2020</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。</p>
+<p>今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U93310f53935245659d219f8bab5dde58b.jpg alt=p002001_Unity-001-1>
+</p>
+<h2 id=1-首先建立一个新工程>1 首先建立一个新工程<a hidden class=anchor aria-hidden=true href=#1-首先建立一个新工程>#</a></h2>
+<p>首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ua005fe3deabb46b39c39b16428a4253eQ.png alt=p002002_Unity-001-2>
+</p>
+<p>你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 <strong>2 by 3</strong> 即可成为下面图的样子。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ua364665b006a4ee58ec2a904a27787aeq.png alt=p002003_Unity-001-3>
+</p>
+<p>下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U2c7aaaff6a8f4947a41fb5da2e3ac52ff.png alt=p002004_Unity-001-4>
+</p>
+<h2 id=11-创建一个-gameobject>1.1 创建一个 GameObject<a hidden class=anchor aria-hidden=true href=#11-创建一个-gameobject>#</a></h2>
+<p>默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 <strong>Clock</strong>，并且把它的位置置为 (0,0,0)。看下面的图</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ub964f23478bf41dfba9d0ff729713b38r.png alt=p002005_Unity-001-5>
+</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Uca5aaa0c0c8f47de87a05cff99f6a500a.png alt=p002006_Unity-001-6>
+</p>
+<h2 id=12-创建时钟的表盘>1.2 创建时钟的表盘<a hidden class=anchor aria-hidden=true href=#12-创建时钟的表盘>#</a></h2>
+<p>创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U20f194d82c254c25bd57462d413c979ef.png alt=p002007_Unity-001-7>
+</p>
+<p>Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。</p>
+<p>然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U29d2010a2b8540daa1ddb76d0abf69726.png alt=p002008_Unity-001-8>
+</p>
+<p>接下来要做的，就是把 Cylinder 重命名为 Face，然后把这个物体拖到我们一开始建立的 Clock 物体下面，作为它的子物体，并且把坐标归为 (0, 0, 0)，如下图。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U692ab8ab24d74d479279f6da97368224v.png alt=p002009_Unity-001-9>
+</p>
+<h2 id=13-创建时钟刻度>1.3 创建时钟刻度<a hidden class=anchor aria-hidden=true href=#13-创建时钟刻度>#</a></h2>
+<p>表盘是 360 度，有 12 个小时，所以每个小时间隔的角度是 356 / 12 = 30 度。也就是说，我们需要每隔 30 度创建一个小时刻度。最终效果如下</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ucf61173f582a41689c79433501fbe6dbR.png alt=p002010_Unity-001-10>
+</p>
+<p>接下来我们一步一步来创建刻度。</p>
+<p>首先创建一个 Cube，将它的 Scale 设置为 (0.5, 0.2, 1)，然后设置它的位置为 (0, 0.2, 4)。如果没错的话，它现在应该处于 12 点位置。</p>
+<p>但是有一个问题，因为它默认是白色的，看不清，所以我们创建一个材质，命名为 Clock Dark，然后设置 Albedo 颜色值为 (73 73 73 255)，然后把这个材质拖到Cube上，现在应该是下图中的样子。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U0796a25bc358443abdbcd49e4f464cb9k.png alt=p002011_Unity-001-11>
+</p>
+<p>接下来我们继续创建其他刻度，但是有一个问题，我们怎样才能精确地设置每一个刻度的位置呢？其实很简单，只需要旋转30度即可，但是，不是旋转刻度本身，而是要建立一个新的 GameObject。</p>
+<p>新建一个新的空 GameObject，坐标置为 (0, 0, 0)，然后将刚才创建的 Cube 拖动到新建立的 GameObject 下面，作为子物体，将 Cube 重命名为 Hour Indicator。如下图这样</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U02e48b6ded1947aa8dd9ce84309e0e758.png alt=p002012_Unity-001-12>
+</p>
+<p>下面我们创建 1 点时的刻度，只需要复制上面的 &ldquo;GameObject&rdquo;，注意，不是复制 Hour Indicator，而是复制它的父物体，然后将复制后的物体 y 轴旋转 30 度即可。那 2 点的位置，就是再复制一个 GameObject，这只旋转为 60 度即可。其他的时间刻度也同样，只需要依次增加旋转角度。</p>
+<p>当所有刻度创建完毕后，我们将所有的 Hour Indicator 拖动到之前创建的 Clock 下面，然后删除掉为了旋转而临时创建的 &ldquo;GameObject&rdquo;，到此，刻度创建完毕。如下图</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ue3b2a1a6b0604c2a9c8a9fa8cae518eeJ.png alt=p002013_Unity-001-13>
+</p>
+<h2 id=14-创建时钟指针>1.4 创建时钟指针<a hidden class=anchor aria-hidden=true href=#14-创建时钟指针>#</a></h2>
+<p>创建指针，与上面创建刻度类似。首先新建一个 Cube，命名为 Arm，设置 Scale 为 (0.3, 0.2, 2.5)，设置坐标 (0, 0.2, 0.75)。然后将上面创建的材质 Clock Drak 也赋予我们刚建立的 Arm。现在状态如下</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Uf9509e79afdb4be5b867836ac4919002O.png alt=p002014_Unity-001-14>
+</p>
+<p>为了后面旋转，我们还要创建一个空的GameObject，命名为 Hours Arm，然后将 Hours Arm 坐标设置为 (0, 0, 0)。然后将之前创建的 Arm 拖动到 Hours Arm 下面，作为其子物体。然后再将 Hours Arm 拖动到 Clock 下面。现在的层级如下</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ud60e2c2ae6474d3fbda89413d0128a1a1.png alt=p002015_Unity-001-15>
+</p>
+<p>接下来我们再创建分针和秒针，和上面创建时针基本类似。选中之前创建的 Hours Arm，然后按 Ctrl+D (如果是Mac，则是Command + D) 两次，复制两份 Hours Arm，重命名为 Minutes Arm 和 Seconds Arm，作为分针和秒针。</p>
+<p>设置 Minutes Arm 下面的 Arm 缩放和坐标，Scale 为 (0.2, 0.15, 4)，Position 为 (0, 0.375, 1)</p>
+<p>设置 Seconds Arm 下面的 Arm 绽放和坐标，Scale 为 (0.1, 0.1, 5)，Position 为 (0, 0.5, 1.25)</p>
+<p>为了使秒针更明显，我们创建一个新的材质，命名为 Clock Red，然后设置颜色值为 (197, 0, 0, 255)，然后将材质拖到 Seconds Arm 下面的 Arm 物体上。目前应该是下面的样子</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ua4b348fa34de43628f0689712a9c7d4f6.png alt=p002016_Unity-001-16>
+</p>
+<h2 id=2-实时显示当前时间>2 实时显示当前时间<a hidden class=anchor aria-hidden=true href=#2-实时显示当前时间>#</a></h2>
+<p>接下来就是写代码的时间，我们先看代码，然后对代码作解释。代码中我们实现了两种指针行走的方式，一种是逐步方式，一步是持续方式。注意看代码中的注释</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>using</span> UnityEngine;
+<span style=color:#66d9ef>using</span> System;
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Clock</span> : MonoBehaviour
+{
+    <span style=color:#75715e>// 定义时针、分针、秒针步伐角度
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>float</span> degreesPerHour = <span style=color:#ae81ff>30f</span>;
+    <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>float</span> degreesPerMinute = <span style=color:#ae81ff>6f</span>;
+    <span style=color:#66d9ef>const</span> <span style=color:#66d9ef>float</span> degreesPerSecond = <span style=color:#ae81ff>6f</span>;
+
+    <span style=color:#75715e>// 时针、分针、秒针的旋转体 Transform
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> Transform hoursTransform;
+    <span style=color:#66d9ef>public</span> Transform minutesTransform;
+    <span style=color:#66d9ef>public</span> Transform secondsTransform;
+
+    <span style=color:#75715e>// 指针行走模式
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>bool</span> continuous = <span style=color:#66d9ef>false</span>;
+
+    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> Awake()
+    {
+        UpdateDiscrete();
+    }
+
+    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> Update()
+    {
+        <span style=color:#66d9ef>if</span> (continuous)
+        {
+            UpdateContinuous();
+        }
+        <span style=color:#66d9ef>else</span>
+        {
+            UpdateDiscrete();
+        }
+    }
+
+    <span style=color:#75715e>// 逐步方式更新当前时间
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> UpdateDiscrete()
+    {
+        DateTime time = DateTime.Now;
+        hoursTransform.localRotation = 
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, time.Hour * degreesPerHour, <span style=color:#ae81ff>0f</span>);
+
+        minutesTransform.localRotation = 
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, time.Minute * degreesPerMinute, <span style=color:#ae81ff>0f</span>);
+
+        secondsTransform.localRotation =
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, time.Second * degreesPerSecond, <span style=color:#ae81ff>0f</span>);
+    }
+
+    <span style=color:#75715e>// 持续方式更新当前时间
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>private</span> <span style=color:#66d9ef>void</span> UpdateContinuous()
+    {
+        TimeSpan time = DateTime.Now.TimeOfDay;
+        hoursTransform.localRotation =
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, (<span style=color:#66d9ef>float</span>)time.TotalHours * degreesPerHour, <span style=color:#ae81ff>0f</span>);
+
+        minutesTransform.localRotation =
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, (<span style=color:#66d9ef>float</span>)time.TotalMinutes * degreesPerMinute, <span style=color:#ae81ff>0f</span>);
+
+        secondsTransform.localRotation =
+            Quaternion.Euler(<span style=color:#ae81ff>0f</span>, (<span style=color:#66d9ef>float</span>)time.TotalSeconds * degreesPerSecond, <span style=color:#ae81ff>0f</span>);
+    }
+}
+</code></pre></div><p>上面代码中，首先我们定义了各指针每一步行走的角度，然后定义了三个变量，用于引用三个指针旋转体的Transform，最后写了两种方式的更新指针位置，通过 continuous 变量控制使用哪种方式更新指针。</p>
+<p>将脚本拖动到我们之前建立的 Clock 物体上面，然后将三个指针的旋转体 Transform 拖到脚本对应的变量区域，如下图所示</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U753239003c10452b8f71b692c27df1cc2.png alt=p002017_Unity-001-17>
+</p>
+<p>接下来，运行即可看到效果</p>
+<p>下面是未勾选 continuous 的运行效果
+</p>
+<p>下面是勾选了 continuous 的运行效果</p>
+<p></p>
+<p>好了，这次的教程到这里就结束了，如果有什么问题，欢迎在下面留言~</p>
+<blockquote>
+<p>原文翻译自 <a href=https://catlikecoding.com/unity/tutorials/basics/game-objects-and-scripts/>Game Objects and Scripts Creating a Clock</a>
+Github 代码下载: <a href=https://catlikecoding.com/unity/tutorials/basics/game-objects-and-scripts/animating-the-clock/animating-the-clock.unitypackage>animating-the-clock.unitypackage</a></p>
+</blockquote>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/>游戏开发</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/unity-sine-visualization/>
+<span class=title>« Prev Page</span>
+<br>
+<span>使用Unity3D展示Sin函数动画</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/data-structure-07-binary-heap/>
+<span class=title>Next Page »</span>
+<br>
+<span>二叉堆</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on twitter" href="https://twitter.com/intent/tweet/?text=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f&hashtags=%e6%b8%b8%e6%88%8f%e5%bc%80%e5%8f%91"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f&title=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f&summary=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f&source=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f&title=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on whatsapp" href="https://api.whatsapp.com/send?text=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 制作一个会动的时钟 on telegram" href="https://telegram.me/share/url?text=%e5%88%b6%e4%bd%9c%e4%b8%80%e4%b8%aa%e4%bc%9a%e5%8a%a8%e7%9a%84%e6%97%b6%e9%92%9f&url=https%3a%2f%2fblog.moeif.com%2fposts%2funity-basis-01-clock%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

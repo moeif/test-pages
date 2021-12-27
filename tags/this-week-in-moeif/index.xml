@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>This Week In Moeif on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/this-week-in-moeif/</link>
+    <description>Recent content in This Week In Moeif on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 26 Dec 2021 23:11:49 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/this-week-in-moeif/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This Week In Moeif 27</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-27/</link>
+      <pubDate>Sun, 26 Dec 2021 23:11:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-27/</guid>
+      <description>&lt;p&gt;又是一周结束了，时间过的好快啊。这周在焦虑和烦躁中度过。上海也开启了冬天模式，很冷，还没有取暖设备，买了一个取暖器，也做不到整屋加热，不过还好距离过年也就剩一个多月了，可以回北方了。好像已经两个周没有出去跑步了&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 26</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-26/</link>
+      <pubDate>Mon, 20 Dec 2021 21:11:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-26/</guid>
+      <description>&lt;p&gt;对于下一个游戏产品，有了一点点的方向，还没有深入去考虑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 25</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-25/</link>
+      <pubDate>Sun, 12 Dec 2021 19:47:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-25/</guid>
+      <description>这周开始学习画像素画了，还不是很熟练，不过每天会多少画几分钟，使用数位板。以前使用数位板不太习惯，慢慢的对于它的控制会越来越顺手。
+另外，这周完成了 Ray Tracing in One Weekend 系列的博客Rust重实现。接下来就要开始第二篇章了。
+今天上海下雨了，下个周的温度，可能会冷很多。
+项目进度   游戏码农：那些打工的日子 这周主要完成了头像自定义模块，简历完善模块，招聘信息模块，以及添加了能用的提示消息界面。确定了核心玩法界面的基本结构，参考了其他同类型的游戏对于时间上的处理逻辑。基本上确定了由事件来驱动整个游戏的进程，如果没有事件填充，那么时间就会停止，这样避免了很多以前想不到解决方案的问题，只是这样唯一的问题是没法一直挂机，可能过一段时间就需要操作一下。另外确定的小玩法有赛车，地下搏击俱乐部这两个。整理了一下游戏的核心，就是围绕着金钱，健康，快乐的循环。
+  本周电影  花与罪 (2021) 你 第一季 You Season 1 (2018)  本周书籍  《无后为大》（阅读中） 《重构：改善即有代码的设计》（阅读中）  下周初步计划  游戏码农逻辑编写  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 24</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-24/</link>
+      <pubDate>Sun, 05 Dec 2021 23:00:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-24/</guid>
+      <description>这周跑步了四天，还可以，下周继续。我发现跑步的时候可以捋清一些事情，这周主要跑 2.5 公里，然后走 2.5 公里，整体感觉还是挺舒适的，下个周看看是否可以加大一点跑步里程。
+这周输出了4篇博客和公众号，Rust光线追踪系列以及后续的博客，会同步到掘金这个平台上。
+这周把产品页面也搭建好了，更新了 moeif.com 这个域名。
+项目进度   游戏码农：那些打工的日子 这周开始写游戏逻辑了，已经确定了主要玩法界面的逻辑。这周把之前的Lua代码全删了，想了想，还是全用C#来写了，逻辑上不会有什么功能性的更新，如果加功能，加玩法模块，那就直接大版本更新，用C#的开发和调试效率也会更高一些。
+  本周电影  最后的决斗 The Last Duel (2021)  本周书籍  《KK三部曲》（阅读中） 《游戏设计艺术》（阅读中）  下周初步计划  游戏码农逻辑编写  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 23</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-23/</link>
+      <pubDate>Sun, 28 Nov 2021 23:55:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-23/</guid>
+      <description>&lt;p&gt;这个周主要在做夜莺号的记忆这个项目，30号要交付一个版本，到今天为止，所有的逻辑已经搞完了，明天修一下问题基本上就可以了。这个周继续输出了三篇关于Rust及光线追踪的博客以及公众号和知乎，关注和阅读的人也在增加，下个周继续。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 22</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-22/</link>
+      <pubDate>Sun, 21 Nov 2021 19:55:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-22/</guid>
+      <description>11月马上快要结束了，时间过的真快，有一点点的焦虑，但是也还好。这周开始了不断输出博客内容，可能是因为和Rust有关，阅读数量和关注数量增长了很多，后面可以考虑在每一篇文章最后加上游戏的宣传链接。看起来写博客这件事情可以长期写下去，可能前期没什么，后期积累到一定程度，不确定会发生什么。
+这周上海的温度还可以，但是今天下雨了，未来两天温度下降的很多。
+项目进度   游戏码农：那些打工的日子 这周主要做的事情还是各个模块的数据配置，以及界面元素的考虑，具体的UI还没有仔细考虑。专业技能相关配置、厨艺配置、外卖配置、找工作和面试相关配置、通勤配置、行为配置。
+  夜莺号的记忆 这个项目这周做了很多事情，工程的搭建，游戏循环的逻辑，具体的关卡的逻辑等。
+  本周电影  欲望号快车 Crash (1996) 毒液  本周书籍  《KK三部曲》（阅读中）  下周初步计划  继续数据配置工作 夜莺号关卡逻辑 有时间的话考虑游戏码农的UI构建  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 21</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-21/</link>
+      <pubDate>Mon, 15 Nov 2021 20:06:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-21/</guid>
+      <description>&lt;p&gt;这周的周记，拖到了周一才写。昨天周日，一天没干活，晚上的时候把博客从Hexo迁移到了Hugo，因为Hugo有更像样的主题。这个周小Q回家了，我一个人在上海，还是按原来的节奏开发，还在继续推进游戏码农项目，但是推的有点吃力，感觉好多东西没有想明白。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 20</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-20/</link>
+      <pubDate>Sun, 07 Nov 2021 16:06:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-20/</guid>
+      <description>&lt;p&gt;今天上海的天气开始大幅度降温了，现在外面开始下雨了，刚刚看完了一部电影《幸福终点站》，一开始想从里面寻找一下关于时间线的灵感，但是看着看着，就沉浸到剧情里了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 19</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-19/</link>
+      <pubDate>Sun, 31 Oct 2021 20:37:17 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-19/</guid>
+      <description>&lt;p&gt;这周买了滑板，现在每天下午 4:00 左右会出去跑步或玩会滑板。下午出去运动，没有以前晚上出去时那种任务的负重感，更像是放松一下。现在的状态还好，时间上算是比较自由，唯一的问题是还没有什么收入。之前一直关注的一个虚拟货币 GEEKCASH 这个月上线了，但是没有奇迹出现，这个慢慢等吧，只要不归0，就还有希望。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 18</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-18/</link>
+      <pubDate>Sun, 24 Oct 2021 19:16:52 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-18/</guid>
+      <description>&lt;p&gt;这周使用 plexmediaserver 把下载的电影给整理了一下，方便观看，本来想使用树莓派搞，可是服务启动总是失败，也不知道为什么，没找到解决方案，就放弃了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 17</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-17/</link>
+      <pubDate>Mon, 18 Oct 2021 10:10:48 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-17/</guid>
+      <description>&lt;p&gt;这周搞了一个新的Logo，当然是付费的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 16</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-16/</link>
+      <pubDate>Mon, 11 Oct 2021 12:43:45 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-16/</guid>
+      <description>&lt;p&gt;今天晚上下雨了，上海的气温终于要凉快一点了。这周搞好了社保，直接从公司账户交，似乎一切都在向着正确的方向推进。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 15</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-15/</link>
+      <pubDate>Sun, 03 Oct 2021 19:37:28 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-15/</guid>
+      <description>&lt;p&gt;这周比较轻松，没有做太多的事情，改了一下界面的设计及逻辑，然后改了一下服务器。国庆也没出去玩，假期和工作日现在并没有那么明显的界限了。打算下个周去一个偏远点的地方，例如滴水湖。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 14</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-14/</link>
+      <pubDate>Mon, 27 Sep 2021 15:23:11 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-14/</guid>
+      <description>&lt;p&gt;这周中秋，回老家了，没有做太多事情，只是把服务器排行榜，用户数据，膜拜等功能写完了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 13</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-13/</link>
+      <pubDate>Sun, 19 Sep 2021 19:25:01 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-13/</guid>
+      <description>这周主要在学习使用Rust和Rocket Web框架写Web逻辑。这将用于ZombieDash以及其他游戏的排行榜，以前只是把功能堆起来，这一次重新看这些内容，清晰了许多，至于不至于头痛了。看文档也有点头绪了，目前用户部分的逻辑已经写完了，接下来就是把分数逻辑加上就可以了，下周应该可以搞完，顺别把UI重构一下，争取这个月底能够提交到AppStore并且审核通过。还有两周，时间还是挺紧的。
+这周还收到了诗仙与诗魔游戏的软著证书，但是发现并没有什么太大的用处，要上架国内的一些Android平台，还得接入各个平台的SDK，一个免费游戏，真是醉了&amp;hellip;
+中秋了，明天回家&amp;hellip;
+项目进度   音乐与僵尸（ZombieDash） 客户端添加了背景音乐，确定了大概的UI重构方式，以及音乐播放逻辑。服务器的写完确定，下周可以搞完。
+  动物旅行 上周主要的流程逻辑已经写完，这周主要做了一点UI视觉方面接入的工作，UI逻辑进行中。
+  pinmaker 横盘中&amp;hellip;
+  本周电影  好家伙 GoodFellas (1990)  本周书籍  《大师谈游戏设计：创意与节奏》（已读完） 《写给大家看的设计书》（已读完）  下周初步计划  完成音乐与僵尸的UI重工作 完成音乐与僵尸的服务器逻辑 完成继续动物旅行的UI逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 12</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-12/</link>
+      <pubDate>Sun, 12 Sep 2021 20:50:21 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-12/</guid>
+      <description>这周开始看一书关于游戏设计，游戏节奏方面的书籍和相关资料，觉得有必要系统地科学得去学习一下游戏设计，学习一下前辈们积累的丰富经验。玩游戏是一会事，做游戏，把握好游戏的节奏，明白某个点为什么要那样设计，就是另一会事了。单纯参考（抄）其他游戏的设计，总觉得云里雾里的，无法做到极致。
+项目进度   诗仙与诗魔 这周收到软件著作权的证书，国内的几个商店提交了一下，目前正在审核中。作为独立开发者，感觉国内的市场环境还是有点难。
+  音乐与僵尸（ZombieDash） 这周把核心的流程跑通了，Node的位置也改变了一下，放到了两边，临时的UI也加了进去，录了Demo视频上传到了B站和Youtube。下周开始调整节奏，以及看一下UI怎么布局，怎么设计。
+  动物旅行 这周把核心玩法的逻辑框架搞完了，数据的恢复逻辑也可以了，接下来开始一边加入UI，一边完善整个逻辑。
+  pinmaker 重新调整了一下程序，目前一共有3W的本金在跑，上个月因为调整过本金，收益没法算了，这个月月底看一下。
+  本周电影  本能 Basic Instinct (1992)  下周初步计划  音乐与僵尸节奏体验调整，UI设计 动物旅行UI逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 11</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-11/</link>
+      <pubDate>Sun, 05 Sep 2021 20:38:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-11/</guid>
+      <description>这周把原来的台式机各个部件挂闲鱼卖了，还有 2015 年的 MacBook Pro 也卖了，然后换成了一台 Macmini M1 和一个 Philips 的4K显示器。整体的体验，比原来的PC好了很多。家里工作的位置也换了一下，换到了靠近窗边的位置，感觉整体效率提高了许多。所以这周就没怎么写逻辑，配置了一下环境。
+项目进度   诗仙与诗魔 软著的审核终于有动静了，现在处于待发放的状态，预计下周可以收到。这样可以把国内各大Android 市场上一下。
+  音乐与僵尸 这周加入了僵尸的资源，修改了歌曲的难度逻辑。开始搭建基本的 UI 界面。
+  动物旅行 今天把游戏核心Action的逻辑重新构建了一下，为了做数据的保存以及恢复，重新整理了一下数据结构。
+  本周电影  尸骨无存3：零号病人 Cabin Fever: Patient Zero (2014) 神秘感染 Contracted (2013) 神秘感染：第二阶段 Contracted: Phase II (2015)  下周初步计划  音乐与僵尸的UI搭建 动物旅行核心Action逻辑写完  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 10</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-10/</link>
+      <pubDate>Sun, 29 Aug 2021 21:25:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-10/</guid>
+      <description>&lt;p&gt;这周的整体进度还可以，首先新的苹果账号已经可以用了，诗仙与诗魔也上架了AppStore，审核通过居然只用了一天。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 9</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-9/</link>
+      <pubDate>Sun, 22 Aug 2021 20:49:12 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-9/</guid>
+      <description>这周上架了诗仙与诗魔项目，不过没有多少玩家，国内只上架了TapTap，其他的Android商店等待著作权下来。这周有了一个新的项目构思，一个模拟养成的游戏，具体还在构思中，细节比较多。音乐与僵尸游戏进入了Demo阶段的开发流程。
+这周还整理了一下博客，换了一下主题，回到了以内容为中心的模式。后面会慢慢提高写作输入的频率。
+项目进度   诗仙与诗魔 国内已上架了TapTap，国外上架了GooglePlay，以及一些其他的商店，像华为，三星，小米，APKPure等。国内其他的Android商店等待著作权。
+  音乐与僵尸 开始了核心玩法的Demo逻辑开发，目前完成了Node点的逻辑。Beat点的规则下周再确定一下。预计这个月底可以完成整个核心玩法Demo的开发，然后就可以开始加音乐和做UI逻辑。
+  动物旅行 动物旅行目前只有周末会开发一天，今天写了一下数据方面的结构，游戏状态的描述逻辑基本上确定了，写了一些基类，下周可以继续填充细节。UI方面的资源有一些缺失，暂时先放一下，等待补全。
+  本周电影  第四公民 Citizenfour (2014) 黑白魔女库伊拉 Cruella (2021)  下周初步计划  音乐与僵尸游戏Demo逻辑 动物旅行游戏核心玩法逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 8</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-8/</link>
+      <pubDate>Sun, 15 Aug 2021 17:33:36 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-8/</guid>
+      <description>这周发生了令人很不愉快的事情，苹果把我的开发者账号封了，之前上架的物时和百变罪犯也被下架了。我不觉得我有做错什么，但是苹果认为我违反了3.2，申诉也不行。面对强硬的巨头，普通的开发者一点办法都没有，甚至没有任何辩解的机会。
+项目进度   诗仙与诗魔 这个项目算是开发完了，目前提交了 GooglePlay 和 TapTap，两个平台都还在审核中。软件著作权还没有下来，国内其他的应用商店还上不去，只能等等看。
+  动物旅行 这周整理了一下数据结构，然后今天搞了一下部分游戏数据的配置表，整理了一下基础代码的逻辑。
+  一些想法  相对于App需要受到平台的限制，Web产品似乎更加自由一点，只要有一个域名，在不违反法律的情况下，几乎不会有谁可以封禁产品。这个方向可以考虑一下。  关于学习 有一些东西是会变的，有一些东西是不会变的。
+下周初步计划  构思音乐与僵尸游戏 诗仙与诗魔上架各大Android平台 写动物旅行的逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 7</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-7/</link>
+      <pubDate>Sun, 08 Aug 2021 22:53:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-7/</guid>
+      <description>这周总算把诗仙与诗魔服务器的逻辑全都写完了。
+今天一整天都在客户端和服务器联调，与AWS的数据交互部分应该没有什么大问题了。放在自己服务器的匹配逻辑，今天晚上调了一下，改了几个比较大的问题，协议都通了，明天还需要再看一下数据的准确性。
+项目进度   pinmaker 第40天，DOTUSDT 目前收益 119.19 USDT，上行的挂单已经全部卖出，目前无法再继续交易了，只能等待价格下跌。
+  pinmakerhuobi 第11天，HTUSDT 目前收益 80.06 USDT, 增加了一次本金，目前本金为 3000 美元。
+  诗仙与诗魔 服务器逻辑完成，需要更加详细的测试。客户端与服务器通信的逻辑全部完成，数据拉取与保存全部完成。等待与服务器进行更详细的数据正确性测试。
+在完成正确性测试后，客户端还需要添加音乐，添加排行榜头像随机显示的逻辑。然后看一下哪一些UI可以添加一下动效。
+接下来就是出包测试。
+软著还在审查中，不知道下周会不会审查完。
+  下周初步计划  客户端与服务器联调完 完成客户端各方面的完善 出包进行真机测试  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 6</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-6/</link>
+      <pubDate>Sun, 01 Aug 2021 22:23:44 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-6/</guid>
+      <description>今天已经是8月份了，好快啊，从开始到现在，已经4个月了。
+这周没有做客户端的事情，几乎都在看服务器相关的东西，今天终于把排行榜的逻辑写完了，因为使用的是 Rust，所以写的过程中遇到很多问题，不断的查，不断地改，基本上是一边学一边改。昨天想过放弃使用 Rust，直接使用 Nodejs 推起来，但是后来考虑了一下，觉得那样没有任何积累，就还是继续学习使用 Rust 来写了。
+不过这周将 HTUSDT 的交易对也开始了网格交易。火币的API调了好一会才调通，主要是文档写的不清楚。
+这周还参加了 Unity 的技术开放活动。
+项目进度   pinmaker 这个跑了一个月，目前收益正好 105.35 USDT。不过DOT有一部分是在高价买的，现在并没有买回来，严格来说，还不能这样来考虑收益。
+  pinmakerhuobi 火币的 HTUSDT 交易对，这个只是在 pinmaker的基础上改了一下，大部分逻辑没有改，只是API的调用及数据结构改了一下。到今天为止，跑了4天了，目前收益 40 USDT。但是这个本金多，投入了 1500 USDT。
+  诗仙与诗魔 这周没有做客户端的事情，全在搞服务器了。基本的流程已经理清，用户数据，服务器状态，版本信息等数据，全放 aws 的 DynamoDB中，客户端直接拉取。排行榜，匹配这两块，放 aws 的 ec2中，先使用免费的服务器，需要测一下并发。
+今天看了一下软著，已经走到了审查中这一步，提交的还是有点晚了。
+  下周初步计划  完成服务器的全部逻辑 调通客户端与服务器的通信 客户端边缘模块完善，服务器状态，版本更新提示等  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 5</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-5/</link>
+      <pubDate>Sun, 25 Jul 2021 20:57:13 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-5/</guid>
+      <description>&lt;p&gt;这周去参加了亚马逊云科技的全球峰会，了解了一些东西，不过目前我还用不上，他们游戏部分的东西倒是可以看一下。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 4</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-4/</link>
+      <pubDate>Sun, 18 Jul 2021 20:57:06 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-4/</guid>
+      <description>&lt;p&gt;这周主要的工作都在搞诗仙与诗魔项目。今天写了一篇文章发在了Indiehackers，看看能不能帮助国外的独立开发者上架中国市场。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 3</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-3/</link>
+      <pubDate>Sun, 11 Jul 2021 20:56:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-3/</guid>
+      <description>项目进度   pinmaker 目前 pinmaker 已经赚了37.9 USDT，在写这篇总结的此刻，没有待成交的交易对，现在正处于纯粹盈利 37.9 的状态。这周好像调整过一次上涨部分的网格大小。
+  诗词项目 这个项目的名字已经确定了，还是用了之前想的那个名字，诗仙与诗魔。这周完成了界面的设计，这次使用了 Figma，总体来说还挺好用的。今天打印邮寄了著作权申请的资料。
+  音乐游戏 音乐游戏暂时先放一下，从工作量已经实现上来说，有一些点工作量有点大，先做诗词项目。
+  彩票玩家 此项目暂时不考虑了，个人根本上不了线，基本死透。以这个产品为主题写了一篇公众号。
+  下周初步计划  诗词数据确定好 诗词数据格式化 客户端的部分代码可以开始写，顺便整理一下以前的框架 学习 Microservice in Rust，考虑一下服务器部分怎么写。 诗词项目开发模块和计划拆分  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 2</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-2/</link>
+      <pubDate>Sat, 03 Jul 2021 20:56:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-2/</guid>
+      <description>这是 The Week In Moeif 的第二周。对于 Moeif 未来的规划还是有点迷茫，到底做什么，目前来看，对于学习App开发是没有太大的兴趣，这一点可以确定。对于游戏开发，兴趣度挺好的，另外，对于Web，还没有一个明确的方向，做什么，但是相对于App开发来说，兴趣度高一点，有一些小想法想做成Web产品，例如 This Week In X。而对于后端，一方面是写一些纯后端的东西，例如程序化交易，或者后面的量化交易，再就是服务于游戏或App产品，这一块目前可以确定的是一定是用Rust来写。
+所以目前看来的方向有下面四个
+ 游戏 Web 服务器 程序化/量化交易  项目进度   pinmaker pinmaker这周已经跑起来了，从6.30开始，到今天的7.4号晚上，一共收益了8 USDT了，中间调整了一次网格，由15个网格调整为了10个，交易数量每网格2个DOT调整为了3个DOT。这个项目先跑跑看，目前看来是能赚点小钱。计划再阅读或者学习一点自动化交易相关的东西，然后再加来看这个项目。
+  彩票玩家 彩票玩家这个项目已经完了，上不了线，只能算是学习项目了，著作权也申请不下来，还是因为一些版权问题。这个项目就这样了吧。
+  下周初步计划  准备古诗数据 对古诗游戏进行整体策划 开始阅读KK三部曲 写完网络营销课程的作业  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 1</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-1/</link>
+      <pubDate>Sat, 26 Jun 2021 20:56:28 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-1/</guid>
+      <description>&lt;p&gt;从这周开始，总结每一周做了哪些事情，这是 This Week In Moeif 的第一周。每周的总结将从项目的进度，学习了哪些东西，下周的计划，或者一些想法进行记录。&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

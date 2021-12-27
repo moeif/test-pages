@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Python on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/python/</link>
+    <description>Recent content in Python on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Tue, 11 Feb 2020 20:16:39 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 Python 去掉 Kindle PC 复制时自动添加的内容</title>
+      <link>https://blog.moeif.com/posts/python-delete-kindle-pc-content/</link>
+      <pubDate>Tue, 11 Feb 2020 20:16:39 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/python-delete-kindle-pc-content/</guid>
+      <description>在使用 Kindle PC 软件看英文电子书时，常常会配合 CopyTranslator 软件做剪切板内容翻译，但是最近发现 Kindle PC 在复制内容时，会在剪切板中自动附加上书籍的内容，就像下面这样
+There’s nothing wrong with pursuing venture funding and attempting to grow fast like eBay Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&amp;#39;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本. 上面的内容，第一行是我要复制的内容，Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&#39;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本. 是Kindle PC自动附加的书籍信息内容，这一点很烦人。
+要解决这个问题其实很简单，只要监控剪切板变化时，将剪切板中的字符串，去掉自动附加的内容，然后将新的字符串替换回剪切板即可。接下来我们使用Python来做这件事情，代码只需要很少几行即可。</description>
+    </item>
+    
+  </channel>
+</rss>

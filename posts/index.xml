@@ -1,0 +1,1481 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on 萌一小栈</title>
+    <link>https://blog.moeif.com/posts/</link>
+    <description>Recent content in Posts on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 26 Dec 2021 23:11:49 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This Week In Moeif 27</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-27/</link>
+      <pubDate>Sun, 26 Dec 2021 23:11:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-27/</guid>
+      <description>&lt;p&gt;又是一周结束了，时间过的好快啊。这周在焦虑和烦躁中度过。上海也开启了冬天模式，很冷，还没有取暖设备，买了一个取暖器，也做不到整屋加热，不过还好距离过年也就剩一个多月了，可以回北方了。好像已经两个周没有出去跑步了&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 26</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-26/</link>
+      <pubDate>Mon, 20 Dec 2021 21:11:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-26/</guid>
+      <description>&lt;p&gt;对于下一个游戏产品，有了一点点的方向，还没有深入去考虑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 25</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-25/</link>
+      <pubDate>Sun, 12 Dec 2021 19:47:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-25/</guid>
+      <description>这周开始学习画像素画了，还不是很熟练，不过每天会多少画几分钟，使用数位板。以前使用数位板不太习惯，慢慢的对于它的控制会越来越顺手。
+另外，这周完成了 Ray Tracing in One Weekend 系列的博客Rust重实现。接下来就要开始第二篇章了。
+今天上海下雨了，下个周的温度，可能会冷很多。
+项目进度   游戏码农：那些打工的日子 这周主要完成了头像自定义模块，简历完善模块，招聘信息模块，以及添加了能用的提示消息界面。确定了核心玩法界面的基本结构，参考了其他同类型的游戏对于时间上的处理逻辑。基本上确定了由事件来驱动整个游戏的进程，如果没有事件填充，那么时间就会停止，这样避免了很多以前想不到解决方案的问题，只是这样唯一的问题是没法一直挂机，可能过一段时间就需要操作一下。另外确定的小玩法有赛车，地下搏击俱乐部这两个。整理了一下游戏的核心，就是围绕着金钱，健康，快乐的循环。
+  本周电影  花与罪 (2021) 你 第一季 You Season 1 (2018)  本周书籍  《无后为大》（阅读中） 《重构：改善即有代码的设计》（阅读中）  下周初步计划  游戏码农逻辑编写  </description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 14: 最终汇总效果</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-14/</link>
+      <pubDate>Sat, 11 Dec 2021 20:40:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-14/</guid>
+      <description>这一节没有新的知识，只是将之前知识汇总起来，然后生成一张最终的图，最终生成的图如下
+首先，将创建世界及添加物体的代码从 main 函数中删除，然后抽象成一个函数 random_scene，在这个函数中，会随机生成一些球体，并且根据规则，随机使用我们的已有的三个材质。
+// src/main.rs fn random_scene() -&amp;gt; HittableList { let mut world = HittableList::new(); let ground_material = Lambertian::new(Color::new(0.5, 0.5, 0.5)); world.add(Box::new(Sphere::new( Vec3::new(0.0, -1000.0, 0.0), 1000.0, ground_material, ))); let mut rng = rand::thread_rng(); // 生成一些小球  for a in -11..11 { for b in -11..11 { let choose_mat: f64 = rng.gen(); let x_offset: f64 = rng.gen(); let z_offset: f64 = rng.gen(); let center = Vec3::new(a as f64 + 0.</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 13: 散焦模糊</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-13/</link>
+      <pubDate>Fri, 10 Dec 2021 20:19:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-13/</guid>
+      <description>&lt;p&gt;散焦模糊，通俗来讲就是在聚焦区域外的东西，都是模糊的。通常这种效果被称为 Depth Of Field（DOF)，也就是景深。最终效果如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 12: 正交相机</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-12/</link>
+      <pubDate>Wed, 08 Dec 2021 23:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-12/</guid>
+      <description>正交相机所看到的东西大小，与远近无关，只与正交相机的视野（FOV）有关。FOV越大，能看到的世界范围就大，也就是能看到更多的东西，而FOV越小，能看到的世界范围就越小，也就是只能看到较少的东西。
+由于FOV越小，看到的范围就越小，从而，相机的上下界，所发出的射线，所能覆盖的范围，就小。也就是相当于所有的射线，都集中在世界中一个小范围，从这个小范围中取得颜色，填充画布（最后渲染的图片），所以看到的东西就大。而如果FOV很大，射线所能覆盖的世界范围就大，用这个大范围来填充画布，自然同一个物体就会看起来小。
+可以想象一个两个盒子，一个大的，假设口径是50厘米，扣在一把键盘上，可以扣住整个键盘，相当于摄像机看到了整个键盘。而将一个1厘米口径的盒子，扣在键盘上，可能只能覆盖其中一个键，也就是相机只能看到这一个键范围的东西。但最后都会将扣到的东西填充到画布上，所以，就相当于FOV越小，看到的东西就越大。
+添加相机FOV逻辑 在本文中，相机的FOV，我们使用角度来表示，上图中，$\theta$ 就是相机的开口大小，而 $h = \tan(\frac{\theta}{2})$，$2 * h$就是视口的高度，而视口的宽度，通过自定义的宽高比，来动态计算出来。
+下面修改 camera.rs 的代码，添加 fov 和 宽高比。
+// src/camera.rs impl Camera { pub fn new(vfov: f64, aspect_ratio: f64) -&amp;gt; Self { let theta = vfov * std::f64::consts::PI / 180.0; let h = (theta / 2.0).tan(); let viewport_height = 2.0 * h; let viewport_width = aspect_ratio * viewport_height; let focal_length = 1.0; let origin = Vec3::zero(); let horizontal = Vec3::new(viewport_width, 0.0, 0.</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 11: 折射</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/</link>
+      <pubDate>Tue, 07 Dec 2021 15:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-11/</guid>
+      <description>关于折射的实现，可以使用斯涅尔定律。当光波从一种介质传播到另一种介质时，如果两种介质拥有不同的折射率，那么光线就会发生折射现象。例如光线从空气中进入水中，或者从空气中进入玻璃中。
+下面涉及到的公式，也可以不用理解推导过程，只要拿来用就行。
+斯涅尔定律 斯涅尔定律表明，当光波从介质1传播到介质2时，假若两种介质的折射率不同，则会发生折射现象，其入射光和折射光都处于同一平面，称为“入射平面”，并且与界面法线的夹角满足如下关系：
+$n_{1}\sin\theta_{1} = n_{2}\sin\theta_{2}$
+其中，$n_{1}$、$n_{3}$ 分别是两种介质的折射率，$\theta_{1}$、$\theta_{2}$ 分别是入射光线、折射光线与界面法线的夹角，分别叫做入射角和折射角。
+要求折射光线的方向，就需要解出 $\sin\theta_{2}$ 来。根据上面的公式可知
+$\sin\theta_{2} = \frac{n_{1}}{n_{2}} \cdot \sin\theta_{1}$
+我们可以将折射光线的向量，分解为一个垂直向量和一个平行向量。计算出这两个向量，然后相加，即可得到最终的折射向量。
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + \cos\theta_{1}*法向量)$
+$ 平行向量 = - \sqrt{1 - |垂直向量|^2 * 法向量}$
+由于，两个向量的点乘与其夹角的 cos 值有关，也就是 $ a \cdot b = |a||b|\cos\theta $ ，如果 a 和 b 都是单位向量，那么可得到 $a \cdot b = \cos\theta$
+根据上面的规则，可以使用新的方式来表示垂直向量
+$ 垂直向量 = \frac{n_{1}}{n_{2}}(入射向量 + (-入射向量 \cdot 法向量) * 法向量) $
+综上，可以使用代码来实现折射逻辑，在 vec3.rs 中添加一个新的函数 refract</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 24</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-24/</link>
+      <pubDate>Sun, 05 Dec 2021 23:00:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-24/</guid>
+      <description>这周跑步了四天，还可以，下周继续。我发现跑步的时候可以捋清一些事情，这周主要跑 2.5 公里，然后走 2.5 公里，整体感觉还是挺舒适的，下个周看看是否可以加大一点跑步里程。
+这周输出了4篇博客和公众号，Rust光线追踪系列以及后续的博客，会同步到掘金这个平台上。
+这周把产品页面也搭建好了，更新了 moeif.com 这个域名。
+项目进度   游戏码农：那些打工的日子 这周开始写游戏逻辑了，已经确定了主要玩法界面的逻辑。这周把之前的Lua代码全删了，想了想，还是全用C#来写了，逻辑上不会有什么功能性的更新，如果加功能，加玩法模块，那就直接大版本更新，用C#的开发和调试效率也会更高一些。
+  本周电影  最后的决斗 The Last Duel (2021)  本周书籍  《KK三部曲》（阅读中） 《游戏设计艺术》（阅读中）  下周初步计划  游戏码农逻辑编写  </description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 10: 材质</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/</link>
+      <pubDate>Sat, 04 Dec 2021 12:44:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/</guid>
+      <description>&lt;p&gt;在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。&lt;/p&gt;
+&lt;p&gt;最终的渲染图如下&lt;/p&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://blog.moeif.com/postimages/rtiowrs/1001.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>编译 Apple Silicon 版本 Aseprite</title>
+      <link>https://blog.moeif.com/posts/compile-aseprite-for-apple-m1/</link>
+      <pubDate>Wed, 01 Dec 2021 21:12:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/compile-aseprite-for-apple-m1/</guid>
+      <description>&lt;p&gt;编译苹果 M1 芯片版本的 Aseprite，步骤如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 09: 理想散射</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-09/</link>
+      <pubDate>Wed, 01 Dec 2021 13:26:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-09/</guid>
+      <description>上一节生成的图看起来很暗，有一个问题是因为有些物体反射的光线，会在 t = 0 时再次击中自己，而由于浮点数精度的问题，这些值可能是 0.00000001 或 -0.0000001 之类的任意接近0的浮点数，所以我们 hit 函数的 t_min 参数，需要忽略掉 0 附近的一小部分范围，防止物体发出的光线再次与自己相交。这样也就避免了阴影痤疮（Shadow ance）的产生。
+修改 main.rs 中 ray_color 函数中的 word.hit()，改为 if let Some(hit_record) = world.hit(r, 0.001, f64::INFINITY)，也就是 t_min 参数传值 0.001。
+cargo run --release &amp;gt; diffuse_random_in_sphere.ppm 生成图如下
+可以看到，已经比上一节生成的图亮了很多。
+我们上一节使用的漫反射光线散射的方法，是在球体内部生成一个随机的点。然后，这样生成的向量，有很大的概率会和法线方向相近，并且及小概率会沿着入射方向反射回去。然而，真正的理想散射（Lambertian 反射）后的光线距离法向量比较近的概率会更高，但是分布规律会更加均衡，而实现这个方法，就是在球面上选取一个点，而不是在球内。我们可以通过在球内选取一个点，然后将其标准化，来得到球面上的点，因为我们的球是单位球。
+在 vec3.rs 中 Vec3 的实现里，添加一个新的方法 random_unit_vector，代码如下
+// src/vec3.rs pub fn random_unit_vector() -&amp;gt; Vec3 { let point = Vec3::random_in_unit_sphere(); return Vec3::unit_vector(point); } 然后修改 main.rs 中的 ray_color 函数，将原来调用 random_in_unit_sphere 的代码改成调用 random_unit_vector。</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 08: 漫反射和伽马校正</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-08/</link>
+      <pubDate>Tue, 30 Nov 2021 13:50:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-08/</guid>
+      <description>&lt;p&gt;漫反射的通俗理解是，当一个光线打到某一个物体的某一个点上，这条光线一部分会被吸收，一部分会被随机的反射出去，而反射出去的光线，又可能会打到另一个物体面上的一个点，然后又会被吸收，以及随机的反射出去。现实中的光线可能会无限递归下去，但是我们在程序中实现，不可能无限递归，会设置一个反射次数，达到了那个次数，就停止。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 23</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-23/</link>
+      <pubDate>Sun, 28 Nov 2021 23:55:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-23/</guid>
+      <description>&lt;p&gt;这个周主要在做夜莺号的记忆这个项目，30号要交付一个版本，到今天为止，所有的逻辑已经搞完了，明天修一下问题基本上就可以了。这个周继续输出了三篇关于Rust及光线追踪的博客以及公众号和知乎，关注和阅读的人也在增加，下个周继续。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 07: 抗锯齿和相机抽象</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-07/</link>
+      <pubDate>Wed, 24 Nov 2021 20:50:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-07/</guid>
+      <description>&lt;p&gt;将上一节生成的图放大来看，可以看到球体的边缘与存在着很明显的锯齿，这一节我们首先将相机的代码进行抽象，写在一个 Camera 结构体里，然后加入抗锯齿的逻辑。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 06: 代码抽象</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-06/</link>
+      <pubDate>Tue, 23 Nov 2021 20:15:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-06/</guid>
+      <description>&lt;p&gt;这一节的内容修改的比较多，我们会把前面的逻辑重新整理一下，将可光线可交互的世界物体，抽象成一个 &lt;code&gt;Hittable Object&lt;/code&gt;，然后可以在场景中添加多个物体。也使用了 Rust 的 Trait，Vec 等。最终效果图如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 05: 简化 hit_sphere 函数</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-05/</link>
+      <pubDate>Mon, 22 Nov 2021 22:06:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-05/</guid>
+      <description>&lt;p&gt;这一节比较简单，就是将上一节的 &lt;code&gt;hit_sphere&lt;/code&gt; 函数进行一定的简化，直接看代码。代码中简化之前的已经注释，可以直接对比一下，不同的计算方式，最终算出来的值都是一样的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 22</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-22/</link>
+      <pubDate>Sun, 21 Nov 2021 19:55:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-22/</guid>
+      <description>11月马上快要结束了，时间过的真快，有一点点的焦虑，但是也还好。这周开始了不断输出博客内容，可能是因为和Rust有关，阅读数量和关注数量增长了很多，后面可以考虑在每一篇文章最后加上游戏的宣传链接。看起来写博客这件事情可以长期写下去，可能前期没什么，后期积累到一定程度，不确定会发生什么。
+这周上海的温度还可以，但是今天下雨了，未来两天温度下降的很多。
+项目进度   游戏码农：那些打工的日子 这周主要做的事情还是各个模块的数据配置，以及界面元素的考虑，具体的UI还没有仔细考虑。专业技能相关配置、厨艺配置、外卖配置、找工作和面试相关配置、通勤配置、行为配置。
+  夜莺号的记忆 这个项目这周做了很多事情，工程的搭建，游戏循环的逻辑，具体的关卡的逻辑等。
+  本周电影  欲望号快车 Crash (1996) 毒液  本周书籍  《KK三部曲》（阅读中）  下周初步计划  继续数据配置工作 夜莺号关卡逻辑 有时间的话考虑游戏码农的UI构建  </description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 04: 显示球体的法线</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-04/</link>
+      <pubDate>Sun, 21 Nov 2021 15:01:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-04/</guid>
+      <description>&lt;p&gt;法线的定义是垂直于面的向量。对于一个球体来说，法线的向量，就是球上某个点，减去球心坐标，所得到的向量。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 03: 渲染一个圆</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-03/</link>
+      <pubDate>Sat, 20 Nov 2021 22:10:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-03/</guid>
+      <description>下面的公式有点多，只是把原教程中的公式详细展开了，一步一步来，很简单，相信我。
+给定一个点，判断一个点是否在一个半径为 $R$ 的圆或者圆外、圆内，我们可以使用下面的公式来判断。这里假设圆心在 $(0，0，0)$ 点，半径为 $R$
+如果一个点 $(x, y, z)$ 在圆上，则 $x^2 + y^2 + z^2 = R^2$
+如果一个点 $(x, y, z)$ 在圆内，则 $x^2 + y^2 + z^2 &amp;lt; R^2$
+如果一个点 $(x, y, z)$ 在圆外，则 $x^2 + y^2 + z^2 &amp;gt; R^2$
+假设圆心在点 $C = (C_x, C_y, C_z)$，半径为 r，则根据上面的第一个公式，可以得到
+$(x - C_x)^2 + (y - C_y)^2 + (z - C_z)^2 = r^2$
+我们可以将点 $(x, y, z)$ 使用之前的 Vec3 向量表示，例如设 $点P = (x, y, z)$，则可以将上面的公式，换一种表达形式，也就是</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 02: 使用光线生成渐变图</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-02/</link>
+      <pubDate>Sat, 20 Nov 2021 11:58:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-02/</guid>
+      <description>&lt;p&gt;这个小节的目标是添加光线相光内容，根据光线打在屏幕上不同的位置，生成一张蓝白渐变图。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 光线追踪 01: 输出PPM</title>
+      <link>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-01/</link>
+      <pubDate>Thu, 18 Nov 2021 17:30:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-01/</guid>
+      <description>&lt;p&gt;这个系列的博客是使用 Rust 来实现 《Ray Tracing in One Weekend》相关的内容，我们把整本书拆开，来分篇实现，这们可以进一步降低难度。PPM是一个简单的图片格式，它将RGB的颜色使用 ASCII 的形式记录在文件中。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 21</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-21/</link>
+      <pubDate>Mon, 15 Nov 2021 20:06:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-21/</guid>
+      <description>&lt;p&gt;这周的周记，拖到了周一才写。昨天周日，一天没干活，晚上的时候把博客从Hexo迁移到了Hugo，因为Hugo有更像样的主题。这个周小Q回家了，我一个人在上海，还是按原来的节奏开发，还在继续推进游戏码农项目，但是推的有点吃力，感觉好多东西没有想明白。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 20</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-20/</link>
+      <pubDate>Sun, 07 Nov 2021 16:06:49 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-20/</guid>
+      <description>&lt;p&gt;今天上海的天气开始大幅度降温了，现在外面开始下雨了，刚刚看完了一部电影《幸福终点站》，一开始想从里面寻找一下关于时间线的灵感，但是看着看着，就沉浸到剧情里了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 19</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-19/</link>
+      <pubDate>Sun, 31 Oct 2021 20:37:17 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-19/</guid>
+      <description>&lt;p&gt;这周买了滑板，现在每天下午 4:00 左右会出去跑步或玩会滑板。下午出去运动，没有以前晚上出去时那种任务的负重感，更像是放松一下。现在的状态还好，时间上算是比较自由，唯一的问题是还没有什么收入。之前一直关注的一个虚拟货币 GEEKCASH 这个月上线了，但是没有奇迹出现，这个慢慢等吧，只要不归0，就还有希望。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 18</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-18/</link>
+      <pubDate>Sun, 24 Oct 2021 19:16:52 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-18/</guid>
+      <description>&lt;p&gt;这周使用 plexmediaserver 把下载的电影给整理了一下，方便观看，本来想使用树莓派搞，可是服务启动总是失败，也不知道为什么，没找到解决方案，就放弃了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 17</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-17/</link>
+      <pubDate>Mon, 18 Oct 2021 10:10:48 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-17/</guid>
+      <description>&lt;p&gt;这周搞了一个新的Logo，当然是付费的。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《音乐与僵尸：Zombie Rhythm》开发日志</title>
+      <link>https://blog.moeif.com/posts/zombie-rhythm-devlog/</link>
+      <pubDate>Tue, 12 Oct 2021 12:43:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/zombie-rhythm-devlog/</guid>
+      <description>&lt;p&gt;《音乐与僵尸：Zombie Rhythm》经过了一个多月的开发，终于上线了。这是一个融合了丧尸和音乐节奏的休闲游戏。这篇文章就聊一下这个游戏的整个开发过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 16</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-16/</link>
+      <pubDate>Mon, 11 Oct 2021 12:43:45 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-16/</guid>
+      <description>&lt;p&gt;今天晚上下雨了，上海的气温终于要凉快一点了。这周搞好了社保，直接从公司账户交，似乎一切都在向着正确的方向推进。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 15</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-15/</link>
+      <pubDate>Sun, 03 Oct 2021 19:37:28 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-15/</guid>
+      <description>&lt;p&gt;这周比较轻松，没有做太多的事情，改了一下界面的设计及逻辑，然后改了一下服务器。国庆也没出去玩，假期和工作日现在并没有那么明显的界限了。打算下个周去一个偏远点的地方，例如滴水湖。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《我在美国学游戏设计》笔记</title>
+      <link>https://blog.moeif.com/posts/game-design-note/</link>
+      <pubDate>Mon, 27 Sep 2021 15:35:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/game-design-note/</guid>
+      <description>&lt;p&gt;从情感体验出发，探索出最合适的机制来表达情感。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 14</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-14/</link>
+      <pubDate>Mon, 27 Sep 2021 15:23:11 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-14/</guid>
+      <description>&lt;p&gt;这周中秋，回老家了，没有做太多事情，只是把服务器排行榜，用户数据，膜拜等功能写完了。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>为什么没有大公司推动 P2P 文件分享</title>
+      <link>https://blog.moeif.com/posts/sharing-files-without-tc/</link>
+      <pubDate>Sun, 26 Sep 2021 09:40:55 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/sharing-files-without-tc/</guid>
+      <description>&lt;p&gt;现在已经是2021年了，如果你拍摄了100张度假的照片，想分享给我，如何分享？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 13</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-13/</link>
+      <pubDate>Sun, 19 Sep 2021 19:25:01 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-13/</guid>
+      <description>这周主要在学习使用Rust和Rocket Web框架写Web逻辑。这将用于ZombieDash以及其他游戏的排行榜，以前只是把功能堆起来，这一次重新看这些内容，清晰了许多，至于不至于头痛了。看文档也有点头绪了，目前用户部分的逻辑已经写完了，接下来就是把分数逻辑加上就可以了，下周应该可以搞完，顺别把UI重构一下，争取这个月底能够提交到AppStore并且审核通过。还有两周，时间还是挺紧的。
+这周还收到了诗仙与诗魔游戏的软著证书，但是发现并没有什么太大的用处，要上架国内的一些Android平台，还得接入各个平台的SDK，一个免费游戏，真是醉了&amp;hellip;
+中秋了，明天回家&amp;hellip;
+项目进度   音乐与僵尸（ZombieDash） 客户端添加了背景音乐，确定了大概的UI重构方式，以及音乐播放逻辑。服务器的写完确定，下周可以搞完。
+  动物旅行 上周主要的流程逻辑已经写完，这周主要做了一点UI视觉方面接入的工作，UI逻辑进行中。
+  pinmaker 横盘中&amp;hellip;
+  本周电影  好家伙 GoodFellas (1990)  本周书籍  《大师谈游戏设计：创意与节奏》（已读完） 《写给大家看的设计书》（已读完）  下周初步计划  完成音乐与僵尸的UI重工作 完成音乐与僵尸的服务器逻辑 完成继续动物旅行的UI逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 12</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-12/</link>
+      <pubDate>Sun, 12 Sep 2021 20:50:21 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-12/</guid>
+      <description>这周开始看一书关于游戏设计，游戏节奏方面的书籍和相关资料，觉得有必要系统地科学得去学习一下游戏设计，学习一下前辈们积累的丰富经验。玩游戏是一会事，做游戏，把握好游戏的节奏，明白某个点为什么要那样设计，就是另一会事了。单纯参考（抄）其他游戏的设计，总觉得云里雾里的，无法做到极致。
+项目进度   诗仙与诗魔 这周收到软件著作权的证书，国内的几个商店提交了一下，目前正在审核中。作为独立开发者，感觉国内的市场环境还是有点难。
+  音乐与僵尸（ZombieDash） 这周把核心的流程跑通了，Node的位置也改变了一下，放到了两边，临时的UI也加了进去，录了Demo视频上传到了B站和Youtube。下周开始调整节奏，以及看一下UI怎么布局，怎么设计。
+  动物旅行 这周把核心玩法的逻辑框架搞完了，数据的恢复逻辑也可以了，接下来开始一边加入UI，一边完善整个逻辑。
+  pinmaker 重新调整了一下程序，目前一共有3W的本金在跑，上个月因为调整过本金，收益没法算了，这个月月底看一下。
+  本周电影  本能 Basic Instinct (1992)  下周初步计划  音乐与僵尸节奏体验调整，UI设计 动物旅行UI逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 11</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-11/</link>
+      <pubDate>Sun, 05 Sep 2021 20:38:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-11/</guid>
+      <description>这周把原来的台式机各个部件挂闲鱼卖了，还有 2015 年的 MacBook Pro 也卖了，然后换成了一台 Macmini M1 和一个 Philips 的4K显示器。整体的体验，比原来的PC好了很多。家里工作的位置也换了一下，换到了靠近窗边的位置，感觉整体效率提高了许多。所以这周就没怎么写逻辑，配置了一下环境。
+项目进度   诗仙与诗魔 软著的审核终于有动静了，现在处于待发放的状态，预计下周可以收到。这样可以把国内各大Android 市场上一下。
+  音乐与僵尸 这周加入了僵尸的资源，修改了歌曲的难度逻辑。开始搭建基本的 UI 界面。
+  动物旅行 今天把游戏核心Action的逻辑重新构建了一下，为了做数据的保存以及恢复，重新整理了一下数据结构。
+  本周电影  尸骨无存3：零号病人 Cabin Fever: Patient Zero (2014) 神秘感染 Contracted (2013) 神秘感染：第二阶段 Contracted: Phase II (2015)  下周初步计划  音乐与僵尸的UI搭建 动物旅行核心Action逻辑写完  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 10</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-10/</link>
+      <pubDate>Sun, 29 Aug 2021 21:25:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-10/</guid>
+      <description>&lt;p&gt;这周的整体进度还可以，首先新的苹果账号已经可以用了，诗仙与诗魔也上架了AppStore，审核通过居然只用了一天。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何开发一个问答类游戏</title>
+      <link>https://blog.moeif.com/posts/how-to-make-a-quiz-game/</link>
+      <pubDate>Sun, 29 Aug 2021 12:19:40 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/how-to-make-a-quiz-game/</guid>
+      <description>问答类游戏，在开发过程中还算是比较简单的一个分类，核心的内容就是问题与答案。抽象来讲，问题可能是文字，也可以是图片，也可以是声音等等，而对应玩家可以选择的答案，也可以不同的表现形式。例如看电影海报猜电影名字，听音乐片段猜歌曲等等
+【诗仙与诗魔】，是一个诗词挑战类游戏，本质上也算是一个答类游戏，问题变成了某一首诗中的某一句，而答案就是从给定的类似诗句中选择正确的那一句。接下来我将从技术有角度来解析一下这个游戏的整个开发过程。
+这个游戏现在可以直接从商店下载体验，在 AppStore 或 TapTap 搜索 诗仙与诗魔 即可找到。
+这个游戏现在可以直接从商店下载体验，在 AppStore 或 TapTap 搜索 诗仙与诗魔 即可找到。
+iOS 下载连接: https://apps.apple.com/app/id1583234447
+Android 下载连接: https://www.taptap.com/app/222178
+先解析一下这个游戏，诗仙与诗魔有三种玩法，独自练习，就是关卡模式。无尽冲榜，就是不断地累积得分，然后进行排行榜。匹配挑战，是可以与其他玩家进行联网匹配的玩法，这一个涉及到服务器部分的开发。
+客户端的部分   客户端在启动后，会先去一个固定的域名，拉取一些必要的配置信息，例如服务器的状态，排行榜和匹配服务器的连接地址，服务器的状态等等。这个可以自己根据需求配置各种各样的信息，只有这些必要的信息拉到后，游戏才会继续下一步。
+  接下来会从本地尝试读取用户数据，如果本地没有，则会从服务器尝试请求，如果服务器也没有，则认为这是一个新玩家。弹出玩家昵称输入界面，玩家确定后，会将用户的ID和昵称等数据发到服务器，并且在本地存档，然后就会进入游戏。如果本地没有用户数据，但是服务器有，就会使用服务器保存的用户数据，进行数据恢复，然后在本地存档。
+  接下来就进入了主界面，可以选择三种不同的玩法。先说一下诗词数据。诗词数据是使用 flatbuffers 存储在游戏包里的。每一个记录，保存了一首诗的ID，名字，作者，内容等。游戏启动后，会读取所有的诗词数据，进行结构化存储。每一首诗，会创建一个 Poem 对象，里面保存了这首诗的内容，以及额外的数据，例如这首诗有几句，每一句的字数，这些数据会用于随机生成问题，以及根据字数，从其他诗词中选择类似的诗句，用作答案。
+关卡模式，就是罗列出诗词配置表中的每一首诗，作为一个关卡，当玩家作答完毕后，会记录所用时间。在关卡界面，所以看到每一首作答过的诗词所用的时间。
+无尽冲榜，首先进入时会消耗体力，对于每一个新玩家，会给予默认300体力，还有2个复活道具，5个刷新道具。在冲榜模式中，每一首诗会有10秒的倒计时，在过程中，玩家可以选择使用一个刷新道具，换一首诗作答，以此不终断冲榜过程。冲榜结束后，会给出得分，客户端会得得分提交到服务器。对于头衔，是由得分计算出来的，这个直接在客户端计算。游戏没有作作弊方面的处理，对于这个游戏来说，没什么必要。如果失败，则必须消耗一个复活道具，才能继续从失败的地方继续冲榜。如果道具或体力不足，则可以通完看广告获得。
+匹配挑战，匹配挑战同样会消耗体力，进入后，首先会向服务器发送匹配消息，服务器会在根据匹配的等待时间，根据玩家的 elo 分值，进行实力相当的匹配，如果最后没有真实玩家，则会匹配一个机器人，与玩家一起玩。每一局匹配挑战由10首诗构成，由哪10首诗，以及每一首诗的可选择答案，则由服务器生成，以此保证两个玩家使用的挑战数据是一致的，保证公平性。
+匹配挑战的分得计算，每一首诗为1000分，如果答错，则0分。如果答对，先得500分，剩下的500分，根据作答速度，剩余时间的百分比，进行得分。得分由服务器计算，一定程度上受网络影响。
+  服务器的部分 服务器可以分为三部分，服务器及用户基础数据，排行榜，匹配，这三部分是使用不同的方式实现的。
+  服务器及用户基础数据 这一部分使用 aws 的 DynamoDB、Lambda、 API gateway 实现的。通过API gateway 调用 lambda 读写 DynamoDB的数据，可以根据网上一些视频教程来操作来下。逻辑很简单，主要是配置各种权限的时候稍微麻烦一点，也还好。
+  排行榜 排行榜放在了 aws 的免费 ec2上，因为游戏的量不大，所以免费的也够用，数据直接放在了 Redis 中，API 逻辑是使用 Rust 来写的。</description>
+    </item>
+    
+    <item>
+      <title>Unity 2D 游戏背景适配</title>
+      <link>https://blog.moeif.com/posts/unity-2d-bg-adaptive/</link>
+      <pubDate>Sun, 22 Aug 2021 20:57:04 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-2d-bg-adaptive/</guid>
+      <description>&lt;p&gt;在开发2D游戏的时候，不同的设备分辨率下，经常需要将背景以高或以宽来适配。如果以高适配，即背景图的高度填充整个屏幕，然后去缩放宽度。最终效果图如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 9</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-9/</link>
+      <pubDate>Sun, 22 Aug 2021 20:49:12 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-9/</guid>
+      <description>这周上架了诗仙与诗魔项目，不过没有多少玩家，国内只上架了TapTap，其他的Android商店等待著作权下来。这周有了一个新的项目构思，一个模拟养成的游戏，具体还在构思中，细节比较多。音乐与僵尸游戏进入了Demo阶段的开发流程。
+这周还整理了一下博客，换了一下主题，回到了以内容为中心的模式。后面会慢慢提高写作输入的频率。
+项目进度   诗仙与诗魔 国内已上架了TapTap，国外上架了GooglePlay，以及一些其他的商店，像华为，三星，小米，APKPure等。国内其他的Android商店等待著作权。
+  音乐与僵尸 开始了核心玩法的Demo逻辑开发，目前完成了Node点的逻辑。Beat点的规则下周再确定一下。预计这个月底可以完成整个核心玩法Demo的开发，然后就可以开始加音乐和做UI逻辑。
+  动物旅行 动物旅行目前只有周末会开发一天，今天写了一下数据方面的结构，游戏状态的描述逻辑基本上确定了，写了一些基类，下周可以继续填充细节。UI方面的资源有一些缺失，暂时先放一下，等待补全。
+  本周电影  第四公民 Citizenfour (2014) 黑白魔女库伊拉 Cruella (2021)  下周初步计划  音乐与僵尸游戏Demo逻辑 动物旅行游戏核心玩法逻辑  </description>
+    </item>
+    
+    <item>
+      <title>Unity Sprites Full-Rect 和 Tight 设置</title>
+      <link>https://blog.moeif.com/posts/unity-sprite-full-rect-tight/</link>
+      <pubDate>Sat, 21 Aug 2021 15:27:38 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-sprite-full-rect-tight/</guid>
+      <description>&lt;p&gt;在开发2D游戏的时候，对于图片的 Mesh Type 设置我们应该选择 &lt;strong&gt;Full Rect&lt;/strong&gt; 还是 &lt;strong&gt;Tight&lt;/strong&gt; 呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 8</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-8/</link>
+      <pubDate>Sun, 15 Aug 2021 17:33:36 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-8/</guid>
+      <description>这周发生了令人很不愉快的事情，苹果把我的开发者账号封了，之前上架的物时和百变罪犯也被下架了。我不觉得我有做错什么，但是苹果认为我违反了3.2，申诉也不行。面对强硬的巨头，普通的开发者一点办法都没有，甚至没有任何辩解的机会。
+项目进度   诗仙与诗魔 这个项目算是开发完了，目前提交了 GooglePlay 和 TapTap，两个平台都还在审核中。软件著作权还没有下来，国内其他的应用商店还上不去，只能等等看。
+  动物旅行 这周整理了一下数据结构，然后今天搞了一下部分游戏数据的配置表，整理了一下基础代码的逻辑。
+  一些想法  相对于App需要受到平台的限制，Web产品似乎更加自由一点，只要有一个域名，在不违反法律的情况下，几乎不会有谁可以封禁产品。这个方向可以考虑一下。  关于学习 有一些东西是会变的，有一些东西是不会变的。
+下周初步计划  构思音乐与僵尸游戏 诗仙与诗魔上架各大Android平台 写动物旅行的逻辑  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 7</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-7/</link>
+      <pubDate>Sun, 08 Aug 2021 22:53:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-7/</guid>
+      <description>这周总算把诗仙与诗魔服务器的逻辑全都写完了。
+今天一整天都在客户端和服务器联调，与AWS的数据交互部分应该没有什么大问题了。放在自己服务器的匹配逻辑，今天晚上调了一下，改了几个比较大的问题，协议都通了，明天还需要再看一下数据的准确性。
+项目进度   pinmaker 第40天，DOTUSDT 目前收益 119.19 USDT，上行的挂单已经全部卖出，目前无法再继续交易了，只能等待价格下跌。
+  pinmakerhuobi 第11天，HTUSDT 目前收益 80.06 USDT, 增加了一次本金，目前本金为 3000 美元。
+  诗仙与诗魔 服务器逻辑完成，需要更加详细的测试。客户端与服务器通信的逻辑全部完成，数据拉取与保存全部完成。等待与服务器进行更详细的数据正确性测试。
+在完成正确性测试后，客户端还需要添加音乐，添加排行榜头像随机显示的逻辑。然后看一下哪一些UI可以添加一下动效。
+接下来就是出包测试。
+软著还在审查中，不知道下周会不会审查完。
+  下周初步计划  客户端与服务器联调完 完成客户端各方面的完善 出包进行真机测试  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 6</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-6/</link>
+      <pubDate>Sun, 01 Aug 2021 22:23:44 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-6/</guid>
+      <description>今天已经是8月份了，好快啊，从开始到现在，已经4个月了。
+这周没有做客户端的事情，几乎都在看服务器相关的东西，今天终于把排行榜的逻辑写完了，因为使用的是 Rust，所以写的过程中遇到很多问题，不断的查，不断地改，基本上是一边学一边改。昨天想过放弃使用 Rust，直接使用 Nodejs 推起来，但是后来考虑了一下，觉得那样没有任何积累，就还是继续学习使用 Rust 来写了。
+不过这周将 HTUSDT 的交易对也开始了网格交易。火币的API调了好一会才调通，主要是文档写的不清楚。
+这周还参加了 Unity 的技术开放活动。
+项目进度   pinmaker 这个跑了一个月，目前收益正好 105.35 USDT。不过DOT有一部分是在高价买的，现在并没有买回来，严格来说，还不能这样来考虑收益。
+  pinmakerhuobi 火币的 HTUSDT 交易对，这个只是在 pinmaker的基础上改了一下，大部分逻辑没有改，只是API的调用及数据结构改了一下。到今天为止，跑了4天了，目前收益 40 USDT。但是这个本金多，投入了 1500 USDT。
+  诗仙与诗魔 这周没有做客户端的事情，全在搞服务器了。基本的流程已经理清，用户数据，服务器状态，版本信息等数据，全放 aws 的 DynamoDB中，客户端直接拉取。排行榜，匹配这两块，放 aws 的 ec2中，先使用免费的服务器，需要测一下并发。
+今天看了一下软著，已经走到了审查中这一步，提交的还是有点晚了。
+  下周初步计划  完成服务器的全部逻辑 调通客户端与服务器的通信 客户端边缘模块完善，服务器状态，版本更新提示等  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 5</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-5/</link>
+      <pubDate>Sun, 25 Jul 2021 20:57:13 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-5/</guid>
+      <description>&lt;p&gt;这周去参加了亚马逊云科技的全球峰会，了解了一些东西，不过目前我还用不上，他们游戏部分的东西倒是可以看一下。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 4</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-4/</link>
+      <pubDate>Sun, 18 Jul 2021 20:57:06 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-4/</guid>
+      <description>&lt;p&gt;这周主要的工作都在搞诗仙与诗魔项目。今天写了一篇文章发在了Indiehackers，看看能不能帮助国外的独立开发者上架中国市场。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>我做了一个无法上架的彩票App</title>
+      <link>https://blog.moeif.com/posts/unlisted-lottery-project/</link>
+      <pubDate>Sun, 11 Jul 2021 22:33:28 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unlisted-lottery-project/</guid>
+      <description>&lt;p&gt;前两个月做了一个项目，彩票玩家，但是因为政策问题，无法上架。那就从技术的角度来聊一下这个产品。彩票玩家的规划是一个可以查看开奖信息，可以管理自己想要的彩票号码，可以查看历史开奖信息的App。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 3</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-3/</link>
+      <pubDate>Sun, 11 Jul 2021 20:56:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-3/</guid>
+      <description>项目进度   pinmaker 目前 pinmaker 已经赚了37.9 USDT，在写这篇总结的此刻，没有待成交的交易对，现在正处于纯粹盈利 37.9 的状态。这周好像调整过一次上涨部分的网格大小。
+  诗词项目 这个项目的名字已经确定了，还是用了之前想的那个名字，诗仙与诗魔。这周完成了界面的设计，这次使用了 Figma，总体来说还挺好用的。今天打印邮寄了著作权申请的资料。
+  音乐游戏 音乐游戏暂时先放一下，从工作量已经实现上来说，有一些点工作量有点大，先做诗词项目。
+  彩票玩家 此项目暂时不考虑了，个人根本上不了线，基本死透。以这个产品为主题写了一篇公众号。
+  下周初步计划  诗词数据确定好 诗词数据格式化 客户端的部分代码可以开始写，顺便整理一下以前的框架 学习 Microservice in Rust，考虑一下服务器部分怎么写。 诗词项目开发模块和计划拆分  </description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 2</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-2/</link>
+      <pubDate>Sat, 03 Jul 2021 20:56:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-2/</guid>
+      <description>这是 The Week In Moeif 的第二周。对于 Moeif 未来的规划还是有点迷茫，到底做什么，目前来看，对于学习App开发是没有太大的兴趣，这一点可以确定。对于游戏开发，兴趣度挺好的，另外，对于Web，还没有一个明确的方向，做什么，但是相对于App开发来说，兴趣度高一点，有一些小想法想做成Web产品，例如 This Week In X。而对于后端，一方面是写一些纯后端的东西，例如程序化交易，或者后面的量化交易，再就是服务于游戏或App产品，这一块目前可以确定的是一定是用Rust来写。
+所以目前看来的方向有下面四个
+ 游戏 Web 服务器 程序化/量化交易  项目进度   pinmaker pinmaker这周已经跑起来了，从6.30开始，到今天的7.4号晚上，一共收益了8 USDT了，中间调整了一次网格，由15个网格调整为了10个，交易数量每网格2个DOT调整为了3个DOT。这个项目先跑跑看，目前看来是能赚点小钱。计划再阅读或者学习一点自动化交易相关的东西，然后再加来看这个项目。
+  彩票玩家 彩票玩家这个项目已经完了，上不了线，只能算是学习项目了，著作权也申请不下来，还是因为一些版权问题。这个项目就这样了吧。
+  下周初步计划  准备古诗数据 对古诗游戏进行整体策划 开始阅读KK三部曲 写完网络营销课程的作业  </description>
+    </item>
+    
+    <item>
+      <title>从万亿美元的市场赚点小钱</title>
+      <link>https://blog.moeif.com/posts/grid-trading/</link>
+      <pubDate>Thu, 01 Jul 2021 15:16:44 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/grid-trading/</guid>
+      <description>&lt;p&gt;今天要说的内容是对于程序化网格交易的简单理解，目标是通过简单的代码逻辑，实现自己的网格交易程序。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>This Week In Moeif 1</title>
+      <link>https://blog.moeif.com/posts/this-week-in-moeif-1/</link>
+      <pubDate>Sat, 26 Jun 2021 20:56:28 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/this-week-in-moeif-1/</guid>
+      <description>&lt;p&gt;从这周开始，总结每一周做了哪些事情，这是 This Week In Moeif 的第一周。每周的总结将从项目的进度，学习了哪些东西，下周的计划，或者一些想法进行记录。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>自己动手申请软件著作权（软著）</title>
+      <link>https://blog.moeif.com/posts/apply-for-software-copyright/</link>
+      <pubDate>Fri, 18 Jun 2021 15:09:05 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/apply-for-software-copyright/</guid>
+      <description>对于Android端的应用，要上线国内各大应用市场，很多都需要软件著作权。申请软著很简单，只要在中国版权保护中心注册并提交资料，然后邮寄资料就可以了。从版权中心接收到资料算起，到申请下来，正常情况一般要一个月左右，也可能更久，这个是无法控制的。当然，如果想更快，或者更省事，也可以某宝找代理申请，一般正常速度也就300块，如果要加急，那会贵很多。
+申请著作权主要有以下几个步骤：
+ 在中国版权保护中心注册账号 准备好Android应用的说明文档 准备好Android应用的代码文档 在线填写申请信息 打印资料和申请表并邮寄到北京版权保护中心   应用不必等到都开发完才申请，开发的差不多了，能运行，有界面可以截图了，或者模拟一些假数据能在真机上截图，就可以开始申请著作权了。
+ 1. 在中国版权保护中心注册账号 注册账号，如果已有账号，可以跳过这一步骤。进入 中国版权保护中心 http://www.ccopyright.com.cn/ 点击右上角的注册按钮。然后选择身份，看下图
+这里可以选择个人和机构，如果你想软著证书上著作权人是你的名字，那就选择个人。如果想要是你的工作室或公司的名字，那就选择机构。这个要想好了，一旦账号注册好了，是不能改的。选择好后，根据提示填写相关信息，然后提交即可。账号注册好后，接下来就是准备word文档资料，因为在线填写申请信息的时候，是需要提交这些资料的。看下面的步骤。
+2. 准备好 Android 应用的说明文档 应用文档，就是大概说明你的软件是如何使用的，基本上可以理解为，把应用截一下各个界面的图，然后配以文字说明一下即可。对于word文档页数的要求，30页以为就可以了。下面是我的一个应用的例子。下载 物时应用软件操作手册.doc
+这里有一个要注册的点是，word文档要有页眉，左边是软件名称和版本号，右边是页码 这个要和后面填写在线申请表时的名称完全一致，可以使用 xxxx应用软件 这种格式作为申请名字。对于保存成的word文档的名字，可以是 xxxx应用软件操作手册。
+3. 准备好 Android 应用的代码文档 代码文档没什么好说的，就是把自己工程里的代码复制到一个word文档里就可以，随便复制，只要凑够60页代码即可。有几个注意的地方是，页眉和上面的说明文档完全一样，左边是软件名称和版本号，右边是页码。代码不能有空行，就是不能有那种一个可见字符也没有的行。这个可以通过Sublime之类编辑器的批量去掉空行，具体方法 Google。最后一页的代码最后以 } 结尾。代码文档的命名可以是 xxxx应用软件代码。
+这个就不放下载了，各个软件的代码都不一样。
+4. 在线填写申请信息 在线填写申请表，先登录，然后点击 版权登记 -&amp;gt; 计算机著作权相关登记 -&amp;gt; 立即登记。如果这时弹出要求实名认证，那就先去实名认证，等认证完再回来。
+接下来就是填写软件相关的信息。
+点击一下步后，需要填写更多信息，这里就不截图了，直接文字描述。
+ 开发的硬件环境: PC电脑 内存:8G CPU:i5 6500 3.2GHz 硬盘:1T 显卡:GTX1080ti 运行的硬件环境: 安卓手机 开发该软件的操作系统: Windows 10 专业版 软件开发环境/开发工具: Unity C# Visual Studio 该软件的运行平台/操作系统: 安卓操作系统5.</description>
+    </item>
+    
+    <item>
+      <title>独立开发者注册企业资质</title>
+      <link>https://blog.moeif.com/posts/company-qualification-for-indie-developers/</link>
+      <pubDate>Tue, 08 Jun 2021 23:01:57 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/company-qualification-for-indie-developers/</guid>
+      <description>作为一名独立开发者，许多地方会用到企业资质，例如接入广告，产品上架应用市场等。虽然个人也可以，但是有企业资质会更方便一些。今天就来聊聊怎样以最低的成本注册及维护企业资质。
+整个过程主要分为三个部分，注册公司，办理对公账户，记账报税。因为不同地区有不同的要求，所以整个流程只能作为参考，这里以上海地区为例。
+注册公司 注册公司，首先面临的问题就是注册什么类型的公司，有个人独资企业，有限责任公司，一人有限责任公司，等。个体户就不要考虑了。
+从后期的维护操作来说（注册完后，后期每个月要做的事情），个人独资企业最简单。从纳税成本来说，如果可以核定纳税，那肯定是个人独资企业纳税最少，能节约70%以上的税。
+如果不能核定纳税，也就是按正常的收入纳税来说，如果年收入小于50万人民币，还是个人独资企业纳税少，如果大于50万人民币，小于100万人民币，那有限责任公司纳税会少一点，具体数额按自己的收入来计算一下，大概范围是这样。
+个人独资企业的核定纳税，简单来说就是按不同行业，有一个固定的税率，不管你的收入是多少，要缴纳的税额就是收入乘以那个固定税率。所以会少缴很多税。前提是得能核定纳税，2021年开始很多政策都变了，许多地方不能再核定纳税。
+确定了要注册什么类型的公司，接下来就是注册了。从钱和时间成本来最低来说，就是淘宝上找代理，以上海地区为例，注册下营业执照来，基本上 500~1500 块之间，按不同地区。
+例如我找的一个代理，注册在奉贤的某个园区，就是500块。这个钱包括了注册公司，刻章费用。最后拿到手的东西有，营业执照正副本，刻好的印章，税务UKey（这个是代理那边帮忙注册好公司后进行税务报道，代领UKey，所以额外花了100块）。UKey是用来开发票用的，不管开不开发票，这个东西最好有，你可以不用，但是后面一旦要用的话，就不需要再跑税务局。
+有的代理的报价是注册公司+代理记账的，但是他们代理记账很贵，一年几千块，这个有更低成本的解决方案，所以可以直接问他们只注册公司的价格。
+注册个人独资企业至少需要两个人的身份证信息，注册有限责任公司需要三个人的身份证信息。
+办理对公账户 等营业执照、印章都拿到手了，就可以考虑去开对公账户了。当然，对公账户也可以不开，前提是公司没有要进账的款项。
+如果要开对公账户的话，首先需要一个公司的实际经营地址。注册公司时的那个园区地址，也就是营业执照上的那个地址，只是公司的注册地址，并不是实际办公的地址，那个地址可以挂了好几百家公司。
+在上海这边，可以租一个商住两用的公寓，让房东配合拍一张房产证上有房屋地址的那一页的照片，租房合同上的地址，要和房产证上的地址完全一样，这一点很重要。另外，租房合同哪怕只是有一张纸的内容，也可以，只要地址对（100%一样）就可以。
+有了房产证地址页的照片（这个要打印出来）、租房合同，接下来就要做一个带有公司名字的牌子，淘宝搜一下，很多，大概100块以内就可以搞定，做最便宜的就可以，牌子上的公司名要和营业执照上的完全一样。
+有了上面三样东西，就可以去银行预约办理对公账户了，现在不管哪个银行，都会上门核实地址并拍照的。先去银行，或者直接在某些银行的企业公众号上预约都可以，然后根据银行工作人员说的流程来就可以。不同银行收费也是不同的，具体的费用可以打银行电话咨询。上海银行整个对公账户办下来，基本上 1000 块多一点，已经算是便宜的了。
+民用住宅能不能办理对公账户，得具体银行咨询，这个我也不确定。
+关键点，商住两用的公寓、租房合同、房产证地址页照片打印、营业执照、印章、公司牌子。
+ 开对公账户也需要两个人身份证信息，而且开的时候另一个人最好也到场，具体咨询银行。
+ 记账报税 这个我是用了 自记账 这个平台。公司不对外开发票的话，是29/月，如果 开发票的话，好像是69/月，比代理记账便宜太多，只要每月按要求录入一些信息就可以了，他们负责给报税之类的，很简单。
+以上就是获得企业资质的整个流程，有任何问题欢迎加微信讨论，微信号: ifloop</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入 Topon 报错解决</title>
+      <link>https://blog.moeif.com/posts/solve-topon-ad-build-error/</link>
+      <pubDate>Sun, 25 Apr 2021 20:16:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/solve-topon-ad-build-error/</guid>
+      <description>&lt;p&gt;最近在接入Topon广告聚合SDK是，导出XCode工程后，编译报了一堆错误，搞了好久，这里记录一下解决过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>独立开发者，使用 Unity 开发 App</title>
+      <link>https://blog.moeif.com/posts/app-dev-with-unity/</link>
+      <pubDate>Sat, 24 Apr 2021 23:44:29 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/app-dev-with-unity/</guid>
+      <description>&lt;p&gt;我终于成为了一名独立开发者&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity XCode 自动设置签名</title>
+      <link>https://blog.moeif.com/posts/unity-xcode-auto-signing/</link>
+      <pubDate>Fri, 12 Mar 2021 19:01:01 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-xcode-auto-signing/</guid>
+      <description>&lt;p&gt;Unity ios导出XCode工程后，通常需要手动设置签名，就像下图中的样子。只要简单的两部设置，就可以自动选择我们想要的签名。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入 Sigmob SDK</title>
+      <link>https://blog.moeif.com/posts/sigmob-sdk-for-unity/</link>
+      <pubDate>Wed, 06 Jan 2021 22:03:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/sigmob-sdk-for-unity/</guid>
+      <description>&lt;p&gt;在 Unity 项目中接入Sigmob 时，遇到很多问题，他们的文档写的也不是很清楚，特别是对于 Android 开发没有很深入了解的情况，读起来很困难，这篇博客记录了详细的 Sigmob 广告 sdk 接入过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解 Boids</title>
+      <link>https://blog.moeif.com/posts/understanding-boids/</link>
+      <pubDate>Mon, 30 Nov 2020 18:01:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/understanding-boids/</guid>
+      <description>Boids 可以理解为类似鸟群的东西，就是多个个体之间的相互作用。在游戏开发中经常会用到。例如 RTS 游戏，控制一个坦克战队，如何保持行进方向的一致性，以及坦克之间互相有一定有间隔，又不会间隔太大，这里就可以使用 Boids 相关的理论来实现。
+在众多这方面的文章中，基本上会涉及到三个方面，跟随、分离、聚合。跟随，就是说整个群体有一个行进的大方向。分离，则是个体与个体之间有一定的间隔，不至于发生碰撞。而聚合，就是个体不能离群体太远，不能脱离群体。
+ 对于上面提到的三个方面，简单来说，就是一个力的叠加。
+ 跟随 一个鸟群往哪个方向飞，可以假设有一只领头的鸟，其他的鸟跟随这只鸟的方向。知道领头的鸟的方向，知道自己当前的飞行方向，就可以计算出应该向中个方向施加一个力，可以使自己的方向，偏向于领头的鸟的方向。
+分离 分离，是要保证个体之间不要离的太近，不要发生碰撞。先考虑两个物体的情况，假设要使物体 A 远离物体 B，只要从 B，向 A 施加一个推力，就可以将 A 推离 B。那如果 A 要同时和 B 与 C 保持距离呢？一样的，只需要从 B 和 C 分别向 A 施加一个推力，这两个的合力，就是 A 远离 B 和 C 的方向。同理，不管 A 要与多少个物体保持距离，只需要从每个物体出发，向 A 的方向施加一个力，就可以将 A 推开。
+上面只考虑了 A 远离其他物体的情况，如果每一个物体都要与其他物体保持距离呢？一样的，只需要从每一个其他物体，向自己的方向施加一个力，这个合力，就是自己运动的方向。
+聚合 为了保证个体不脱离群体，还需要一个聚合力。就是将个体自身，推向群体中心的力。
+ 分离的力和聚合的力一定程度上抵消，从而达到个体之间即保持了距离，又保证了每一个体不脱离群体。
+ 下面的代码是我的一个小游戏项目中的，其中只用到了分离和聚合。只要懂了原理，就可以根据具体的情况灵活变通，达到自己想要的效果即可。
+using UnityEngine; using System.Collections.Generic; using System.Collections; public class GamePlayFlock : MonoBehaviour { public static List&amp;lt;GamePlayFlock&amp;gt; flockList = new List&amp;lt;GamePlayFlock&amp;gt;(); public static void StartAllFlock() { for(int i = 0; i &amp;lt; flockList.</description>
+    </item>
+    
+    <item>
+      <title>使用 frp 的远程桌面方案</title>
+      <link>https://blog.moeif.com/posts/frp-for-remote-desktop/</link>
+      <pubDate>Sat, 14 Nov 2020 13:50:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/frp-for-remote-desktop/</guid>
+      <description>当我们想使用 Windows 自带的 mstsc 远程桌面连接远程电脑时，常见的情况由于远程电脑没有公网IP而连接失败，这时就需要一个拥有公网 IP 的 VPS 来做代理，实现内网穿透，也就是相当于一个桥梁，将目标内网的机器与我们当前机器连起来。像花生壳，Teamviewer 等这类软件都可以实现，远程桌面，但是要么费用比较高，要么免费版体验很差，所以这里我们购买一台廉价的 VPS，使用 frp 来做这个代理功能，更方便，更好用。
+1. 在VPS和目标机器上分别下载 frp frp Github: https://github.com/fatedier/frp，通常下载最新的 Release 版本就可以。
+2. 在VPS上配置服务器端 在服务器端，用的是 frps.exe，配置文件是 frps.ini，配置内容如下即可。
+[common] bind_port = 7000 dashboard_user = jack dashboard_pwd = jack&#39;svps dashboard_port = 8888 上面的配置中， bind_port = 7000 就是配置对外开放的端口，客户端都会连接服务器的这个端口。下面三行的配置是网页的管理页面，可以通过网页查看当前有多少设备连接。
+配置完成后，打开 CMD 或 PowerShell，执行 frps.exe -c frps.ini 就启动了服务器端，注意这个窗口不要关闭。
+3. 在目标机器上配置客户端 客户端使用的是 frpc.exe，配置文件是 frpc.ini，配置内容如下
+[common] server_addr = 110.112.110.112 server_port = 7000 [RDP] type = tcp local_ip = 127.</description>
+    </item>
+    
+    <item>
+      <title>Apk 上架前的签名操作</title>
+      <link>https://blog.moeif.com/posts/apk-signature/</link>
+      <pubDate>Thu, 05 Nov 2020 14:09:29 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/apk-signature/</guid>
+      <description>&lt;p&gt;在 APK 包上传到一些应用市场时，通常要求开发者对 APK 进行签名，下面记录一下签名步骤。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入友盟SDK</title>
+      <link>https://blog.moeif.com/posts/unity-umeng-sdk/</link>
+      <pubDate>Sun, 16 Aug 2020 10:56:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-umeng-sdk/</guid>
+      <description>友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。
+要使用友盟 SDK，一共有以下几步
+ 在友盟后面新建应用 在友盟后面建立自定义事件 下载并导入 SDK 调用 SDK  1. 在友盟后面新建应用 首先注册账号，然后进入友盟工作台。↓ https://www.umeng.com/
+然后点击上面的产品，移动统计 ↓
+点击添加应用 ↓
+然后填写应用信息，下面是我随便填的，根据自己的应用信息填写即可（随便填也没关系）↓
+点击注册后，将跳到下面的页面，这里我们只要关注这个 AppKey 即可，其他的不用管。这个 AppKey 会在 Unity 中用到 ↓
+2. 自定义事件 建立好了应用后，就要想好我们想要统计哪些数据。例如，有多少用户点了开始游戏，有多少用户点了 观看广告，有多少用户观看广告结束，等等，这些都可以统计。
+所谓的统计，也就是使用自定义的事件名，在不同的地方调用一下友盟的代码。所以接下来我们就建立自己想要统计的数据事件。
+在应用页面，点击我们刚才新建的应用 ↓
+然后依次点击 设置 -&amp;gt; 事件 -&amp;gt; 手工添加 ↓
+我们下面先定义一个统计游戏开始的事件，事件 ID 是这个事件的唯一表示，会在 SDK 调用时用到，显示名称是让我们自己知道这个事件是干嘛的。然后点击确定 ↓
+添加完后的事件，会显示在事件列表中。接下来我们再添加一个统计事件，例如游戏结束。↓
+现在我们已经有了两个事件，当然，还可以添加更多，统计更多数据。这里为了演示，就只添加两个。↓
+3. 下载并导入 SDK 建立好了事件，就可以在项目中使用了，首先要将友盟的 SDK 导入工程中。去友盟的 SDK 页面下载 SDK https://developer.umeng.com/sdk/u3d，这里我们下载 Unity3D 的。
+下载下来的是一个 ZIP 压缩包，解压后，依次找到里面的 Unity3D -&amp;gt; analytics -&amp;gt; analytics_unit3d_x.</description>
+    </item>
+    
+    <item>
+      <title>简单理解光线追踪</title>
+      <link>https://blog.moeif.com/posts/simple-understanding-of-ray-tracing/</link>
+      <pubDate>Sat, 11 Jul 2020 15:16:29 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/simple-understanding-of-ray-tracing/</guid>
+      <description>&lt;p&gt;在过去的一个周，读完了&lt;a href=&#34;https://raytracing.github.io/books/RayTracingInOneWeekend.html&#34;&gt;《Ray Tracing in One Weekend》&lt;/a&gt;并且用Rust完整地实现了文章中的效果。对于经典的光线追踪逻辑，也有了宏观上的理解。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Letsencrypt Nginx HTTPS 配置</title>
+      <link>https://blog.moeif.com/posts/nginx-https-config-and-redirect/</link>
+      <pubDate>Sat, 11 Jul 2020 12:36:46 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/nginx-https-config-and-redirect/</guid>
+      <description>买了一个域名，一个 VPS，安装好 Nginx，配置了一个博客，或者一个Web服务。在Chrome中访问后，地址栏 不安全 三个字，很是让人不舒服。今天这篇博客，就记录一下如何配置 Nginx 的 HTTPS 重定向。整个过程很简单，一共有三步，域名配置，HTTPS 证书申请，配置 Nginx，下面将详细说明。
+域名配置 首先，将自己的域名配置A记录，指向自己的服务器。并且在服务器上装好 Nginx。 安装 Nginx 使用命令 apt-get install nginx
+HTTPS 证书申请  Ping 一下自己的域名，确定域名已经被解析到自己的VPS。 执行命令 apt-get install letsencrypt 安装 letsencrypt 执行命令 service nginx stop 先将 Nginx 停掉 执行命令 letsencrypt certonly --standalone 进行获取证书流程，根据提示，输入信息，域名，邮箱等 获取证书流程结束后，会生成两个文件，在接下来的的 Nginx 配置中会用到 /etc/letsencrypt/live/imoegirl.com/fullchain.pem /etc/letsencrypt/live/imoegirl.com/privkey.pem 上面的 imoegirl.com 只是举例，这里是你输入的域名  Nginx 配置  执行命令 cd /etc/nginx/conf.d 使用你喜欢的编辑器创建并编辑文件 my.conf (命名无所谓，只要扩展名是.conf) 输入以下内容 server { listen 80; listen [::]:80; server_name imoegirl.com; return 301 https://imoegirl.</description>
+    </item>
+    
+    <item>
+      <title>对比 Rust 和 Python 图片缩放速度</title>
+      <link>https://blog.moeif.com/posts/compare-rust-and-python-resize-image/</link>
+      <pubDate>Sun, 26 Apr 2020 19:38:35 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/compare-rust-and-python-resize-image/</guid>
+      <description>写博客时经常会用到 tinypng 这个网站进行图片压缩，所以今天就想用 Rust 试一下关于图片处理的东西。首先对比了一个 Rust 和 Python 的缩放速度，Rust 使用了 image-rs，Python 使用了 Image 中的 PIL，速度结果如下图。
+原图是一张 2.9M，4800x2500 的图片，缩小为 500x260。电脑CPU型号是 Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz。使用 release 编译。
+&amp;gt; 点击这里查看大图
+ 注意下图中每个图片文件的文件名，标注了 image-rs 中使用的 FilterType
+ 可以发现，除了 image-rs 中的 Nearest 模式比较快之外，其他模式均比 Python 的 PIL 慢，因为 PIL 是C写的。
+代码如下
+[dependencies] image = &amp;#34;0.23.4&amp;#34; stopwatch = &amp;#34;0.0.7&amp;#34; extern crate image; extern crate stopwatch; use image::RgbImage; use image::DynamicImage; use image::imageops::FilterType; use stopwatch::{Stopwatch}; fn resize_image(){ let origin_image = &amp;#34;1.</description>
+    </item>
+    
+    <item>
+      <title>游戏项目资源管理</title>
+      <link>https://blog.moeif.com/posts/u3d-game-resources-managemant/</link>
+      <pubDate>Sat, 25 Apr 2020 18:57:08 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/u3d-game-resources-managemant/</guid>
+      <description>在游戏开发的过程中，整个项目的资源管理是很重要的一部分。涉及到与美术、策划等同事的协作，以及资源的打包，和后续运行时资源的更新，加载，卸载，内存管理等方面。规划好资源的的各个目录存放，以及资源的分类，会为后续的开发工作节省不少时间。这一篇博客主要来聊一下到资源的存放问题，而 AssetBundle 打包，以及运行时的更新和资源管理，将在后面的博客中详细说明。
+资源类型 一个游戏项目，涉及到的资源主要有 配置数据、图片、模型、材质、Shader、字体、音频、视频、动画Clip、Prefab、Animator Controller、Timeline、场景文件、Lua脚本 等。
+关于协作 首先说一下协作问题。在游戏开发的过程中，美术的同学需要将资源直接提交到建立好的项目中的指定目录中，一般来说，提交到哪个目录，是由程序的同学来决定，具体哪个目录，要根据后续的资源打包以及管理等方面决定。美术的同学提交的资源一般就是模型、动画、贴图等。
+而配置数据，则通常由策划同学来提交。配置数据的方式有很多种，常用的例如 Excel，有的项目是直接将原始的 Excel 文件放到工程中，而有的是将 Excel 数据转成其他格式再放到项目中。改表由策划同学来着手操作，在配表的过程中，除了数值，可能也会涉及到一些资源路径，例如有一些图片，是要动态加载的，那么路径也就配在某个模块的相关配置表中。而这些路径配在表中的资源，通常也由策划同学根据不同的系统来操作资源的位置。当然，首先会有一个父目录，在这个父目录下，策划的同学可以自由操作资源的位置，然后将资源的路径配置在数据表中。
+还有一个很重要的部分是UI，对于UI来说，如果不打图集，放入项目目录中的都是一个一个的散图，则可以由UI部分的同学直接将UI的图提交到指定的UI父目录下，父目录下的子目录，根据不同的模块来划分，共用的同可以放到一个公用的目录中。对于图的移动操作，都要在 Unity 中进行操作，防止 Prefab 上的图片引用丢失。如果UI使用 TexturePacker 这类工具打成一张图集，则可以由程序同学来做，在开发某个模块时，顺便将对应UI的图打成一张图集，原始的UI图就不必放到工程中，放在外部的一个美术的资源目录即可。
+资源存放 接下来，就说一下各个资源怎么去划分。在运行时，需要手动加载的资源，一般有下面这些，Prefab、图片、音频、视频、动画Clip、Animator Controller、配置数据 等，Prefab 这个不用多说。而图片，主要是UI上的一些动态的图，例如头像，或者其他一些需要根据数值，来显示不同的图。动画Clip 可以做成动态加载，也可以直接放到动画状态机中，根据实际情况决定。Animator Controller 也要根据情况决定。配置数据一般需要动态加载。而像 Prefab中用到的材质，贴图等，一般不需要我们手动加载，我们只需要加载 Prefab 即可。
+这些需要动态加载的资源，我们可以放在一个父目录下，例如这个目录就叫 Prefabs，然后在 Prefabs 下面建立各个子目录，或者多级子目录来存放不同的资源。如下图
+上面的图中只是大概划分了一下，每一个目录下，都可以再次建立子目录，子目录下还可以再细分子目录，具体还需要根据实际项目来划分。
+上面图中的目录，是用于存放那些我们需要动态加载的资源，还有一些不需要我们动态加载的资源，例如美术同学上传的原始FBX，以及模型使用到的材质，贴图等等。对于这些资源，我们可以再建立一个目录，例如叫做 RawResources。在这个目录下，我们也需要清晰地去划分子目录，要清楚地知道哪一个目录放了什么资源，哪一些 Prefab 会引用这些资源，后面写 Bundle 打包模块时，可能会用得到。
+关于 AssetBundle 问题 在打包 AssetBundle 时，Unity是可以自己处理依赖关系，例如我们可以不用管 RawResources 中的东西，只把 Prefabs 目录下的资源打包，而Prefab引用的原始资源，例如贴图，材质等，会自动打进Bundle，不需要我们手动管理。但是这样有一个问题是，对于共用的资源，会造成重复包含。看下面的图
+上面的图中，两个 Prefab 引用了同一个材质，而材质，引用了一张贴图。如果我们将 PrefabA 和 PrefabB 分别打成一个Bundle，而让 Unity 自己处理依赖打包关系，那么就会出现 PrefabA 所在的 Bundle 中包含了材质和贴图，而 PrefabB 所在的 Bundle 中，也包含了材质和贴图。这样就造成了 Bundle 文件占用空间变大，在运行时，占用内存变大。</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 常用集合数据类型</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-06/</link>
+      <pubDate>Sun, 12 Apr 2020 23:51:23 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-06/</guid>
+      <description>之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。
+Vec Vec&amp;lt;T&amp;gt; 和数组一样，用于存储一系列相同类型的值。但是 Vec 可以动态地插入，删除。首先，是创建一个 Vec，可以使用 Vec::new()，或者使用宏 vec!。要注意的是，只有使用 mut，才能使 Vec 可变，也就是可以插入和删除值。
+fn main() { // 在定义时就标明数据类型为 i32 的 Vec  let v1: Vec&amp;lt;i32&amp;gt; = Vec::new(); // 在定义时不标明类型，而在首次插入值时，由Rust自动推断  let mut v2 = Vec::new(); // 这里插入了一个 i32 的值，所以Rust推断 v2 为存放 i32 的 Vec  v2.push(2); let v3 = vec![1,2,3,4,5]; let v4 = vec![&amp;#34;hello&amp;#34;, &amp;#34;rust&amp;#34;]; let mut v5: Vec&amp;lt;String&amp;gt; = vec![&amp;#34;hello&amp;#34;.to_string(), &amp;#34;rust&amp;#34;.to_string()]; } 向 Vec 有两个操作函数，一个是 push，往里插入值，一个是 pop，往外弹出值，Pop返回的是最后插入的值。看下面的代码</description>
+    </item>
+    
+    <item>
+      <title>nginx 配置 https 及重定向</title>
+      <link>https://blog.moeif.com/posts/configure-nginx-https-and-redirect/</link>
+      <pubDate>Sun, 12 Apr 2020 18:49:38 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/configure-nginx-https-and-redirect/</guid>
+      <description>将博客放在自己的VPS上，免不了配置 nginx 及 https，如果不配置 https，浏览器上**不安全**那三个字，实在是太刺眼。所以这篇博客，将记录整个折腾过程。
+ nginx 的安装 https 的证书配置 http 重定向到 https www 重定向到非不带 www 的域名  接下来的操作，都是在 Ubuntu 18.04 版本上进行的。
+域名解析的配置 首先要先自己的域名解析到自己的 VPS，需要配置两条A记录，一条是 @，一条是 www，都是指向自己的 VPS IP。
+安装 nginx apt install nginx 申请 ssl 证书 这里，我们使用腾讯云免费的证书，访问 https://console.qcloud.com/ssl，然后点击页面上的 申请免费证书，然后填写信息，注意在域名身份认证时，选择 手动DNS验证，然后点击确认申请，根据给出的提示，在自己的域名上配置TXT解析，等待一段时间，解析成功后，下载证书。
+下载下来的是一个压缩包，里面有一个 Nginx 目录，这个目录里有两个文件，xxx.crt 和 xxx.key。需要将这两个文件上传到自己的 VPS。放在 /etc/nginx/ssl 这个目录下，如果 ssl 这个目录不存在，就使用命令 mkdir /etc/nginx/ssl 创建目录。
+创建网站资源目录 首先创建我们的网站资源目录，假设我们放在 /var/www/imoegirl.com 这个目录下。注意 imoegirl.com 是一个目录，如果不存在，就先使用 mkdir 创建。imoegirl.com 可以换其他名字。
+为了测试，我们在 imoegirl.com 这个目录下新建一个 index.html，内容如下
+&amp;lt;h1&amp;gt;Hello iMoegirl&amp;lt;/h1&amp;gt; 配置 nginx 接下来就是配置 nginx，按下面的步骤进行</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 枚举、匹配</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-05/</link>
+      <pubDate>Sun, 05 Apr 2020 22:29:14 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-05/</guid>
+      <description>&lt;p&gt;这篇博客涉及到的知识点有 &lt;strong&gt;枚举的定义&lt;/strong&gt;、&lt;strong&gt;Option 枚举&lt;/strong&gt;、&lt;strong&gt;match 语法&lt;/strong&gt;、&lt;strong&gt;if let 语法&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 结构体</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-04/</link>
+      <pubDate>Thu, 02 Apr 2020 17:26:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-04/</guid>
+      <description>在有类的编程语言中，组织数据的方式可以定义一个类，而在 Rust 中，组织数据的方式，使用 struct。struct 可以定义三种不同的类型，一种是带有字段名字的结构体，一种是没有字段名字的元组结构体，一种是没有任何字段的单元结构体。
+定义 struct 带有字段名字的结构体
+#[derive(Debug)] struct User { username: String, email: String, active: bool, } fn main() { let user1 = User { username: String::from(&amp;#34;fred&amp;#34;), email: String::from(&amp;#34;fred@outlook.com&amp;#34;), active: false, }; println!(&amp;#34;{:?}&amp;#34;, user1); }  注意上面的代码中 #[derive(Debug)]，简单理解就是加上这个，可以给我们自定义的结构体添加上可打印的功能，后面就可以使用 println! 来打印出结构体。
+ 上面的代码中定义了一个 User 结构体，里面的每一个字段，前面是字段名，后面是字段的数据类型。在 main 函数中的代码，是创建一个 User 实例。
+元组结构体
+#[derive(Debug)] struct Color(u8, u8, u8, u8); fn main() { let color = Color(255,255,255,255); println!(&amp;#34;{:?}&amp;#34;, color); } 上面的代码中，定义了一个元组结构体，用来存储颜色值。
+单元结构体
+#[derive(Debug)] struct Unit; fn main() { let unit = Unit; println!</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 引用、切片</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-03/</link>
+      <pubDate>Wed, 01 Apr 2020 12:13:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-03/</guid>
+      <description>在阅读Rust官方教程时，会看到两个词，引用和借用，也就是 References and Borrowing。这里很容易让人混乱，如果了解C/C++这类有指针的语言，则引用很容易理解，但是 Rust 中的借用这个词是什么意思呢？我觉得，在初学 Rust 时，可以忽略这个词，或者就简单理解为，它所涉及到的东西，就是引用，就是一个指针，就可以了，避免陷入进去。所以，接下来我就就聊一聊引用。
+什么是引用 简单来说，引用就是一个指针，这个指针指向了某个内存地址。在说所有权时，我们知道，当把一个 String 当作参数传到函数时，它的所有权也就会被移动到函数的参数上，如果在调用完函数时，我们依旧想使用这个 String，则需要将所有权再返回，这样就很麻烦，所以用引用，会方便很多，因为引用，并不会获得这个 String 的所有权。看下面的代码
+fn main() { let s1 = String::from(&amp;#34;Hello&amp;#34;); print_name(s1); // 下面这一句再访问 s1 就会编译出错，因为 s1 的所有权已经没了  //println!(&amp;#34;s1 again: {}&amp;#34;, s1); } fn print_string(s: String) { println!(&amp;#34;{}&amp;#34;, s); } 下面是用引用作为参数
+fn main() { let s1 = String::from(&amp;#34;Hello&amp;#34;); print_name(s1); println!(&amp;#34;s1 again: {}&amp;#34;, s1); } fn print_name(s: &amp;amp;String) { println!(&amp;#34;{}&amp;#34;, s); } 在上面的代码中，我们将参数从 String 改为 &amp;amp;String，这样函数的参数需要的就不是 String 的所有权，而是 String 的引用，所以在函数 print_name 结束时，main 函数中依然可以使用 name。下图是使用引用时的数据状态。</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 所有权</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-02/</link>
+      <pubDate>Sun, 29 Mar 2020 20:38:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-02/</guid>
+      <description>什么是所有权 Rust 的所有权，是 Rust 语言的一个核心概念。可以简单理解为，一种内存管理的方式。用现实中的东西举例，当你从图书管借了一本书时，这本书的所有权暂时归你所有，而当你把书给你的朋友时，此刻，书的所有权归你的朋友所有，而当你的朋友把书归还图书馆时，此时没有人拥有书的所有权，相当于内存释放。
+在使用有自动垃圾回收(GC)的编程语言时，我们并不需要考虑内存的释放问题，因为GC会帮我们释放。Rust是无GC的语言，一个变量占用的内存什么时候释放，由它的所有权决定，简单来说，当所有权所在的作用域结束时，内存将被释放。
+什么是作用域 Rust 的作用域和其他编程语言中的作用域概念是一样的，我们使用下面的代码说明
+// 整个 main 函数是一个作用域 fn main() { let a = 10; // 下面的花括号内，也是一个作用域  { let s = &amp;#34;hello&amp;#34;; println!(&amp;#34;{}&amp;#34;, s); } // 下面这句再次打印s，会编译出错，因为s所在的作用域已经结束，s 被释放掉了  //println!(&amp;#34;s again: {}&amp;#34;, s); } 关于堆内存和栈内存 我们知道，内存分为堆和栈。存在栈上的数据，必须是已知固定大小的数据。而存在堆上的数据，都是在编译时不知道大小的数据，例如用户自己输入的数据。栈比堆的访问快很多，这是因为栈的存取结构，都是操作栈顶，不需要去内存中找数据。而要将数据存在堆上，则需要向操作系统申请，由操作系统在内容中找到一块能够容纳你要存的数据大小的内存空间，然后将内存空间的指针返回给你。访问堆内存上的数据，都是要通过指针，找到指向的内存，然后再读取内存中的数据。
+哪些数据是存在栈上，哪些是存在堆上 let x = 10; let y = &amp;#34;hello&amp;#34;; let c = &amp;#39;A&amp;#39;; let x2 = x; 像上面这些简单的数据类型，都是存在于栈上，对于 Rust 而言，整型，浮点型，布尔型，字符型等，都是存在于栈上。而对于Rust的 String，这种可变大小的数据类型，是存在于堆上的。看下面的代码
+let s1 = String::from(&amp;#34;hello&amp;#34;); let s2 = &amp;#34;hello&amp;#34;.</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 基本语法</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-01/</link>
+      <pubDate>Sat, 28 Mar 2020 22:45:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-01/</guid>
+      <description>1. 变量和可变性 Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。
+let x = 10; x = 11; // 这里会编译出错， 如果要定义可变量，需要使用 mut
+let mut x = 10; x = 11; 用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing
+let x = 10; let x = &amp;#34;Hello&amp;#34;; 常量的定义使用 const，常量是永远不会变的量，常量必须在定义的时候注明数据类型
+const MAX_SCORE: i32 = 10000; 2. 标量数据类型 Rust 数据类型可以分为标量类型和复合类型，标量类型有四种 整型，浮点型，布尔型，字符型。而整型分为 8位、16位、32位、64位、128位，动态长度这几种，每一种又分为有符号型，无符号型。浮点数分为 32位、64位。
+关键字： 整型有符号型: i8 i16 i32 i64 i128 isize 整型无符号型: u8 u16 u32 u64 u128 usize
+ 整型默认类型为 i32。注意 isize usize 的长度是动态的，如果运行程序的计算机是32位的，则为32位，如果计算机为64位的，则为64位。另外，在Rust中遍历集合时，常用 isize 和 usize。</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 半兰伯特、高光反射、BlinnPhone</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-05/</link>
+      <pubDate>Thu, 19 Mar 2020 21:50:16 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-05/</guid>
+      <description>写 Shader，到底是在做什么？Shader 就像一个拥有魔法的黑箱，我们最终从它那里得到的，是像素的颜色。而得到的是什么样的像素颜色，则取决于我们丢进黑箱里的是什么东西，以及使用的魔法咒语是什么。丢进同样的东西，使用不同的魔法咒语，得到的像素颜色也是不一样的。输入顶点的坐标，光线方向，以及自定义的颜色，使用不同的计算方式，得到的像素颜色是不一样的。使用同样的计算方式，丢进一个纯色颜色值，和丢进一张纹理，得到的像素，也是不一样的。
+如果把整个 Shader 比作一个函数，那么顶点位置，自定义的颜色值，纹理，灯光等这些就相当于函数的输入参数，而 Shader 中写的各种计算，用的各种算法，都是对输入的那些参数进行操作，而最终生成的，就是颜色值，也就是相当于函数的返回值。把 Shader 想的简单一点，就是输入需要的东西，进行计算，得到像素值。
+这篇博客，还是关于光照模型的，接下来我们首先总结一下常用的光照模型。
+Lambert (兰伯特) 光照模型 在之前的博客中说了漫反射的实现，实现漫反射用到的模型，叫做 Lambert (兰伯特) 光照模型。Lambert 实现出来的效果，一旦入射光向量与材质表面的角度大于90度，那么得到的漫反射颜色就会全部变为黑色，没有任何明暗变化效果。
+Lambert 光照模型公式: 最终颜色 = 直射光颜色 * 漫反射颜色 * max(0, dot(光源方向, 法线方向))
+其中，直射光颜色，漫反射颜色，都是我们自定义的变量。
+Half Lambert (半兰伯特) 光照模型 Half Lambert 是在 Lambert 模型的基础上，做了微调，也就是将光源方向与法线方向的点乘结果，从原来[-1, 1]，映射为 [0, 1]，这样原来背光面，也会有明暗效果。
+Half Lambert 光照模型公式: 最终颜色 = 直射光颜色 * 漫反射颜色 * (dot(光源方向, 法线方向) * 0.5 + 0.5)
+Specular (高光反射) 这里的高光反射使用了 Phone 模型，的原理很简单，想象一束光射向某个点，然后反射出去，我们的眼睛同样看向那个点，当我们的眼睛看向那个点的方向，与光线反射的方向，越接近时，进入我们眼睛的反射光则越多，也就是更亮。看下面的图
+很明显，当视野方向与光的反射方向夹角越小时，也就是说进入眼睛的光越多，所以那个点也就会越亮，这就是高光反射的原理。所以高光反射，实现起来也就很简单了，只要拿到视野方向，拿到直射光的反射方向，就可以求出最终的颜色值。
+Specular 光照模型公式: 最终颜色 = 直射光颜色 * 反射光颜色 * pow(max(0, dot(反射光方向, 视野方向)), 光泽度(gloss)) + 漫反射颜色 + 环境光颜色</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 光照模型和漫反射</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-04/</link>
+      <pubDate>Sun, 15 Mar 2020 11:54:30 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-04/</guid>
+      <description>在之前的文章中写的Shader，呈现出来的物体样子是一个平面2D的状态，即使物体是3D的，那是因为，我们还没有将灯光加入到Shader的运算中。现在，我们将介绍灯光相关的东西，最后呈现出和 Unity Diffuse Shader 一样的效果。
+什么是光照模型 光照模型，简单理解就是一种运算，或者说一个公式，计算的结果，决定了一个点受到光照时，所表现出来的效果。例如，光照在木板上，和照在一面镜子上，我们所看到的效果是不一样的，照在镜子上，很大一部分光会被镜子反射，而木板，却不会反射那么多光。
+进入摄相机的光线分类 在游戏中，我们可以将进入摄相机的光分为 高光反射、漫反射、自发光等。像上面说的镜子反射了大部分光，就是高光反射，现实中比较光滑的表面，受到光照时，都会产生这种效果，很亮。而光线照在木头上，就是漫反射，其实是木头先吸收了光，然后向周围散射出去，这个就不会很亮。而自发光，就是字面意思，自身是一个发光体。这里大概知道这些词是什么就可以，不必深究里面的原理。
+这一篇博客，接下来我们将在Shader中实现一下漫反射。实现漫反射，可以在顶点函数中，这叫做逐顶点光照。也可以在片元函数中实现，这叫做逐片元光照。在顶点函数中实现，也就是对每一个顶点都进行一次光照的计算，而在片元函数中也就是对每一像素执行光照计算，所以，在片元函数中实现相对来说要更耗费一点性能。
+在顶点函数中实现漫反射 漫反射的计算公式是 最终颜色=直射光颜色 * max(0, dot(光线，法线))，也就是使用 Directional Light 的颜色 乘 光线发射方向 与顶点法线方向的夹角，dot函数就是点乘，结果就是夹角。有一点要注意的是，dot中的 光线 和 法线 都是单位向量，也就是我们要对其进行标准化。max函数是取最大值，也就是说，如果dot计算出来的结果小于0，那就取0。
+看下面的代码，注意看注释，从上往下每一个注释都要看
+Shader &amp;#34;iMoeGirl/04-DiffuseVertex&amp;#34; { SubShader { Pass { // 要使用光照，首先要定义一下LightMode，这里我们使用ForwardBase， // 这里先不用管意思，只要照着写上就行 Tags { &amp;#34;LightMode&amp;#34; = &amp;#34;ForwardBase&amp;#34; } CGPROGRAM // 这里我们将 Unity 一些预定义的Shader代码包含进来， // 里面有我们需要的东西，场景中第一个Directional Light的信息（后面用来做计算） #include &amp;#34;Lighting.cginc&amp;#34; #pragma vertex vert #pragma fragment frag // 根据共识，要计算最终顶点的颜色，需要法线数据，所以这里将法线从Application传到顶点处理函数中 struct a2v { float4 vertex: POSITION; float3 normal: NORMAL; // NORMAL就是法线语义，之前的文章说过 }; struct v2f { float4 position: SV_POSITION; fixed3 color : COLOR; // 这个颜色就是在顶点函数中计算完的顶点的漫反射颜色，传到片元函数中 }; // 把光照的计算放在顶点函数中，所以叫做顶点光照 v2f vert(a2v v) { // 定义一个数据传送结构体（传送到片元函数中） v2f f; f.</description>
+    </item>
+    
+    <item>
+      <title>Unity UGUI RGB通道分离抖动</title>
+      <link>https://blog.moeif.com/posts/unity-ugui-tiktok-effect/</link>
+      <pubDate>Sun, 08 Mar 2020 22:18:03 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-ugui-tiktok-effect/</guid>
+      <description>&lt;p&gt;今天我们要在 UGUI 上实现图片RGB通道分离抖动效果，先看最终效果图&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 使用Struct传递数据</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-03/</link>
+      <pubDate>Sat, 07 Mar 2020 14:02:26 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-03/</guid>
+      <description>上一篇博客 说了在 CGPROGRAM 中写代码、顶点处理函数、片元处理函数、以及在两个函数之间传递简单的数据、从 ShaderLab 属性到CG数据类型之间的联系等。这一篇博将稍详细一点说一下 Shader 的基本知识，以及在顶点和片元函数之间传递更多的数据。
+Shader的基本理解 简单来说，Shader 决定了一个模型最终呈现在屏幕上的样子。一个模型由很多顶点构成，而每一个顶点，都会经过 Shader 中的顶点处理函数，这个过程，就是从应用将数据传递到顶点处理函数，顶点函数需要将顶点从模型空间转换到屏幕空间，或者说是裁剪空间，也可以简单理解为从 3 维空间转换到屏幕上的 2 维空间。在这个过程中，还可以做一些其他对顶点的操作。
+顶点数据经过顶点处理函数处理后，接下来就返回，然后传给片元处理函数，到了这一步，面对的，就是像素，也就是每一个像素的颜色值。在这里，可以根据自己的需求，对每一个像素做处理，例如做高斯模糊，RGB通道分离，等等，各种各样的效果。
+向 Shader 传递更多的数据 在之前的博客文章中，我们只是将顶点的坐标传给了Shader，但是我们还需要其他的数据，例如法线，例如切线，纹理坐标等等。接下来，我们将使用结构体来存储要传递的数据，看下面的代码
+Shader &amp;#34;iMoeGirl/03-Shader&amp;#34; { Properties { _MainColor(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) } SubShader { Pass { CGPROGRAM float4 _MainColor; #pragma vertex vert #pragma fragment frag // 这里定义一个结构体，封装需要从应用传到顶点函数的数据 struct a2v { float4 vertex : POSITION; // 顶点坐标 float3 normal : NORMAL; // 顶点法线 float4 textcoord : TEXCOORD0; // 第一套纹理坐标(可以有多套) }; // 这里定义另一个结构体，封装从顶点函数传到片元函数的数据 struct v2f { float4 position : SV_POSITION; float3 temp : COLOR0; }; // 顶点处理函数，传入的是a2v结构体，返回的是要传到片元函数的v2f结构体 v2f vert(a2v v){ v2f result; result.</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader |  属性、顶点与片元函数</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-02/</link>
+      <pubDate>Mon, 02 Mar 2020 22:46:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-02/</guid>
+      <description>上一篇博客 介绍了Shader的基本结构，这里我们继续来说Shader的编写，也就是要在 CGPROGRAM 中写代码。首先我们把之前的Shader结构代码复制过来。
+Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 // 这里定义一些属性，可以显示在UI面板上用于调节 Properties { // 属性名(&amp;#34;Inspector面板上显示出来的属性名&amp;#34;, 属性类型) = 默认值 _Color(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) _Vector(&amp;#34;向量类型&amp;#34;, Vector) = (1, 2, 3, 4) _Int(&amp;#34;整型&amp;#34;, Int) = 11111 _Float(&amp;#34;浮点型&amp;#34;, Float) = 12.11 _Range(&amp;#34;范围类型&amp;#34;, Range(100, 1000)) = 128 _Tex2D(&amp;#34;贴图类型&amp;#34;, 2D) = &amp;#34;white&amp;#34;{} _Cube(&amp;#34;立方体贴图类型&amp;#34;, Cube) = &amp;#34;white&amp;#34;{} _Tex3D(&amp;#34;3D纹理&amp;#34;, 3D) = &amp;#34;white&amp;#34;{} } // 子 Shader，可以写多个，显卡运行时， // 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个， // 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader SubShader { // 至少有一个Pass，相当于一个方法 Pass { // 在Pass块里写Shader代码 CGPROGRAM // 使用 CG语言编写Shader ENDCG } } // 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案 Fallback &amp;#34;VertexLit&amp;#34; } 怎样使用 Properties 中定义的属性 Unity3D定义Shader属性所使用的语法，和CG所使用的说法是不一样的，所以我们要在一个Pass中使用Properties中定义的属性，需要在Pass中再以CG的语法再写一遍，其实就是变量名相同，而数据类型不同，在Shader在编译的时候，就会自动将两个变量关联起来。看下面的代码</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 基础</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-01/</link>
+      <pubDate>Mon, 24 Feb 2020 22:14:04 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-01/</guid>
+      <description>MeshFilter 存储一个Mesh（网格，模型的网格，模型的三角面顶点信息）
+MeshRenderer 用于渲染一个物体的外观，数据来源于MeshFilter
+Material 材质包含两部分，贴图和Shader
+OpenGL DirectX 直接与显卡交互图形渲染库，可以理解为应用程序与显卡之间的桥梁，为应用程序提供一些渲染接口，用于渲染。
+Shader Shader可以理解为是一种渲染命令，由opengl或DX进行解析，用于控制图形的渲染。
+GLSL/HLSL/CG shader编程语言，GLSL面向OpenGL，HLSL面向DirectX，CG是Nvidia公司出的，跨平台的shader编程语言。
+ShaderLab 我们在Unitiy中写Shader用的语言是ShaderLab，可以理解为Unity为了方便使用者写Shader而创造的一种新的Shader语言，最后其实都会在底层被翻译成GLSL或HLSL或CG。
+Unity中的Shader分类 Shader的中文名叫做着色器
+ 表面着色器，Surface Shader 顶点/片元着色器，Vertex/Fragment Shader 固定功能着色器，Fixed function Shader (在现代硬件上基本已被弃用)  表面着色器可以理解为是对顶点/片元着色器的一种封装，它帮我们处理了很多渲染上比较麻烦的事情。而顶点/片元着色器就相对更灵活一些，也就是说很多东西要自己处理，相对来说要写的代码更多一些。进一步讲，使用顶点/片元着色器能实现的效果，使用表面着色器并不一定能实现，或者说，并不一定那么方便地实现。
+Unity Shader 结构 Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 Properties { // 这里定义一些属性，可以显示在UI面板上用于调节 } SubShader { // 子 Shader，可以写多个，显卡运行时， // 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个， // 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader } // 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案 Fallback &amp;#34;VertexLit&amp;#34; } Unity Shader 属性类型 Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 // 这里定义一些属性，可以显示在UI面板上用于调节 Properties { // 属性名(&amp;#34;Inspector面板上显示出来的属性名&amp;#34;, 属性类型) = 默认值 _Color(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) _Vector(&amp;#34;向量类型&amp;#34;, Vector) = (1, 2, 3, 4) _Int(&amp;#34;整型&amp;#34;, Int) = 11111 _Float(&amp;#34;浮点型&amp;#34;, Float) = 12.</description>
+    </item>
+    
+    <item>
+      <title>SVN Cleanup错误 Faild to run the wc db work queue associated with</title>
+      <link>https://blog.moeif.com/posts/solve-svn-clean-up-error/</link>
+      <pubDate>Thu, 13 Feb 2020 14:51:31 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/solve-svn-clean-up-error/</guid>
+      <description>今天svn更新时，因为一个文件问题，导致了 Faild to run the wc db work queue associated with.... 的错误，无法 Cleanup，也无法 Update，无法 Revert，现在记录一下解决方法，很简单，只需要三个 sqlite 命令即可。
+这个过程要用到 sqlite3 的命令行工具，可以在官网下载。找到 Precompiled Binaries for WIndows 中的 sqlite-tools-win32-x86-xxxxxx.zip，点击下载即可，xxxxxx 是指版本号，下载官网上的最新版本即可。
+要在 cmd 中运行，还要将下载并解压后的 sqlite 目录加到环境变量的 Path 中，这样就可以直接在 cmd 中使用 sqlite 命令了。
+下面是解决问题的流程
+ 在 cmd 中通过 cd 命令进入到 svn 工程中的 .svn 目录中 执行命令 sqlite3 wc.db &amp;quot;select * from work_queue&amp;quot; 查看有哪些文件报错 执行命令 sqlite3 wc.db &amp;quot;delete from work_queue&amp;quot; 执行命令 sqlite3 wc.db &amp;quot;delete from wc_lock&amp;quot;  好了，现在工程已经恢复正常。</description>
+    </item>
+    
+    <item>
+      <title>使用 Python 去掉 Kindle PC 复制时自动添加的内容</title>
+      <link>https://blog.moeif.com/posts/python-delete-kindle-pc-content/</link>
+      <pubDate>Tue, 11 Feb 2020 20:16:39 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/python-delete-kindle-pc-content/</guid>
+      <description>在使用 Kindle PC 软件看英文电子书时，常常会配合 CopyTranslator 软件做剪切板内容翻译，但是最近发现 Kindle PC 在复制内容时，会在剪切板中自动附加上书籍的内容，就像下面这样
+There’s nothing wrong with pursuing venture funding and attempting to grow fast like eBay Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&amp;#39;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本. 上面的内容，第一行是我要复制的内容，Walling, Rob; Taber, Mike. Start Small, Stay Small: A Developer&#39;s Guide to Launching a Startup (Kindle位置28). The Numa Group, LLC. Kindle 版本. 是Kindle PC自动附加的书籍信息内容，这一点很烦人。
+要解决这个问题其实很简单，只要监控剪切板变化时，将剪切板中的字符串，去掉自动附加的内容，然后将新的字符串替换回剪切板即可。接下来我们使用Python来做这件事情，代码只需要很少几行即可。</description>
+    </item>
+    
+    <item>
+      <title>在Ubuntu上开启Swap</title>
+      <link>https://blog.moeif.com/posts/open-swap-on-ubuntu/</link>
+      <pubDate>Sun, 09 Feb 2020 12:15:40 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/open-swap-on-ubuntu/</guid>
+      <description>&lt;p&gt;在内存不够大时，需要开启Swap，使用一部分硬盘，作为虚拟内存，解决内存容量不足的情况。这篇博客是以 Ubuntu 基础来操作的，其他 Linux 系统基本类似。很简单，跟着下面的步骤，一步一步来操作即可。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用外部工具登录Google VPS</title>
+      <link>https://blog.moeif.com/posts/ligin-google-vps/</link>
+      <pubDate>Sun, 09 Feb 2020 10:04:23 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/ligin-google-vps/</guid>
+      <description>&lt;p&gt;Google的VPS创建好后，默认是无法通过外部的工具ssh登录的，要使用外部SSH工具登录，需要修改ssh的配置。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 Unity 实现漂亮的数学曲面(下)</title>
+      <link>https://blog.moeif.com/posts/unity-basis-03-math-curve2/</link>
+      <pubDate>Thu, 16 Jan 2020 15:51:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-03-math-curve2/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://imoegirl.com/2020/01/10/unity-basis-03-math-curve1/&#34;&gt;上一篇博客&lt;/a&gt;我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。&lt;/p&gt;
+&lt;h2 id=&#34;25-创建一个涟漪效果&#34;&gt;2.5 创建一个涟漪效果&lt;/h2&gt;
+&lt;p&gt;先来看一下最终要实现的效果图&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 Unity 实现漂亮的数学曲面(上)</title>
+      <link>https://blog.moeif.com/posts/unity-basis-03-math-curve1/</link>
+      <pubDate>Fri, 10 Jan 2020 10:51:45 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-03-math-curve1/</guid>
+      <description>这篇博客是上一篇 使用Unity3D展示Sin函数动画 的续篇，在上一篇的基础上，来实现更复杂的效果。在文章最后会有完整的 C# 代码和 Shader 代码，先来看一下最终的效果图
+由于篇幅太长，所以将分为上下两部分，现在开始第一部分的内容。
+ 先将上一节 使用Unity3D展示Sin函数动画 的资源准备好，可以按下面的步骤手动建立，也可以直接导入上一节内容的完整 Unity 资源包，点这里下载
+ 使用Unity的Cube做成一个Prefab 新建一个 Shader，命名为 ColoredPoint，Shader 的代码为上一篇博客的 Shader 新建一个材质，命名为 ColoredPoint，并使用第2步中创建的Shader C# 逻辑代码，也使用上一篇博客中的完整代码，在本文中会有很多修改   接下来，我们开始新的内容。
+1 在不同的效果函数之间切换 在上一篇博客中我们实现了Sine函数的展示，现在要加入更多函数的展示，为了方便在运行状态可以随时切换到其他函数，我们需要把每一种类型的展示放在独立的函数中。
+1.1 将 Sine 函数的表示放在独立函数中 首先在 Graph 脚本中添加一个新的函数 float SineFunction(float x, float t) {}，这个函数将用于展示 $f(x,t) = sin(π(x + t))$。然后我们需要将函数体的内容填写进去，代码如下
+float SineFunction(float x, float t) { Mathf.Sin(Mathf.PI * (x + t)); } 然后把 Update 函数里的代码改为调用我们新添加的函数
+void Update () { for (int i = 0; i &amp;lt; points.</description>
+    </item>
+    
+    <item>
+      <title>哈希</title>
+      <link>https://blog.moeif.com/posts/data-structure-08-hash/</link>
+      <pubDate>Wed, 08 Jan 2020 12:35:13 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-08-hash/</guid>
+      <description>今天我们来聊一下哈希(Hashing)，有时候也被称为散列。简单来说，哈希是一个唯一标识，用于标识一个东西。例如，一个人的身份证号就可以称为一个哈希，通过一个身份证号，可以定位到某一个人的信息。一个人的名字，也可以用作哈希，不过这个可能会产生重复，因为有很多人重名，这样导致的问题就是，通过名字，可能定位到多个人的信息，这种情况叫做哈希碰撞。
+哈希表(Hash Table) 哈希表是一种存储结构，也称为散列表，是一种 Key-Value 的存储结构。通过 Key 可以直接访问在内存存储位置的数据(Value)。例如 C# 中的 Dictionary 数据结构就是一种哈希表，还有一些编程语言中的 Tuple，也可以用哈希表实现。
+哈希函数/散列函数 哈希函数也可以称为散列函数，是在哈希表内部，用于将我们之前提到的 Key，转为哈希表用于直接访问数据的索引。
+哈希表的实现 在哈希表的内部，可以用数组来存储数据，当我们添加一个 Key-Vale 时，首先会使用哈希函数将 Key 转换成索引，然后将 Value 存储在数组中，而位置就是刚才计算出来的索引。哈希表通常有一个默认容量大小，而哈希函数计算出来的索引，通常会和当前的哈希表容量进行取模计算，然后得到最终的索引，这样能保证不管计算出来的索引有多大，永远不会超界。而当哈希表快要满时，则会进行自动扩容，通常扩为当前容量的2倍，而扩容后，当前哈希表中的所有数据，会重新计算位置。
+举一个例子，假设当前哈希表的容量为 10，我们要将 jack 作为 Key 存放在哈希表中，那索引是什么呢。我们这里使用一个简单哈希函数将Jack转为数据，使用每一个字母的Ascii值之和，也就是 106 + 97 + 99 + 107，最后的结果是 409，然后用 409 % 10，也就是对当前的容量取模，最后得到的索引就是 9，所以数据最终放在数据中索引为9的位置。
+而从哈希表中取数据，也是通过Key来取的，内部也是先把Key计算成索引，然后取数据。
+ 有时，哈希表部分结构也会使用树的形式来存储数据，也有可能在不同容量时，线性存储和树形存储会互相转换
+ 哈希碰撞 哈希函数在计算索引时，有时候同一个 Key 得到的索引是一样的，这种情况称为哈希碰撞，通常的解决方案是，哈希表内部的数组不直接存储数据，而是存储一个数据的指针，当有碰撞时，会以链表的形式将数据挂到索引所对应的数据指针上，这种处理碰撞的方法，也叫做拉链法。看一下下面的图，就会很容易明白。
+总结 哈希表的实现要考虑很多情况，例如哈希函数是否均匀、处理冲突的方法、哈希表的载荷因子等等，这些细节直接决定了哈希表增删改查数据的效率。通常情况下我们直接使用编程语言已经实现好的哈希表结构即可，没有必要自己实现。
+更多资料 维基百科 哈希表 Hashing data structure</description>
+    </item>
+    
+    <item>
+      <title>使用Unity3D展示Sin函数动画</title>
+      <link>https://blog.moeif.com/posts/unity-sine-visualization/</link>
+      <pubDate>Mon, 06 Jan 2020 13:05:08 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-sine-visualization/</guid>
+      <description>&lt;p&gt;今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 &lt;code&gt;Sin&lt;/code&gt; 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 &lt;code&gt;Shader&lt;/code&gt; 来实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>制作一个会动的时钟</title>
+      <link>https://blog.moeif.com/posts/unity-basis-01-clock/</link>
+      <pubDate>Mon, 06 Jan 2020 11:02:32 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-01-clock/</guid>
+      <description>这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。
+今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。
+1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。
+你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。
+下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可
+1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图
+1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。
+Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。
+然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。</description>
+    </item>
+    
+    <item>
+      <title>二叉堆</title>
+      <link>https://blog.moeif.com/posts/data-structure-07-binary-heap/</link>
+      <pubDate>Mon, 30 Dec 2019 18:01:45 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-07-binary-heap/</guid>
+      <description>今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。
+还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。
+再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。
+如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。
+接下来我们就开始说二叉堆的细节，插入节点，删除节点。
+插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。
+ 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。
+找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值
+上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值
+上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。
+以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。
+// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.</description>
+    </item>
+    
+    <item>
+      <title>一个公平的洗牌算法 | Knuth-Shuffle</title>
+      <link>https://blog.moeif.com/posts/algo-knuth-shuffle/</link>
+      <pubDate>Mon, 30 Dec 2019 11:59:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/algo-knuth-shuffle/</guid>
+      <description>洗牌(随机)算法有很多应用，例如我们平时用的音乐播放器随机播放，棋牌游戏中的洗牌，扫雷游戏中雷的位置随机等等，都会用到洗牌算法。
+今天来介绍一个简单，公平，时间复杂度为O(n)的洗牌算法。什么是洗牌算法呢？其实就是将一些数据以公平随机的方式打乱顺序。这个算法，是由Knuth(高纳德)，也就是计算机程序设计艺术的作者发明的。下面我们直接进入正题。
+假设有这样一个数组 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]，我们使用Knuth-Shuffle算法将数据打乱。基本流程是这样的，从最后一个数开始，往前遍历，每一次，从当前数和第1个数之间，随机选择一个数，与当前数字进行交换（这里的随机选择就直接使用程序语言中的Random随机一个索引即可）。
+例如上面的数组，第一次循环，当前数字为10，我们从1~10之间，随机选择一个数，与10交换，这样第9个索引位就算洗完了，接下来就是第8个索引位，也就是数字为9，我们从第1个索引位与第8个索引位之间，选择一个数，第9交换，这样第8个索引位也就洗完了&amp;hellip;。这个算法之所以公平，是因为保证了每一个元素出现在每一个位置上的概率，都是一样的。
+代码实现
+using System; using System.Collections.Generic; class Program { static void Main(string[] args) { List&amp;lt;int&amp;gt; songList = new List&amp;lt;int&amp;gt;(); songList.Add(1); songList.Add(2); songList.Add(3); songList.Add(4); songList.Add(5); songList.Add(6); songList.Add(7); songList.Add(8); songList.Add(9); songList.Add(10); Random rand = new Random(); // 开始洗牌算法  int last = songList.Count - 1; for (int i = last; i &amp;gt;= 0; --i) { // 从当0~当前索引位之间，选择一个数  int selection = rand.</description>
+    </item>
+    
+    <item>
+      <title>二叉查找树</title>
+      <link>https://blog.moeif.com/posts/data-structure-06-binary-search-tree/</link>
+      <pubDate>Thu, 26 Dec 2019 13:18:06 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-06-binary-search-tree/</guid>
+      <description>二叉查找树（Binary Search Tree），简写BST，是满足某些条件的特殊二叉树。任何一个节点的左子树上的点，都必须小于当前节点。任何一个节点的右子树上的点，都必须大于当前节点。任何一棵子树，也都满足上面两个条件。另外二叉查找树中，是不存在重复节点的。
+上图中的二叉查找树，我们从Root节点3开始看，它的左子树（1，2） 和右子树（6，4，9，7）分别满足条件，左子树上的点，都小于当前节点，右子树上的点，都大于当前节点。
+继续，我们以6作为起点，来看一下这棵子树，6的左子树（4），右子树（9，7）也满足上面两条规则。
+整棵树中，任何一个点下面的子树，都满足上面提到的两条规则。你现在是不是对Binary Search Tree已经有一个大概的形象概念了。
+为什么叫做 Binary Search Tree呢？ 因为在BST中搜索一个值是非常简单和高效的。
+看上面的树，假设要搜索7这个节点。首先从Root节点出发，我们知道7大于3，所以会走到右子树6，然后因为7也大于6，所以会继续往右子树走，到了9，因为7小于9，所以会向左子树走，走到7，发现7等于7，所以找到要搜索的节点。
+二叉树的一些性质  将任何一个点看作Root节点，则这个点的左子树也是 Binary Search Tree 将任何一个点看作Root节点，则这个点的右子树也是 Binary Search Tree Binary Search Tree中的最小节点，一定是整棵树中最左下的叶子节点(从Root开始一直顺着左子树往下走，直到某一个点没有左子节点，则这个点就是最小的) Binary Search Tree中的最大节点，一定是整棵树中最右下的叶子节点(从Root开始一直顺着右子树往下走，直到某一个点没有右子节点，则这个点就是最大的)  怎样构建和插入节点 向BST中插入一个节点，也是一个构建的过程，和上面的搜索思路基本一样。首先从Root开始，如果Root点为空，则直接构建Root点。如果Root点不为空，则要判断要插入的值，比Root点的值大还是小，如果小，则往左子树走，如果大，则往右子树走。直到走到某一个点，我们称为点X，发现要插入的值，小于那个点X的值，并且点X没有左子树，则要插入的点作为X的左子节点。或者，要插入的点大于X，并且X没有右子树，则要插入的点作为X的右子节点。
+下面是代码实现（为了方便后面的删除逻辑，我们每一个点，包含了指向左子树，右子树，以及父节点的引用）
+// 这里先定义出节点的结构 class Node { public int data; public Node parent; public Node left; public Node right; public Node(int _data) { this.data = _data; } } // 定义二叉搜索树结构 class BST { private Node root; // 这个函数是 private 的，递归调用，插入节点  private Node RecursionInsert(Node node, int data) { if (node == null) { return new Node(data); } if (data &amp;lt; node.</description>
+    </item>
+    
+    <item>
+      <title>二叉树</title>
+      <link>https://blog.moeif.com/posts/data-structure-05-binary-tree/</link>
+      <pubDate>Sat, 21 Dec 2019 16:22:10 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-05-binary-tree/</guid>
+      <description>这篇博客来聊一下二叉树。呆萌数据结构系列，终于开始了树型结构的部分。这篇文章你能够学到的内容有 树，有哪些应用，二叉树的结构，什么是满二叉树，什么是完全二叉树，二叉树的遍历方式，二叉树的构建。二叉树是很基本的结构，在此基本上，会有很多很多变种，变成各种各样的树，理解了二叉树，对于后面学习其他更复杂的树型结构，会有很大的帮助。
+这篇文章首先理解文字上的内容，不要管代码，对二叉树的结构，操作，理解原理，最后再看代码。
+好了，下面开始吧。
+树，有哪些应用 现在学习的目的，已经不是为了考试，而是为了能够用来做一些事情。对于我们来说，知识只有用起来，才是有意义的，所以，我们先说一下树型结构的一些应用。咦？为什么不是二叉树的应用呢，因为很多应用，都不是单纯地使用二叉树来实现的，而是在此基础上，使用了它的变种，所以我们这里直接说一下树型结构的一些应用。
+我们使用各种各样的数据结构，本质上似乎就是为了更方便或更高效地去组织数据，操作数据。我们平时用的搜索引擎，当你输入要搜索的内容时，可能在输入了前几个字，下面就已经出现了我们想要的结果，其实背后，就是用了树型结构，才能在这样庞大的数据中，找到与我们输入内容匹配的结构。
+我们手机中常用的电话薄，也是这个原理。当你找一个联系人时，输入第一个字，例如李，可能下面的结构是李四，李五，李六，但是输入第二个字时，结果就会更精确。
+我们平时用的压缩软件，其数据压缩算法，也离不开树型结构。
+操作系统中的文件系统，以及我们使用的数据库软件，也是树型结构的应用。
+二叉树的结构 二叉树是由一个一个节点组成，每个节点，有数据部分，以及两个节点指针，一个指向左子树，一个指向右子树。二叉树每一个节点，最多拥有两个子树。就像下面中的图（图中的数字可以理解为要存储的数据）。另外，二叉树的分支，也就是左右子树，是具有左右次序的，不能随意颠倒。
+什么是满二叉树 满二叉树就除了最后一层，每一个节点，都拥有左右两个子树，没有空缺。
+什么是完全二叉树 在理解了满二叉树的基础上，才能理解完全二叉树。完全二叉树要满足两个条件。首先，如果不看最后一层，那这棵树是满二叉树。其次，最后一层，要尽可能的往左靠，中间不能有空缺。什么意思呢？我们看一张图。
+上图中，左边的图是一个完全二叉树。如果去掉最后一层，那这棵树是满二叉树，满足。最后一层，即使缺少了一个节点，但是所有的节点都是尽可能地往左靠了，所以，也满足第二个条件。
+而第二个图，不是完全二叉树。首先第一个条件就不满足。其实，最后一层的节点也不是尽可能地往左靠。什么叫尽可能得往左靠呢，如果 B 节点作为 A 节点的左子树，那就叫做尽可能地往左靠了。
+二叉树的遍历方式 树的遍历(不限于二叉树)，有广度优先遍历，和深度优先遍历。而深度优先遍历，分为前序遍历，中序遍历，后序遍历。
+我们以下面这张图为例子，分别说一下这几种遍历方式。
+  广度优先遍历：
+广度优先遍历，其实就是一层一层地遍历，所以又可以称为层次遍历，会先访问离根节点最近的节点。按照广度优先遍历，上面的树中节点访问顺序是这样的。
+8，4，12，2，6，10，14，1，3，5，7，9，11，13，15
+  深度优先索索 深度优先搜索，通常采用递归的形式来进行。这里我们用简单的代码去描述，会比文字描述更直观。
+  前序遍历 前序遍历的顺序是先访问根节点，然后再访问子树。
+void pre_order_traversal(Node root) { // TODO：操作当前节点  // 如果左子树不为空，则递归处理左子树  if(root.left != null){ pre_order_traversal(root.left); } // 如果右子树不为空，则递归处理右子树  if(root.right != null){ pre_order_traversal(root.right); } }   中序遍历 中序遍历的顺序是先访问左（右）子树，然后访问根，然后访问右（左）子树。
+void in_order_traversal(Node root) { // 如果左子树不为空，则递归处理左子树  if(root.</description>
+    </item>
+    
+    <item>
+      <title>队列</title>
+      <link>https://blog.moeif.com/posts/data-structure-04-queue/</link>
+      <pubDate>Wed, 18 Dec 2019 13:53:31 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-04-queue/</guid>
+      <description>生活中的一些排队行为，基本上都是队列的形式。这篇博客涉及的概念有 队列，循环队列，优先队列，双端队列。
+很多编程语言已经内置了队列结构，在实际项目中可以直接使用。这篇文章里的代码实现，主要用做原理理解。
+拿超市买单为例，买完东西，一般会找一个结账台排队，等待结账。如果前面已经有人在排队，那你肯定是排在当前队伍的最后面，如果再来人，肯定是排在你的后面，依次往后排。每当有一个顾客买完单，那后面的顾客就会往前走，直到整个买单队伍没有人排队。这就是队列结构。是不是很简单~
+队列 队列，是一种先进先出的结构(First in first out)，也就是在队尾进行插入操作，在队头进行删除操作。队列可以用链表来实现，也可以用数组来实现，要根据实际需求来决定。
+队列的操作有入列、出列、判断是否为空、判断是否已满等操作。下面将用C#来实现列表结构，看代码
+public class Node { public int data; public Node next; public Node(int data) { this.data = data; } } public class LinkedListQueue { public Node head; public Node tail; // 插入一个元素  public void Enqueue(int data) { Node newNode = new Node(data); if (head == null) { head = newNode; tail = newNode; } else { tail.next = newNode; tail = newNode; } } // 删除一个元素  public int Dequeue() { if (IsEmpty()) { Debug.</description>
+    </item>
+    
+    <item>
+      <title>通过阅读儿童图书快速提高你的英语水平</title>
+      <link>https://blog.moeif.com/posts/improvement-english-through-reading/</link>
+      <pubDate>Sat, 14 Dec 2019 21:51:22 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/improvement-english-through-reading/</guid>
+      <description>翻译自 Improve Your English by Reading Children’s Book Series
+如果我告诉你，阅读英文不需要很难，不需要再为此头痛。如果我告诉你，可以通过你感兴趣的方式阅读，来学习新的英文单词，来提高你的听说能力。你是否会认为我很 Crazy?
+这篇文章，看到最后，我保证你会开始阅读，爱上阅读。
+我希望你阅读儿童图书系列 What？
+为什么阅读很重要 这部分内容是为那些认为阅读是浪费时间的朋友准备的。
+阅读并不是浪费时间的。阅读会帮助你在很短的时间内学习到大量的新词汇。并且，这些词汇是在文章上下文中学到的，你可以清楚地学到这个词在句子中怎么用，而不需要去死背这个单词的意思。通过阅读学习是很自然的，就像我们学习母语时，什么时候背过单个字？记忆中是不是都是在读文章时，遇到不会的字了，才去查字典的？
+如果你是『免费自愿阅读』的，那阅读并不是浪费时间。免费自愿阅读这个概念来自于一个很有名的教授 Steven Krashen。免费自愿阅读的意思是，你选择读的内容，是你有兴趣，并且能大概看懂(与自己当前的英文水平相匹配)的内容。
+当你阅读时很开心，你学到的就不仅仅是词汇了，你甚至意识不到其实自己正在学习词汇的搭配使用，句子的结构等这些内容。你的信心得到了提高。你的语法在不需要背诵任何东西的情况下得到了提高和加强。你学到了一个句子的是怎样构成的，而不是去背诵什么主语宾语之类的。阅读也让你更容易地理解和说出更地道的英文。
+即使阅读有那么多好处，那怎样去找符合自己当前英文水平并且有趣的阅读材料呢？
+记住，符合自己当前的英文水平并不是说你需要知道每一个词的意思，而是指，你阅读的材料，只要能大概读懂，一句话中只有少部分单词不认识，那这个材料就很适合你。
+什么是系列丛书 系列丛书在英语世界里很受欢迎，在我很小的时候，我读过很多。
+做一个类比，一部电影，例如钢铁侠系列，分为钢铁侠一，钢铁侠二，钢铁侠三，这就是一个系列。书籍也是一样的，例如哈利波特一，哈利波特二，哈利波特三等。
+怎样能确定阅读系列丛书是有用的呢？ 我们上面提到的那个教授，Steven Krashen，在很多年前，发表了一篇文章，是关于英语学习者通过阅读儿童丛书系列 《Sweet Valley Kids》提高了他们的英语水平的故事。
+文章有内容是这样的: 有四个女人，住在美国，正在学习英文，英文是她们的第二语言。他们被邀请参加一个读书节目。老师给他们需要读的书，就是《Sweet Valley Kids》。
+她们很喜欢那个系列的书。Sweet Valley Kids 是短篇，只有不到100页，并且对于她们来说很容易读懂。之后，她们能够在很短的时间内，读很多书。读的越多，她们的英语水平提高的越快。很快她们读过几个系列的丛书后，就发现自己能很容易地理解电视中的英语对话。
+教授的完整文章链接 Acquisition of vocabulary from the Sweet Valley Kids series: Adult ESL acquisition
+推荐一些有趣的系列书籍 《Sweet Valley Kids》已经无法下载，但是这里我可以推荐另外的，我觉得不错的有趣系列。
+下面的书籍都可以在 Amazon 找到
+1. Greetings from Somewhere 这个系列很有趣。讲的是 Ethan 和 Ella 是一对双胞胎。他们的母亲是一个旅行作家，父亲是一个教授。他们一起去环游世界。在经过每一个城市的时候，都会有一些事情发生，他们在离开前，必须解决掉谜题。
+2. Nancy Drew and the Clue Crew 南茜在英语世界里是很有名的一个角色。她是一个侦探。她和她的朋友贝丝和乔治，解决了许多出现在他们学校和日常生活中的神秘事件。</description>
+    </item>
+    
+    <item>
+      <title>一个不用背单词的高效英文学习法</title>
+      <link>https://blog.moeif.com/posts/immers-learning-english/</link>
+      <pubDate>Sat, 14 Dec 2019 13:42:02 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/immers-learning-english/</guid>
+      <description>翻译自 English Immersion Reading: A Powerful and Effective Way to Learn
+ 你觉得英文阅读很无聊吗？你是否一直在寻找一种能让阅读更有趣，更高效地方式？
+接着往下看，你将会爱上 沉浸式阅读
+我们通过阅读和听力掌握一种语言，而不是通过单纯地学习语法和记忆单词。我们可以很熟练地说一种语言是因为我们听的多，读的多，而不是因为我们记住很多正确的语法规则。
+通过尽可能多的读英文，听英文，去学习新单词和语句，去理解书面英语和口语，是一种高效的方式。
+对于读和听的材料，需要根据自己的英文水平去定。不能太难，和太简单。如果太难，远远超出我们现在的英文水平，一句话中大部分单词不认识，是没法用的。太简单，每一个单词都认识，那对于提高就没有什么意义了。所以应该选择那些比自己当前英文水平稍微高一点的英文材料，能够大概读懂，但是里面又有新的词汇可以学习，那就很合适。
+有一个方法可以使用阅读更简单一点，那就是听读，眼睛一边读，耳朵一边听。这叫做 沉浸阅读
+沉浸，意味着注意力被完全带入某种东西中。例如看电影的时候，我的所有的注意力都在电影剧情上。而当我们学习语言时，沉浸则意味着我们被所有和这个语言有关的东西包围着。不管是听到的，看到的，读到的，还是正在思考的东西。
+沉浸阅读可以在很多场景中使用，不仅仅是读英文书。一边看字幕一边看英文电视剧，电影。或者一边听播客一边看英文原文。这都是很有效的学习英文的方式。
+接下来，我将解释为什么沉浸式阅读很强大很高效，为什么我们需要使用这种方法，以及如何随时随地在手机上，电脑上，使用沉浸式阅读提高对英文的掌握。
+1. 当遇到新词时，不要去猜它的发音 当你在阅读的过程中，遇到新词汇时，不要去猜它应该怎么说，怎么发音。也不要尝试去背任何发音规则。你应该多听英语母语的人怎么说这个词，然后一遍一遍去重复。
+当你一边读一边听的的时候，你就可以将发音和词汇进行匹配。这样当你看一个新词时，就会第一时间知道这个词的正确发音。这是很重要的一点。因为如果一个词一直使用错误的发音，那么错误就会越来越熟练，后面想纠正的时候，就会很困难。
+2. 要学习如何说整个句子，而不是一个单词 学习一个新词时，如果你不知道怎样在句子中使用，那学习这个词是没什么意义的。
+一个新词，如果从没有见过它是怎样在句子中应用的，那我们就很难自己去应用这个词。
+不要去猜一个词应该怎样应用于句子中，也不应该尝试将它应用于自己造的句子中，因为可能用错。
+学习英语，应该学习短语，句子，而不是单个的词汇。把请注意力放在学习语言词汇的搭配上，模式上，语句结构上，才是最重要的。
+通过阅读去学习英文的一个好处就是，不需要死记硬背很多『规则』
+当你一边读，一边听时，你学到的是如何说一个短语，一个句子。以及英文的什么时候着重发音，什么时候减弱发音，什么时候连读等等。一个单独的词汇发音，可能与它在特定句子中的发音是不同的。
+3. 做更多有趣的练习 你需要大量的阅读和听力练习。
+如果一个单词只见到一次，那就很难学会和记住这个单词的使用。但是如果见到很多次，那就很容易很自然地学会这个单词相关的短语，句子，搭配。
+现在我们已经不是在英语课堂中，所以可以任何时候按自己的心情去读，去听。可以自己选择感兴趣的书籍，音频等等。
+在有兴趣的资料中学习，就会很容易沉浸其中，很会更容易地学会和记住一个词的使用。
+一遍一遍去听。即使现在所有的单词都不认识也没关系。即使现在所有的内容都不理解也没关系。如果使用的材料都能理解，那也没关系。这不能说明你使用的材料太简单了。你依然在听不是吗，依然在熟悉和加强正确的单词搭配，单词短语，句子，发音。
+4. 你可以通过模仿来练习自己的发音 你不需要去记忆什么发音规则。要通过耳朵去听来学习发音，而不是通过眼睛去背。
+如果不知道自己的发音是什么样子的，就没法提高自己的发音。
+一边读，一边听，同时，模仿听到的发音。不要通过眼睛看去记忆发音。要在听的同时，去默默重复所听到的内容。
+你可以使用录音记录下自己跟读的声音。然后去对比自己的发音和音频中的发音，就知道哪里不准确，哪些还需要提高。
+模仿和跟读，是很有效的练习发音的方式。
+5. 帮你更快地提高英语水平 没有一种快速简单的方式学习英语，也没有什么秘密魔法可以瞬间让你流利地说英语。
+但是你可以通过一些方法，加快学习的速度。
+学习并不是一定很难的。
+通过先学习语法，再记忆单词，然后再尝试说英语，是很低效的学习方法，不要那样做。
+不需要去死记硬背单词。
+当你一边读一边听的时候，可能你意识不到自己正在不断地掌握英语。但其实你正在很自然地吸收单词，搭配，短语，句子的使用等等。就像平时听母语一样。有一天，你看到一些东西，或者听到什么的时候，你才意识到，你居然可以理解。
+下面说说有哪些可以一边读一边听的方式 现在有很多很方便的方式，可以让我们一边读，一边听来练习自己的英语。
+1. 使用英文字幕看电影或电视剧 看电影的时候通常我们会使用中文字幕，第二遍看的时候，可以尝试一下使用英文字幕，尝试去听，去跟着模仿。
+TED 也是一个很好的素材。网易公开课的TED模块
+2. 听那些有英文文本的播客 我认为，我的播客就不错
+3. 使用亚马逊的电子书和有声读物 如果你有 Kindle，那么就可以在 Kindle 上看书，同时，在手机的 Kindle App 上，听对应的有声读物，简直完美。</description>
+    </item>
+    
+    <item>
+      <title>堆栈</title>
+      <link>https://blog.moeif.com/posts/data-structure-03-stack/</link>
+      <pubDate>Thu, 12 Dec 2019 17:31:12 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-03-stack/</guid>
+      <description>有一堆书，一本叠一本地放入箱子里，最后放入的，一定是在最上面，对不对。取书的时候，规定只能从上面一本一本地取，如果要拿最先放入箱子里的那本书，也就是最下面的那本书，只能先把上面的拿出来。
+什么是堆栈(Stack) 上面说的就是我们今天要讲的堆栈，也可以简单叫做栈。堆栈是很常用很基础的数据结构。堆栈涉及到的概念如果下。
+栈顶，就是最上面的一个元素。
+压栈(Push)，就是将一个元素放入栈中。
+弹出(Pop)，就是将栈顶的元素从堆栈中拿出来。
+就像上面往箱子里放书一样，最先放入堆栈的元素，在最下面，最后放入的元素，在最上面，而取元素，只能从上面一个一个取，不能从中间抽取元素。
+堆栈有什么用呢 那栈有什么用呢，举几个简单的例子。我们用的很多软件，都有撤销功能对不对，其实，那个就可以用堆栈来实现。将每一步操作时的状态，保存到堆栈中，当用户要撤销时，就从堆栈中拿出最近的一个状态进行恢复，也就是最后放入堆栈中 (栈顶) 的状态数据。是不是很熟悉？
+后面要学到的树的遍历，深度优先搜索，也是用堆栈来实现的。
+总之呢，记住一句话，先进后出(Fist in last out) 或者 后进先出(Last in first out) 就可以完美诠释堆栈这种数据结构。
+自己动手实现一下 很多编程语言已经实现了堆栈(Stack)结构，但是呢，我们这里自己实现一下，加深理解。代码使用 C#，以链表的形式来实现。(C# 语言本身已经拥有了Stack，在实际使用中，不需要自己实现)
+class Node { public int data; public Node next; public Node(int data){ this.data = data; } } class Stack { public Node topNode = null; // 将一个数据压入堆栈中  public void Push(int data){ Node newNode = new Node(data); newNode.next = topNode; topNode = newNode; } // 将一个栈顶数据从堆栈中弹出  public int Pop() { if (!</description>
+    </item>
+    
+    <item>
+      <title>链表</title>
+      <link>https://blog.moeif.com/posts/data-structure-02-linkedlist/</link>
+      <pubDate>Wed, 11 Dec 2019 10:43:51 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-02-linkedlist/</guid>
+      <description>什么是链表 链表和数组一样，是一种线性的数据结构，由一个一个节点构成，节点中存放着数据，以及指向下一个或上一个节点的指针，通过指针，将节点链接在一起，构成整个链表结构。不同于数组，链表在内存中并不是连续的存储空间。
+为什么要用链表？或者说链表有哪些优点 我们知道，数组是很方便的数据结构，但是数组有一些局限性。必须事先知道要分配多少内存空间。插入和移除是很耗费性能的操作，因为需要移动不止一个元素。
+而链表，正好弥补了数组的缺点，链表是动态内存，不需要事先分配固定大小的空间，添加和删除元素，也只需要改变指针即可，不需要移动很多元素。
+链表的缺点 当然，链表也有弊端。无法像数组一样随机访问，例如要访问第5个元素，是没办法直接访问的，只能遍历。每一个节点，需要额外的内存空间用来存储指向下一节点的指针。对缓存不友好，因为链表的内存空间并不一定是连续的。
+链表怎样用代码表示，以及插入、删除、遍历操作 下面我们使用C#来描述一下链表
+/// &amp;lt;summary&amp;gt; /// 链表中的节点结构 /// &amp;lt;/summary&amp;gt; public class Node { public int data; public Node next; public Node (int data) { this.data = data; } } public class Linkedlist { public Node head; public Node tail; /// &amp;lt;summary&amp;gt;  /// 插入一个节点  /// &amp;lt;/summary&amp;gt;  /// &amp;lt;param name=&amp;#34;data&amp;#34;&amp;gt;&amp;lt;/param&amp;gt;  public void InsertNode(int data) { Node newNode = new Node(data); if(head == null) { head = newNode; tail = newNode; } else { tail.</description>
+    </item>
+    
+    <item>
+      <title>超简单的VPS购买和配置教程</title>
+      <link>https://blog.moeif.com/posts/vps-buy-and-setup/</link>
+      <pubDate>Tue, 10 Dec 2019 15:02:30 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/vps-buy-and-setup/</guid>
+      <description>&lt;p&gt;这篇博客将一步一步教大家学习VPS的购买和配置教程，只需要简单几步，就可以拥有自己的VPS，然后愉快玩耍。可以自己搭一个科学上网代理服务器啦，托管自己的博客啦，等等。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>数组</title>
+      <link>https://blog.moeif.com/posts/data-structure-01-array/</link>
+      <pubDate>Tue, 10 Dec 2019 11:06:57 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-01-array/</guid>
+      <description>数组，在数据结构中，是很基础，也很常用的一个，在很多很多业务中，都能看到它的身影。数组很简单，在不同的编程语言中，操作方式，也几乎都是类似的。
+那数组是什么呢？简单来说，就是在内存中分配一块连续的空间，用来存储相同类型的元素。使用索引，可以直接访问某一个元素的数据。大多数编程语言，数组的索引是从0开始的。
+数组也分为一维数组，和多维数组。就像excel中的表格，一行数据，就可以看做是一个一维数组，而多行数据，就可以看做是一个多维数组。
+这个是一维数组结构 这个是多维数组结构 关于性能方面，因为数组是固定大小，连续的内存结构，所以访问元素的速度是很快的，时间复杂度是O(1)，也就是说，不用遍历，能直接找到要访问的元素，几乎不消耗什么时间。
+但是插入和删除某一个元素，就不一样了，假设一个数组有10个元素，删除了第4号元素，那么，4号后面的元素，都要往前移。而插入，也需要将插入位置后面的元素，往后移动。这是数组的一个弊端。
+当要插入一个元素，而原本分配的数组空间已经不够时，有些编程语言会产生数组溢出。这时，我们就需要自己写逻辑，当数组空间不足时，分配一个新的更大的数组，先将原来数组的元素复制进去，然后将新元素插入。就像你要将100个桃子放进一个盒子里，但是装着装着发现盒子不够大，这时，就需要找一个更大的盒子，将原来盒子里那些拿出来放到新盒子里，然后继续新盒子里放桃子。
+对于数组的操作，有很多，例如删除头部元素、删除尾部元素、在头部添加元素、在尾部添加元素、数组切片、多个数组链接等等。有一些编程语言已经内部实现了这些方法，例如Javascript，Python等，但有一些编程语言，我们就需要在用到时自己实现，例如C语言等。
+好了，数组就先介绍到这里，如果有什么问题，或者有解释不准确的地方，欢迎在下面留言，谢谢~</description>
+    </item>
+    
+    <item>
+      <title>梦开始的地方</title>
+      <link>https://blog.moeif.com/posts/a-game-project-0-start/</link>
+      <pubDate>Sun, 08 Dec 2019 14:44:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/a-game-project-0-start/</guid>
+      <description>经历过很多项目，遇到和解决过很多问题，但是没有没有以文字的形式总结过。所以这个系列，我打算从客户端的视角，去总结一个游戏项目从开始到上线，整个过程中的一些事情，人员之间的配合，客户端一些重要模块的实现，开发过程中遇到的问题等等。
+一个项目的开始，可能始于某一个人的某一个微小的想法，经过一段时间的构思，然后到达公司层面，在经过很多人的会议讨论，市场调研，等等，觉得方案可行，然后就是立项，准备进入开发阶段。这个过程不是一两天完成的，可能经历了很长时间。这个阶段，也会大概预计项目周期，项目成本，什么时候上线，盈利情况预估等等。
+一旦确认了项目开发，策划方面会先行，进行项目的具体设计，开会讨论，确定方案等等。
+然后美术也会根据项目的方向，做一些可以看的东西，可能这些东西最终不会进到版本中，但是现阶段是需要的。
+至于程序呢？这个阶段可能就开始搭框架了，做一些与具体游戏逻辑没有太大关联的，框架层面的模块，例如资源管理啦，网络通信啦，等等。
+这个阶段可能会持续一段时间，然后就会逐渐进入更加规范和流程化的游戏逻辑开发。不同的程序写不同的游戏模块。
+在前期开发过程中，可能会有很多东西做出来了，然后效果不太好，就被砍掉了，或者整个设计变化很大，基本上等于这个模块推到重来，这都是很正常的情况。不管是美术，策划，和程序，都会有这种情况发生，不过随着游戏的开发进度，这种情况会越来越少。
+从开发到上线，游戏会经历很多测试版本，可能有公司内部测试版本，外部小规模测试版本，外部大规模测试版本，付费测试版本等等。每一次版本测试，都会得到很多信息，用于调整和改善游戏内容。经过几轮测试以及测试后的版本打磨，整个项目会越来越接近上线版本。
+当然，在一切顺利的情况下，游戏最终会提交上线。然后就是后期的运营，以及上线后的版本迭代，内容更新，Bug 修复等等。
+这大概就是一个游戏项目的完整生命周期。</description>
+    </item>
+    
+    <item>
+      <title>一个游戏是怎样被做出来的</title>
+      <link>https://blog.moeif.com/posts/how-a-game-is-made/</link>
+      <pubDate>Sat, 07 Dec 2019 14:19:38 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/how-a-game-is-made/</guid>
+      <description>一个游戏是怎样被做出来的呢，当我开始写这篇文章的时候，才意识到，这个题目写的有点大，单纯的一篇文章，真的很难让大部分人了解一个游戏到底是怎样被做出来的，因为这里面涉及到了太多太多的细节。所以，我就来从宏观的角度来聊一聊一个游戏的开发过程是怎样的。
+每一个游戏，可能都始于一个很小的想法，或者故事，然后像种子一样，慢慢成长，最后形成一个完善的体系化的设计。就像写一个故事，最开始，可能只有一个大概的方向，然后会构思里面的人物，性格，故事的发生地点，角色之间的关系，等等，有了宏观方向上的故事线，就有了大概的骨架，在不偏离故事线的情况下，去完善细节，让整个故事更有灵魂。一个游戏的构思，我觉得也是有类似之处。
+首先，简单介绍一下一个游戏公司的人员，大概都分为哪些部分。从宏观上来分，大概分为策划，美术，程序，测试，音频，运营。在这里，暂时不详细地介绍每一个职位的细分以及工作的内容，等我写一篇文章专门介绍这个。
+前期的概念设计，是由游戏策划来做的。游戏策划人员会细分成系统策划，剧情策划，数值策划等等。为了能让每一个人构思的东西，能够不偏离游戏的故事线，以及最后整合到一起，形成一个完整体系，所以还会有一个职位叫做策划总监，或者有的项目还会有制作人。他们会拍板每一个设计是否要采纳，当然，也是和所有策划同学讨论决定的，但是也拥有最终决定权。
+设计阶段产出的内容，一般都是设计文档，或者一些参考图之类的，为后面开发阶段做准备。
+现在来介绍一下美术部的同学，可以说，我们在游戏中眼睛能看到的东西，不管是一个模型，一个世界，一个按钮，一个炫酷的特效等等，都是由美术部的同学做的。美术部分，也会细分，大概分成2D和3D，2D 的同学主要做 UI，原画，3D 的同学呢，有的做场景，有的做角色，有的做动画，有的做特效等等。
+在策划有了大概的设计之后，美术部的同学就可以开始做一些东西了。
+与此同时，程序的同也开始工作了，一开始做的事情呢，要能就是搭建游戏的程序骨架。会写一些与具体的游戏玩法没有关系的东西，就像建造房子时的地基，不管上面的房子要建造成什么样子，地基都可以在有了大概的设计后，开工，与上面的房子建造成什么样子，关系不大，只要能承载上面的房子就 OK。程序的骨架也是一样的。这个通常称做搭框架。有很多东西，不需要从0开始写，很多模块都有现成的，要么是别人写好的，要么是之前项目中的，都可以直接或者稍微改一下就拿过来用。减少开发时间和成本。
+前期的这个阶段会走的很慢，因为一切刚刚开始。慢慢地，设计方面越来越完善，很多东西走出实验阶段，美术知道具体做什么，就可以加快速度开始做。与此同时，美术做的东西，也会直接进入游戏工程中，在经过一段时间后，就可以有一个游戏的雏形了，可以叫做 Demo 版本。就是一个不完善，但是能够大概反应游戏方向的可玩版本。
+在 Demo 版本出来后，验证了游戏的设计想法是可行的，就可以正式地，流程化地往下进行。
+接下来的发展就很明确了。不同的策划会构思不同的游戏功能，每一个游戏功能涉及到的美术部分，会由美术部的同学去做，而这个功能的实现，就由某一个程序的同学去实现。在这个过程中，程序，美术，策划，会经常性的交流和对接，例如，有设计不明确，或者不合理，或者做不了的情况，程序都会和策划聊。或者有的事情，可能由美术那边做起来不太方便，而程序写点代码就可以完成，那这部分可能就会由程序同学写代码实现。总之大家的目标是一致的，就是把这个功能做好。
+随着时间的流逝，以及大家的努力工作，游戏也会越来越完善。在这个过程中，游戏会有很多里程碑阶段的版本。在游戏相对完善时，测试同学就会介入，测试，是游戏的质量保证。测试同学会测试每一个功能，每一个细节，然后将发现的问题，反馈到 Bug 系统上，程序同学会根据测试同学反馈的问题，去进行修复。修复后，测试同学会根据 Bug 系统上问题的状态，去再次确认是否已修复。这个循环基本上是一直存在的。
+在版本相对完善的时候，音频的同学，会开始为整个游戏的各个功能制作音频，然后整合到版本中。
+整个制作的流程，大概就是这样。过程就这么多，但是这个过程中的每一步，都是很艰辛的。可能某一些功能，会不断地修改，完善。美术同学做的东西，也会不断的更新，每一版可能都会比上一版更漂亮。加班加点，是很正常的。
+在游戏真正上线前，会有好几个阶段的不同规模的真实玩家测试。然后根据玩家的反馈，再去修改和完善游戏。经历几次测试和完善后，最终就是上线版本。游戏上线后，我们就可以从苹果的 AppStore 或者 Android 的一些应用市场下载到游戏了。
+一个游戏的研发周期大概1年到几年，根据不同的游戏规模，所花费的时间是一样的。一个游戏研发成本，也是很高的，从最初的游戏概念，到最终的游戏上线，根据游戏的规模，可能要花费上百万到上千万软妹币，或者一些 3A 大作，会花费上亿美元。
+一个游戏上线，并不意味着就会有盈利。一方面，游戏好不好玩是一个关键要素，其实，也需要运营同学的努力，去推广游戏。
+好了，今天先介绍到这，我知道很多人读完了可能一脸茫然，还是不知道一个游戏到底是怎么做出来的，没关系，欢迎进入游戏行业亲自体会，哈哈哈哈~</description>
+    </item>
+    
+    <item>
+      <title>在游戏公司工作是什么体验呢？</title>
+      <link>https://blog.moeif.com/posts/experience-at-game-company/</link>
+      <pubDate>Fri, 06 Dec 2019 12:43:44 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/experience-at-game-company/</guid>
+      <description>不知道大家对于一线城市的游戏公司，或者IT公司，是什么印象。亲身经历过，才知道，其实并没有都市爱情电视剧中演的那么高端(😂)。
+经历过好几家游戏公司，有十几人的小公司，也有几十人，上百人，多项目组的公司，基本上，除了做的东西内容不一样之外，在其他方面有很多交集。
+上班时间一般是9点~10点之间，有的公司弹性制，早上如果晚到了一会，晚上晚点走即可，只要事情保证质量地完成。有的公司严格按照打卡时间来，晚到1秒种也是迟到。第一种心理上会更轻松一点，工作与生活融合，但是也难免有可能出现很多人晚到，做事情拖延的情况。第二种气氛紧张，工作就是工作。说不上哪种更好，各有利弊，主要看公司的文化，以及员工的整体素质更适合哪一种。很荣幸，我现在所在的公司，就是第一种。
+上午只有2个小时的工作时间，如果有比较紧急的事情，那就会优先处理紧急的事情。如果没有，那我一般会先处理能够在段时间内完成的事情。或者不开发新功能，修修Bug之类的。
+我们中午有一个小时的休息和吃饭时间。下午应该是效率最高，工作密度最高，注意力最集中的阶段。我一般会戴着耳机，写代码，开发新功能。如果一个互联网公司规定上班时间不准戴耳机，那你去的可能是一个假的互联网公司（特殊部门除外），或者管理层是非互联网公司出身的人。
+在没有被经常打扰的情况下，一下午，可以处理很多事情。
+我们晚上下班时间是18点~19点，根据早上来的时间，也是弹性制。
+对于加班呢，平时没有硬性规定，如果感觉自己的任务在规定时间内时间比较紧张，那就多加一会班，完全是根据自己的情况来，只要在规定的时间内保证质量地把功能开发完即可。我们一般是按周来排计划的。当然，也有强制加班的情况，比较一些比较重要的时间节点，要出一些比较重要的阶段性版本时，一般会原则上大家都加班，最晚也就是22点左右。出版本的时间，如果问题比较多，也有可能通宵的，当然，如果搞的太晚，第二天基本上也就不用上班了。不过这种情况是极少的。
+有的公司会有一个很不好的现象，就是到了下班时间，如果上司不走，大家没有一个走的，即使没什么事，也是在公司待着，耗时间。我不知道是不是管理层意识不到这个问题。还好，我现在所在的公司不存在这个问题，开心。
+有的公司会提供早餐，有的公司，会有下午茶，大部分公司，是没有的。记得以前去面试一家公司时，招聘信息上写着提供免费的零食，饮料。到了后才发现，就是一个小小的桌子，上面放了一些饼干，一些碳酸饮料，一些雀巢咖啡&amp;hellip;&amp;hellip;这让我很是震惊，还不如不写。
+公司里喝咖啡的人很多，以前没怎么注意，但是现在可以看到很多同事早晨来公司的第一件事就是去楼下的Luckin点一杯咖啡。也许是因为Luckin的出现，让买咖啡确实变得更容易了。
+一个游戏公司的人员，宏观上大概由策划，美术，程序，音频，运营这几部分组成。如果细分的话，策划又分为系统策划，剧情策划，数值策划等。程序分为客户端程序，服务器程序。美术分的会更细，有建模，UI，动作，特效，原画等。建模又可以分为角色建模，场景建模等。原画也可以细分成角色原画，场景原画等等。越大的公司，可能分的越细。小的工作室，往往一人身兼多职。例如建模的把动作也顺便做了。
+工作流程上一般由策划先行，设计和提出功能需求。然后资源方面的需求提给美术那边，逻辑实现方面当然就是程序这边做。开发计划，项目的任务分配与跟踪，一般由PM来做。当然是要和大家开会对接的。一个功能由谁开发，并不是PM直接决定的，而是要商量着来。
+工作氛围很轻松，但也有充满挑战的时候。有时，也需要去解决一些从未遇到过的技术难题。不管哪一个公司，哪一个项目，可能或多或少都会有这种情况。
+当然，也会有产生分歧和争吵的时候，时常发生在程序和策划之间。对于IT界，似乎程序和策划就是&amp;quot;天敌&amp;quot;，哈哈哈。其实不是的，分歧归分歧，工作之外大家相处的还是很融洽的，总之就是针对事情争论，而不是针对人。没有网络上传言的那么可怕。
+年会，也是很多人所期待的。有的互联网公司会搞的很宏大，各种红包，各种抽奖。获取出国旅行，国内旅行等等。也有比较低调的，就是全公司一起出去吃大餐。具体情况，可能还要根据公司的盈利情况。
+大概情况就是这样，暂时想到的就这么多，后面想到了再补充，如果你更多想问的，欢迎在下面留言欧~。</description>
+    </item>
+    
+    <item>
+      <title>浅谈Unity3D音频可视化效果原理</title>
+      <link>https://blog.moeif.com/posts/unity-audio-visualization/</link>
+      <pubDate>Wed, 04 Dec 2019 16:08:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-audio-visualization/</guid>
+      <description>&lt;p&gt;在游戏开发中，你是否也想将音乐旋律变为漂亮的图形显示？就像这样的效果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>怎样在Unity中Reload原生插件</title>
+      <link>https://blog.moeif.com/posts/reload-native-unity-plugins/</link>
+      <pubDate>Sun, 01 Dec 2019 01:05:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/reload-native-unity-plugins/</guid>
+      <description>这是一篇翻译文章，原文来自 how-to-reload-native-plugins-in-unity
+在Unity编辑器使用原生插件，Dll之类的，经常会遇到一个问题，替换插件时，Unity会提示正在使用，无法替换，这是因为Unity一旦点了Play，加载了Dll，就不会去卸载。
+要解决这个问题也很简单，那就是先关掉Unity，然后替换Dll，然后再打开Unity。对于插件的使用者，倒不是什么大问题，但是如果你是插件的开发者，需要频繁的修改和测试插件，那就有点悲惨了。
+这篇博客将介绍一个我认为不错的解决方案，有很多开发者已经实现了这个或者类似的解决方案，但是在Google或者Github上很难找到。
+TLDR 我写了一个200行的代码，在OnAwake时，会加载所有的Dll，在OnDestroy时会卸载所有的Dll，我们自己去管理Dll的加载和卸载，就可以做到停止Play时，卸载掉所有的Dll，这样就可以在不关闭Unity的情况下，替换Dll。
+要做到这个，就不能用 PInvoke 去调用，而是用类似的方式，达到相同的目的。
+完整的工程代码在 Github。但是我们只需要一个文件就可以 NativePluginLoader.cs
+如何使用:   将 NativePluginLoader.cs 放到你的工程中
+  在场景中新建一个GameObject，然后挂载 NativePluginLoader.cs
+  定义一个类，用于声明所有的插件方法，例如命名为 FooPlugin，然后给这个类赋予 PluginAttr 属性
+  给 delegate 添加 PluginFunctionAttr 属性，示例代码如下
+// C# 代码 [PluginAttr(&amp;#34;my_cool_plugin&amp;#34;)] public static class FooPlugin { [PluginFunctionAttr(&amp;#34;sum&amp;#34;)] public static Sum sum = null; public delegate float Sum(float a, float b); // 原生方法的 delegate } void CoolFunc() { float s = FooPlugin.sum(1.0, 2.</description>
+    </item>
+    
+    <item>
+      <title>浅谈在Unity3D中使用CriWare播放声音</title>
+      <link>https://blog.moeif.com/posts/unity-criware/</link>
+      <pubDate>Sat, 30 Nov 2019 19:17:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-criware/</guid>
+      <description>在游戏开发中的音频解决方案，CriWare 是不错的选择，很多游戏大作也在使用。为什么使用CriWare呢？对于游戏运行时，可以显著提高加载速度和减小包体大小。而对于音频制作上，可以很方便地做更多的效果，例如多音源的避让等。
+今天我们就来浅浅地聊一下在 Unity3D 中使用 CriWare 播放声音，以及声音的管理等问题。
+音频文件由做音频的同学使用CriWare的软件去制作，最终导出的文件是以acb或awb为扩展名的文件。如果采用的是Memory的形式，则导出的acb文件。
+对于开发来说，首先要知道两个东西，一个是CueSheet，一个是CueName。在音频制作的时候，多个音频可以打成一个组，每一个音频的名字，就是CueName，而这个组，就是CueSheet。我们要播放一个声音，首先要知道声音的名字，就是CueName，还要知道它所在的组，因为要加载到内存中。即使要播放组中的一个音频，也是要把整个组加载到内存中的。
+所以在制作时，音频那边的同学要规划好，哪些音频要在同一个组，哪些音频要在另外的组。当然，可以一个音频一个组，但是打成组可以做很多事情，这个等我请教一个音频那边的同学再补充。
+先将声音播放出来   首先把CriWare插件导入到Unity中
+  将做好的声音ACB文件放入StreamingAssets目录中
+  新建一个空物体，然后挂载CriAtom组件如下图
+CriAtom 用于管理CueSheet，只有将CueSheet加入到CriAtom中，才能播放其中的某一个音频。将CueSheet加入到CriAtom中，意味着这个CueSheet会被加载到内存中，移除CueSheet，则会从内存中卸载。
+上图中每点击 Add CueSheet，就可以填入一个新的CueSheet，Name字段就是ACB文件的名字(不带扩展名)，ACB File字段填写ACB文件名字(带扩展名)。例如上图中我已经填了一个示例。
+  新建一个空物体，然后挂载 CriAtomSource 组件。这个组件，可以理解为Unity的AudioSource，就是用来播声音的。
+上图中，CueSheet字段，填写要播放的音源，所在的CueSheet名(不带扩展名)，而CueName，就填写要播放的声音的名字。这些名字，都是做音频的同学定好的。勾选上 Play On Start，然后运行Unity，就可以听到声音。
+   上面只是实现了声音能够播出来，要在真正的项目中使用，还需要管理声音，下面将说一下大概的思路。
+ 声音管理器 基本思路是这样的，首先有一个声音管理器我们称为AudioManager，提供接口播放声音，停止声音，暂停声音，恢复声音，播放完毕，CueSheet加载卸载。外面模块调用AudioManager去控制声音。
+调用 AudioManager 播放声音的接口时，会生成一个新的对象, GameObject，挂载一个脚本，我们称为 AudioPlayer，这个 AudioPlayer 中会动态的挂载 CriAudioSource，然后将我们要播放的CueSheet，CueName这些值通过AudioManager传进去，设置 CriAudioSource 参数，然后调用 CriAudioSource的 Play 函数。
+当调用 AudioManager 的播放声音接口时，AudioManager 会动态记录这个 CueSheet 是否已经添加到 CriAtom 中，如果没有，则会添加，这时，CriAtom会去加载声音文件到内存中。
+AudioManager 在声音播放完，或者 GameObject 被销毁时，需要调用 AudioManager 的播放完毕接口，用于计数。这个计数，是为了让 AudioManager 知道一个CueSheet中，是否还有声音在播放，如果没有了，则要动态将 CueSheet 从 CriAtom 中移除掉，释放内存。</description>
+    </item>
+    
+    <item>
+      <title>图形学相关的基本数学</title>
+      <link>https://blog.moeif.com/posts/computer-graphics-math/</link>
+      <pubDate>Wed, 20 Nov 2019 12:56:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/computer-graphics-math/</guid>
+      <description>这一篇博客会比较长，目前还没写完，处于不断更新中&amp;hellip;
+ 这一节会用一些通俗的语言去解释一些数学上的概念，有一些解释可能并不是严谨，我们更多地是把焦点放在理解这些概念是什么，为后面的应用做铺垫。如果有一些点不能理解，也没关系，只要知道有这样一个东西就行，等真正用到的时候，有点印象，这样就会有解决问题的方向，再回来查相关的知识就可以。单纯记住一些知识是没有太多意义的，只有会应用了，才有意义。
+集合 (Sets) 一堆东西，就是一个集合。例如桌子上有一堆苹果，就可以说，这是一个苹果的集合。旁边放了一堆干果，就可以说，那是一个干果的集合。这里有100个数字，都是整数，那这就是一个整数集合。
+下面是一些常用的集合
+  ℝ 实数集合 实数包含有理数 和无理数，有理数包括整数和分数，无理数就是无限不循环小数
+  ℝ+ 非负实数集合 理解了实数集，这个非负实数集合就好理解了，就是把把负数去掉
+  ℝ2 有序对，像二维的坐标，就属于一个有限对，(x,y)
+  ℝn 在n维笛卡尔空间中的点
+  ℤ 整数集合
+  S2 在单位球面上的3D点
+  上面的这些常用的集合，大概了解一下就好了，不用详细的去探究，只要大概知道是什么，有这个名词的印象就OK，等用到的时候自然就了解了。
+映射 (Mappings) 映射和编程上的函数很类似，输入参数，输出结果，或者说，给函数一个A，函数进行运算后，会返回给你一个B。而映射，类似，就是将一个东西从A变成B。
+f:ℝ↦ℤ 这个东东，可以这样解释，有一个函数叫做f，这个函数呢，接收一个输入，这个输入是ℝ，也就是上面说到的实数类型的数，注意，这里是输入一个实数，而不是输入实数集合，这里的ℝ可以理解成编程函数中的数据类型。然后呢输出一个整数类型的数。基本上可以当作编程语言中的函数调用。
+映射，是将一个集合中的元素，映射成另一个集合中的元素。可以说，你从A集合中找一个元素，扔进映射函数里，那么映射函数会从B集合中找一个元素，再扔给你。
+逆映射 (Inverse Mappings) 通俗来讲，逆映射就是映射反过来，你从B集后找一个元素扔进映射函数，映射函数会从A集合中根据映射规则找一个元素还给你。映射中，有一个名词，叫做 双射，就是说，对于A集合中的任何一个元素，都能在B集后中找到唯一一个与它一一对应的元素，并且，对于B集后中的任何一个元素，也都在能A集合找到唯一一个与它一一对应的元素。这种情况，就叫做双射。
+区间 (Intervals) 区间可以理解为一个数值范围，这个范围内的元素放在一起，也就是我们前面学到的集合。例如一周有7天，数值范围就是从星期一到星期日，某幼儿园小朋友的身高范围是80cm到140cm之间的，这些都是区间。我们从整数集合上定义一个区间，例如[1, 15]，意思就是从1到15这15个数。用中括号[] 表示的区间叫做闭区间，用小括号()表示的区间叫做开区间，还可以混合使用，例如 (] 或者 [)，这种分别叫做半开区间和半闭区间。那它们有什么区别呢？中括号，表示区间范围包含起始或结束数值，小括号表示区间范围不包含起始或结束数值。
+ [1, 10] 表示区间范围是从 1到10 (1, 10) 表示区间范围是从 2到9 (1, 10] 表示区间范围是从 2到10 [1, 10) 表示区间范围是从 1到9  并集: 给定两个集合A，B，把他们所有的元素合并在一起组成的集合，叫做集合A与集合B的 并集，记作A∪B，读作A并B。</description>
+    </item>
+    
+    <item>
+      <title>数据结构概述</title>
+      <link>https://blog.moeif.com/posts/data-structure-00-introduction/</link>
+      <pubDate>Sun, 17 Nov 2019 13:15:27 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/data-structure-00-introduction/</guid>
+      <description>经常有小伙伴想系统地学习一下数据结构，但很难找到适合自己的教程。好吧，其实说的是我自己。那今天就来聊一聊这个问题。
+我们先把一些常用的数据结构列表出，大概讲一下他们的结构及应用，后面分篇细细讲解。在分篇讲解时，我们的关注点是某个数据结构是什么，怎样用代码描述出来。而更多涉及到这个数据结构的一些算法，将在后面的算法系列中详细讲解。
+这个系列的博客，是面向那些和我差不多，大概了解数一些数据结构(知道一些名字，不太了解内部详细实现)，又想系统地巩固一下，深入一下的小朋友们~
+快来一起学习吧 ^_^
+数组 [Array] 数组用于存储同种类型的数据，数据与数据之间在内存中是连续的(相邻的)，在使用数组前，要预先分配好指定的内存大小。
+应用: 例如我们想存储幼儿员小班所有小朋友有的名字，就可以用数组。 [第一个小朋友名字, 第二个小朋友名字, 第三个小朋友名字, &amp;hellip;]
+链表 [Linked List] 链表，是由一个个节点，相连而成。每一个节点，都是独立的元素，它们在内存中的位置也不一定是连续的。每一个节点，都拥有两个部分，数据部分，和一个指向下一个节点的引用。刚刚说的是单向链表。
+还有一种叫做双向链表，区别就是一个节点有三个部分，数据部分，一个指向下一个节点的引用，一个指向上一个节点的引用。
+还有一种叫做循环链表，区别就是尾部和头部会连起来。
+应用: 链表常应用于存储不能事先确认数据个数的情况，对于这种情况，使用链表不需像数组一样预先分配内存，当有新的数据要存储时，只需要新申请一个节点的内存空间，然后将这个节点添加到链表即可。
+堆栈 [Stack] 想象这样一个场景，往一个箱子里放书，先放进一本漫画书，再放进一本故事书，再放进一本数学书。现在最上面的是数学书，如果要把里面的书一本一本都拿出来，就要先拿出数学书，再拿出故事书，再拿出漫画书，正好与放下的顺序相反。这就叫先进后出，FILO (First in last out)。
+而堆栈就是这一种结构，堆栈通常拥有两个方法，Push 和 Pop，分别就是放入数据，和拿出数据。后放入的数据，总是在最上面，往外拿数据时，也像从箱子里拿书一样，要从最上面开始拿。是不是很形象~
+应用: 堆栈是一个很有用的东西，我们平常用的很多软件中，都能找到它的应用，例如文本编辑器的撤销功能，其实就是在特定时间将用户的操作Push入栈，然后撤销时，从栈中Pop出最近的一个操作。再例如浏览器的后退功能，也是依次将用户浏览的网址Push入栈，然后后退时，依次Pop出最近的浏览网址。
+队列 [Queue] 大家排队买冰激凌，就是一种队列结构，这个人买完冰激凌，然后下一个。在这个过程中，后面不断的有人在排队，队伍越来越长，服务员从前面一个一个处理顾客的需求。
+队列也是这样，先入列的，也会先出列，就像排队。先排队的，先拿到冰激凌，然后走人。所以队列通常有两个操作，入列(Enqueue) 和 出列 (Dequeue)。队列是先进先出，FIFO (First in first out)。
+还有一种队列叫做环形队列，会循环利用已经分配好的内存空间，而不是入列和出列时执行分配和销毁内存操作。
+应用: 需要依次处理的事情，都可以使用队列，例如网络通信数据包，当客户端收到消息时，就可以放入队列，而消息处理器，不断地尝试从队列中取消息，如果有，则处理。
+咦？刚才好像说到冰激凌了~
+二叉树 [Binary Tree] 树，就像我们平时在公园里看到的那种树的结构，分叉。而二叉树呢，就是只能分两叉，一分为二，每一个分叉，又可以最多一分为二。就像下面的这种形状。
+二叉树的结构，也可以理解为由 &amp;ldquo;节点&amp;rdquo; 组成，就像链表那样的节点。对于二叉树来说，每一个节点有三个部分，数据部分，指向左边分叉节点的引用，指向右边分叉节点的引用。
+二叉树，每一个节点，最多能分两叉，也就是，每一个节点，最多拥有两个直接子节点，也可能有一个，也可能没有。其实，二叉树的实现，很多也是用链表来做的。这个后面的博客再详细介绍，嘿嘿~
+应用: 树型结构在计算机中也有很多应用，例如我们很熟悉的文件浏览器。一个目录下，可以有多个目录，子目录下，又可以有多个文件，然后还可以再分叉继续往下深入。不过，真正的文件系统并不一定用的是二叉树，也可能是n叉树，具体的我还不是很清楚，尴尬ing&amp;hellip;
+二叉查找树 [Binary Search Tree] 二叉查找树，简称 BST，是在二叉树的基础上，增加了额外的规则。首先，我们给每一个节点赋予一个权重，这个权重，可以用任何东西代替，例如小朋友的分数，例如冰激凌的价格等等。然后，每一个节点，满足下面的规则
+ 如果一个节点左子树不为空，则整个左子树上的所有节点，权重都要小于当前节点 如果一个节点右子树不为空，则整个右子树上的所有节点，权重都要大于当前节点 左右子树，也都是二叉查找树，也就是说，子树，也要满足上面也条规则  应用: 二叉查找树常常应用一些需要数据保持有序状态，但是又经常需要插入和删除某些数据的场景。例如电商平台中的商品数据组织，可能就经常用到二叉查找树。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>折腾指南 on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/%E6%8A%98%E8%85%BE%E6%8C%87%E5%8D%97/</link>
+    <description>Recent content in 折腾指南 on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 14 Nov 2020 13:50:25 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/%E6%8A%98%E8%85%BE%E6%8C%87%E5%8D%97/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 frp 的远程桌面方案</title>
+      <link>https://blog.moeif.com/posts/frp-for-remote-desktop/</link>
+      <pubDate>Sat, 14 Nov 2020 13:50:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/frp-for-remote-desktop/</guid>
+      <description>当我们想使用 Windows 自带的 mstsc 远程桌面连接远程电脑时，常见的情况由于远程电脑没有公网IP而连接失败，这时就需要一个拥有公网 IP 的 VPS 来做代理，实现内网穿透，也就是相当于一个桥梁，将目标内网的机器与我们当前机器连起来。像花生壳，Teamviewer 等这类软件都可以实现，远程桌面，但是要么费用比较高，要么免费版体验很差，所以这里我们购买一台廉价的 VPS，使用 frp 来做这个代理功能，更方便，更好用。
+1. 在VPS和目标机器上分别下载 frp frp Github: https://github.com/fatedier/frp，通常下载最新的 Release 版本就可以。
+2. 在VPS上配置服务器端 在服务器端，用的是 frps.exe，配置文件是 frps.ini，配置内容如下即可。
+[common] bind_port = 7000 dashboard_user = jack dashboard_pwd = jack&#39;svps dashboard_port = 8888 上面的配置中， bind_port = 7000 就是配置对外开放的端口，客户端都会连接服务器的这个端口。下面三行的配置是网页的管理页面，可以通过网页查看当前有多少设备连接。
+配置完成后，打开 CMD 或 PowerShell，执行 frps.exe -c frps.ini 就启动了服务器端，注意这个窗口不要关闭。
+3. 在目标机器上配置客户端 客户端使用的是 frpc.exe，配置文件是 frpc.ini，配置内容如下
+[common] server_addr = 110.112.110.112 server_port = 7000 [RDP] type = tcp local_ip = 127.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Rust on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/rust/</link>
+    <description>Recent content in Rust on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 26 Apr 2020 19:38:35 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/rust/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>对比 Rust 和 Python 图片缩放速度</title>
+      <link>https://blog.moeif.com/posts/compare-rust-and-python-resize-image/</link>
+      <pubDate>Sun, 26 Apr 2020 19:38:35 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/compare-rust-and-python-resize-image/</guid>
+      <description>写博客时经常会用到 tinypng 这个网站进行图片压缩，所以今天就想用 Rust 试一下关于图片处理的东西。首先对比了一个 Rust 和 Python 的缩放速度，Rust 使用了 image-rs，Python 使用了 Image 中的 PIL，速度结果如下图。
+原图是一张 2.9M，4800x2500 的图片，缩小为 500x260。电脑CPU型号是 Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz。使用 release 编译。
+&amp;gt; 点击这里查看大图
+ 注意下图中每个图片文件的文件名，标注了 image-rs 中使用的 FilterType
+ 可以发现，除了 image-rs 中的 Nearest 模式比较快之外，其他模式均比 Python 的 PIL 慢，因为 PIL 是C写的。
+代码如下
+[dependencies] image = &amp;#34;0.23.4&amp;#34; stopwatch = &amp;#34;0.0.7&amp;#34; extern crate image; extern crate stopwatch; use image::RgbImage; use image::DynamicImage; use image::imageops::FilterType; use stopwatch::{Stopwatch}; fn resize_image(){ let origin_image = &amp;#34;1.</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 常用集合数据类型</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-06/</link>
+      <pubDate>Sun, 12 Apr 2020 23:51:23 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-06/</guid>
+      <description>之前用到的 String 类型，并没有那么简单，接下来会聊一下关于 String 更多的一些应用。在说 String 前，需要先学习一下 Vec 这种数据类型，类似于一个动态的数组。然后是 HashMap，一个键对值的数据类型，与其他编程语言中的字典很类似。
+Vec Vec&amp;lt;T&amp;gt; 和数组一样，用于存储一系列相同类型的值。但是 Vec 可以动态地插入，删除。首先，是创建一个 Vec，可以使用 Vec::new()，或者使用宏 vec!。要注意的是，只有使用 mut，才能使 Vec 可变，也就是可以插入和删除值。
+fn main() { // 在定义时就标明数据类型为 i32 的 Vec  let v1: Vec&amp;lt;i32&amp;gt; = Vec::new(); // 在定义时不标明类型，而在首次插入值时，由Rust自动推断  let mut v2 = Vec::new(); // 这里插入了一个 i32 的值，所以Rust推断 v2 为存放 i32 的 Vec  v2.push(2); let v3 = vec![1,2,3,4,5]; let v4 = vec![&amp;#34;hello&amp;#34;, &amp;#34;rust&amp;#34;]; let mut v5: Vec&amp;lt;String&amp;gt; = vec![&amp;#34;hello&amp;#34;.to_string(), &amp;#34;rust&amp;#34;.to_string()]; } 向 Vec 有两个操作函数，一个是 push，往里插入值，一个是 pop，往外弹出值，Pop返回的是最后插入的值。看下面的代码</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 枚举、匹配</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-05/</link>
+      <pubDate>Sun, 05 Apr 2020 22:29:14 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-05/</guid>
+      <description>&lt;p&gt;这篇博客涉及到的知识点有 &lt;strong&gt;枚举的定义&lt;/strong&gt;、&lt;strong&gt;Option 枚举&lt;/strong&gt;、&lt;strong&gt;match 语法&lt;/strong&gt;、&lt;strong&gt;if let 语法&lt;/strong&gt;。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 结构体</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-04/</link>
+      <pubDate>Thu, 02 Apr 2020 17:26:15 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-04/</guid>
+      <description>在有类的编程语言中，组织数据的方式可以定义一个类，而在 Rust 中，组织数据的方式，使用 struct。struct 可以定义三种不同的类型，一种是带有字段名字的结构体，一种是没有字段名字的元组结构体，一种是没有任何字段的单元结构体。
+定义 struct 带有字段名字的结构体
+#[derive(Debug)] struct User { username: String, email: String, active: bool, } fn main() { let user1 = User { username: String::from(&amp;#34;fred&amp;#34;), email: String::from(&amp;#34;fred@outlook.com&amp;#34;), active: false, }; println!(&amp;#34;{:?}&amp;#34;, user1); }  注意上面的代码中 #[derive(Debug)]，简单理解就是加上这个，可以给我们自定义的结构体添加上可打印的功能，后面就可以使用 println! 来打印出结构体。
+ 上面的代码中定义了一个 User 结构体，里面的每一个字段，前面是字段名，后面是字段的数据类型。在 main 函数中的代码，是创建一个 User 实例。
+元组结构体
+#[derive(Debug)] struct Color(u8, u8, u8, u8); fn main() { let color = Color(255,255,255,255); println!(&amp;#34;{:?}&amp;#34;, color); } 上面的代码中，定义了一个元组结构体，用来存储颜色值。
+单元结构体
+#[derive(Debug)] struct Unit; fn main() { let unit = Unit; println!</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 引用、切片</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-03/</link>
+      <pubDate>Wed, 01 Apr 2020 12:13:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-03/</guid>
+      <description>在阅读Rust官方教程时，会看到两个词，引用和借用，也就是 References and Borrowing。这里很容易让人混乱，如果了解C/C++这类有指针的语言，则引用很容易理解，但是 Rust 中的借用这个词是什么意思呢？我觉得，在初学 Rust 时，可以忽略这个词，或者就简单理解为，它所涉及到的东西，就是引用，就是一个指针，就可以了，避免陷入进去。所以，接下来我就就聊一聊引用。
+什么是引用 简单来说，引用就是一个指针，这个指针指向了某个内存地址。在说所有权时，我们知道，当把一个 String 当作参数传到函数时，它的所有权也就会被移动到函数的参数上，如果在调用完函数时，我们依旧想使用这个 String，则需要将所有权再返回，这样就很麻烦，所以用引用，会方便很多，因为引用，并不会获得这个 String 的所有权。看下面的代码
+fn main() { let s1 = String::from(&amp;#34;Hello&amp;#34;); print_name(s1); // 下面这一句再访问 s1 就会编译出错，因为 s1 的所有权已经没了  //println!(&amp;#34;s1 again: {}&amp;#34;, s1); } fn print_string(s: String) { println!(&amp;#34;{}&amp;#34;, s); } 下面是用引用作为参数
+fn main() { let s1 = String::from(&amp;#34;Hello&amp;#34;); print_name(s1); println!(&amp;#34;s1 again: {}&amp;#34;, s1); } fn print_name(s: &amp;amp;String) { println!(&amp;#34;{}&amp;#34;, s); } 在上面的代码中，我们将参数从 String 改为 &amp;amp;String，这样函数的参数需要的就不是 String 的所有权，而是 String 的引用，所以在函数 print_name 结束时，main 函数中依然可以使用 name。下图是使用引用时的数据状态。</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 所有权</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-02/</link>
+      <pubDate>Sun, 29 Mar 2020 20:38:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-02/</guid>
+      <description>什么是所有权 Rust 的所有权，是 Rust 语言的一个核心概念。可以简单理解为，一种内存管理的方式。用现实中的东西举例，当你从图书管借了一本书时，这本书的所有权暂时归你所有，而当你把书给你的朋友时，此刻，书的所有权归你的朋友所有，而当你的朋友把书归还图书馆时，此时没有人拥有书的所有权，相当于内存释放。
+在使用有自动垃圾回收(GC)的编程语言时，我们并不需要考虑内存的释放问题，因为GC会帮我们释放。Rust是无GC的语言，一个变量占用的内存什么时候释放，由它的所有权决定，简单来说，当所有权所在的作用域结束时，内存将被释放。
+什么是作用域 Rust 的作用域和其他编程语言中的作用域概念是一样的，我们使用下面的代码说明
+// 整个 main 函数是一个作用域 fn main() { let a = 10; // 下面的花括号内，也是一个作用域  { let s = &amp;#34;hello&amp;#34;; println!(&amp;#34;{}&amp;#34;, s); } // 下面这句再次打印s，会编译出错，因为s所在的作用域已经结束，s 被释放掉了  //println!(&amp;#34;s again: {}&amp;#34;, s); } 关于堆内存和栈内存 我们知道，内存分为堆和栈。存在栈上的数据，必须是已知固定大小的数据。而存在堆上的数据，都是在编译时不知道大小的数据，例如用户自己输入的数据。栈比堆的访问快很多，这是因为栈的存取结构，都是操作栈顶，不需要去内存中找数据。而要将数据存在堆上，则需要向操作系统申请，由操作系统在内容中找到一块能够容纳你要存的数据大小的内存空间，然后将内存空间的指针返回给你。访问堆内存上的数据，都是要通过指针，找到指向的内存，然后再读取内存中的数据。
+哪些数据是存在栈上，哪些是存在堆上 let x = 10; let y = &amp;#34;hello&amp;#34;; let c = &amp;#39;A&amp;#39;; let x2 = x; 像上面这些简单的数据类型，都是存在于栈上，对于 Rust 而言，整型，浮点型，布尔型，字符型等，都是存在于栈上。而对于Rust的 String，这种可变大小的数据类型，是存在于堆上的。看下面的代码
+let s1 = String::from(&amp;#34;hello&amp;#34;); let s2 = &amp;#34;hello&amp;#34;.</description>
+    </item>
+    
+    <item>
+      <title>Rust 基础 | 基本语法</title>
+      <link>https://blog.moeif.com/posts/rust-syntax-summary-01/</link>
+      <pubDate>Sat, 28 Mar 2020 22:45:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/rust-syntax-summary-01/</guid>
+      <description>1. 变量和可变性 Rust 定义一个变量默认是不可变的，这一点与其他编程语言不同。
+let x = 10; x = 11; // 这里会编译出错， 如果要定义可变量，需要使用 mut
+let mut x = 10; x = 11; 用 let 先定义一个变量，再次用 let 定义一个变量，会将之前的变量覆盖，虽然同名，但也不是原来的变量了，这叫做 Shadowing
+let x = 10; let x = &amp;#34;Hello&amp;#34;; 常量的定义使用 const，常量是永远不会变的量，常量必须在定义的时候注明数据类型
+const MAX_SCORE: i32 = 10000; 2. 标量数据类型 Rust 数据类型可以分为标量类型和复合类型，标量类型有四种 整型，浮点型，布尔型，字符型。而整型分为 8位、16位、32位、64位、128位，动态长度这几种，每一种又分为有符号型，无符号型。浮点数分为 32位、64位。
+关键字： 整型有符号型: i8 i16 i32 i64 i128 isize 整型无符号型: u8 u16 u32 u64 u128 usize
+ 整型默认类型为 i32。注意 isize usize 的长度是动态的，如果运行程序的计算机是32位的，则为32位，如果计算机为64位的，则为64位。另外，在Rust中遍历集合时，常用 isize 和 usize。</description>
+    </item>
+    
+  </channel>
+</rss>

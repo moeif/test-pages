@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>计算机图形学 on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/</link>
+    <description>Recent content in 计算机图形学 on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sat, 11 Jul 2020 15:16:29 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9B%BE%E5%BD%A2%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>简单理解光线追踪</title>
+      <link>https://blog.moeif.com/posts/simple-understanding-of-ray-tracing/</link>
+      <pubDate>Sat, 11 Jul 2020 15:16:29 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/simple-understanding-of-ray-tracing/</guid>
+      <description>&lt;p&gt;在过去的一个周，读完了&lt;a href=&#34;https://raytracing.github.io/books/RayTracingInOneWeekend.html&#34;&gt;《Ray Tracing in One Weekend》&lt;/a&gt;并且用Rust完整地实现了文章中的效果。对于经典的光线追踪逻辑，也有了宏观上的理解。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>图形学相关的基本数学</title>
+      <link>https://blog.moeif.com/posts/computer-graphics-math/</link>
+      <pubDate>Wed, 20 Nov 2019 12:56:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/computer-graphics-math/</guid>
+      <description>这一篇博客会比较长，目前还没写完，处于不断更新中&amp;hellip;
+ 这一节会用一些通俗的语言去解释一些数学上的概念，有一些解释可能并不是严谨，我们更多地是把焦点放在理解这些概念是什么，为后面的应用做铺垫。如果有一些点不能理解，也没关系，只要知道有这样一个东西就行，等真正用到的时候，有点印象，这样就会有解决问题的方向，再回来查相关的知识就可以。单纯记住一些知识是没有太多意义的，只有会应用了，才有意义。
+集合 (Sets) 一堆东西，就是一个集合。例如桌子上有一堆苹果，就可以说，这是一个苹果的集合。旁边放了一堆干果，就可以说，那是一个干果的集合。这里有100个数字，都是整数，那这就是一个整数集合。
+下面是一些常用的集合
+  ℝ 实数集合 实数包含有理数 和无理数，有理数包括整数和分数，无理数就是无限不循环小数
+  ℝ+ 非负实数集合 理解了实数集，这个非负实数集合就好理解了，就是把把负数去掉
+  ℝ2 有序对，像二维的坐标，就属于一个有限对，(x,y)
+  ℝn 在n维笛卡尔空间中的点
+  ℤ 整数集合
+  S2 在单位球面上的3D点
+  上面的这些常用的集合，大概了解一下就好了，不用详细的去探究，只要大概知道是什么，有这个名词的印象就OK，等用到的时候自然就了解了。
+映射 (Mappings) 映射和编程上的函数很类似，输入参数，输出结果，或者说，给函数一个A，函数进行运算后，会返回给你一个B。而映射，类似，就是将一个东西从A变成B。
+f:ℝ↦ℤ 这个东东，可以这样解释，有一个函数叫做f，这个函数呢，接收一个输入，这个输入是ℝ，也就是上面说到的实数类型的数，注意，这里是输入一个实数，而不是输入实数集合，这里的ℝ可以理解成编程函数中的数据类型。然后呢输出一个整数类型的数。基本上可以当作编程语言中的函数调用。
+映射，是将一个集合中的元素，映射成另一个集合中的元素。可以说，你从A集合中找一个元素，扔进映射函数里，那么映射函数会从B集合中找一个元素，再扔给你。
+逆映射 (Inverse Mappings) 通俗来讲，逆映射就是映射反过来，你从B集后找一个元素扔进映射函数，映射函数会从A集合中根据映射规则找一个元素还给你。映射中，有一个名词，叫做 双射，就是说，对于A集合中的任何一个元素，都能在B集后中找到唯一一个与它一一对应的元素，并且，对于B集后中的任何一个元素，也都在能A集合找到唯一一个与它一一对应的元素。这种情况，就叫做双射。
+区间 (Intervals) 区间可以理解为一个数值范围，这个范围内的元素放在一起，也就是我们前面学到的集合。例如一周有7天，数值范围就是从星期一到星期日，某幼儿园小朋友的身高范围是80cm到140cm之间的，这些都是区间。我们从整数集合上定义一个区间，例如[1, 15]，意思就是从1到15这15个数。用中括号[] 表示的区间叫做闭区间，用小括号()表示的区间叫做开区间，还可以混合使用，例如 (] 或者 [)，这种分别叫做半开区间和半闭区间。那它们有什么区别呢？中括号，表示区间范围包含起始或结束数值，小括号表示区间范围不包含起始或结束数值。
+ [1, 10] 表示区间范围是从 1到10 (1, 10) 表示区间范围是从 2到9 (1, 10] 表示区间范围是从 2到10 [1, 10) 表示区间范围是从 1到9  并集: 给定两个集合A，B，把他们所有的元素合并在一起组成的集合，叫做集合A与集合B的 并集，记作A∪B，读作A并B。</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,445 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>Rust 光线追踪 10: 材质 | 萌一小栈</title>
+<meta name=keywords content="Rust实现光线追踪">
+<meta name=description content="在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。
+最终的渲染图如下
+
+">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="Rust 光线追踪 10: 材质">
+<meta property="og:description" content="在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。
+最终的渲染图如下
+
+">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2021-12-04T12:44:15+08:00">
+<meta property="article:modified_time" content="2021-12-04T12:44:15+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="Rust 光线追踪 10: 材质">
+<meta name=twitter:description content="在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。
+最终的渲染图如下
+
+">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"Rust 光线追踪 10: 材质","item":"https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Rust 光线追踪 10: 材质","name":"Rust 光线追踪 10: 材质","description":"在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。\n最终的渲染图如下\n","keywords":["Rust实现光线追踪"],"articleBody":"在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。\n最终的渲染图如下\n首先要做的是将材质（Material）相关的代码抽象出来。新建一个 material.rs 的文件，代码如下。\n代码大概的含义是将 Material 作为一个 Trait，里面有一个 scatter 方法，这个方法决定了光线如何散射，对于不同的材质，实现自己不同的散射方式。\nLambertian 是漫反射材质的逻辑，里面的变量 scatter_direction 就是我们之前的逻辑中的光线散射方向，在这里还加入了另一个东西，就是判断这个方向的值是否接近于0，如果是，那么直接使用光线打到的点的法线作为方向。有了方向，有了原光线打到的点，就可以产生一条新的从打到的点，到新方向的光线，也就是 scattered 变量。attenuation 是原光线打到的点的颜色，对于漫反射来说，也就是当前材质的颜色，这个值也会返回。\nMetal 是金属材质的实现，对于金属材质来说，会比漫反射散射更多的光线，所以看起来会闪亮亮的。散射的原理如下\n其中, V 是入射光线，N 是标准化的法线，而红色的向量，就是反射光线的方向，它 = v + 2b。这里的 V 不一定是标准化的。b 的长度是 V 点乘 N，因为 V 是向内的，所以这里需要一个负号，将它进行反向，最后的公式就是\n$反射光线 = V - 2 * (V \\cdot N) * N$\n// src/material.rs use crate::color::Color; use crate::hittable::HitRecord; use crate::ray::Ray; use crate::vec3::Vec3; pub trait Material { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color); } pub struct Lambertian { pub albedo: Color, } impl Lambertian { pub fn new(color: Color) - Self { Self { albedo: color } } } impl Material for Lambertian { fn scatter(\u0026self, _: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let mut scatter_direction = hit_record.normal + Vec3::random_unit_vector(); if scatter_direction.near_zero() { scatter_direction = hit_record.normal; } let scattered: Ray = Ray::new(hit_record.p, scatter_direction); let attenuation = self.albedo; Some((scattered, attenuation)) } } pub struct Metal { pub albedo: Color, } impl Metal { pub fn new(color: Color) - Self { Self { albedo: color, } } } impl Material for Metal { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let unit_ray_direction = Vec3::unit_vector(r_in.direction); let reflected = Vec3::reflect(unit_ray_direction, hit_record.normal); let scattered = Ray::new( hit_record.p, reflected, ); let attenuation = self.albedo; if Vec3::dot(scattered.direction, hit_record.normal)  0.0 { Some((scattered, attenuation)) } else { None } } } 上面代码中用到的两个东西是在 vec3.rs 中，一个是 Lambertian 实现中的 near_zero() 函数。一个是 Metal 实现中的 reflect 函数。代码加到 vec3.rs 中。\n// src/vec3.rs pub fn near_zero(\u0026self) - bool { let border: f64 = 1e-8; self.x.abs()  border \u0026\u0026 self.y.abs()  border \u0026\u0026 self.z.abs()  border } pub fn reflect(v: Vec3, n: Vec3) - Vec3 { v - 2.0 * Vec3::dot(v, n) * n } 材质抽象完，还需要修改光线打到的点的数据，之前只记录了打到哪个位置，这个位置的法线方向是什么等，现在还需要将打到的点的材质，也加进去，修改 hittable.rs，在 HitRecord 中加入材质相关的记录\n在这里，使用了引用的形式来记录打到时的点的材质信息，所上诉人需要生命周期相关的东西。\n// src/hittable.rs use crate::material::Material; use crate::ray::Ray; use crate::vec3::Vec3; #[derive(Copy, Clone)] pub struct HitRecorda { pub p: Vec3, pub normal: Vec3, pub material: \u0026'a dyn Material, pub t: f64, pub front_face: bool, } impla HitRecorda { pub fn new(p: Vec3, t: f64, outward_normal: Vec3, r: Ray, material: \u0026'a dyn Material) - Self { let front_face = Vec3::dot(r.direction, outward_normal)  0.0; let normal = if front_face { outward_normal } else { -outward_normal }; Self { p, normal, t, front_face, material: material, } } } pub trait Hittable { fn hit(\u0026self, r: \u0026Ray, t_min: f64, t_max: f64) - OptionHitRecord; } 接下来一步就是将材质加入到具体的物体中，也就是我们之前的球体 Sphere。一个物体可以使用不同的材质，所以这里使用了泛型的方式来实现。代码与之前没有什么变化，只是加入了材质，并且在被 hit 时，将材质传给 HitRecord。\n// src/sphere.rs use crate::hittable::{HitRecord, Hittable}; use crate::material::Material; use crate::ray::Ray; use crate::vec3::Vec3; pub struct SphereM: Material { pub center: Vec3, pub radius: f64, pub material: M, } implM: Material SphereM { pub fn new(cen: Vec3, r: f64, material: M) - Self { Self { center: cen, radius: r, material, } } } implM: Material Hittable for SphereM { fn hit(\u0026self, r: \u0026Ray, t_min: f64, t_max: f64) - OptionHitRecord { let oc = r.origin - self.center; let a = r.direction.length_squared(); let half_b = Vec3::dot(oc, r.direction); let c = oc.length_squared() - self.radius * self.radius; let result = half_b * half_b - a * c; if result  0.0 { return None; } let sqrtd = result.sqrt(); // 找到光线打到球面最近的点，有可能光线会穿透球体，与两个点相交，  // 但是远的点会被近的面遮住，我们看不到，所以这里使用近的点就可以了  let mut root = (-half_b - sqrtd) / a; if root  t_min || t_max  root { root = (-half_b + sqrtd) / a; if root  t_min || t_max  root { return None; } } let t = root; let p = r.at(t); let outward_normal = (p - self.center) / self.radius; let hit_rec = HitRecord::new(p, t, outward_normal, *r, \u0026self.material); return Some(hit_rec); } } 最后是修改 main.rs。首先修改 ray_color 函数，将之前里面的漫反射代码去掉，换成调用材质的 scatter 函数来获取打到点的颜色和散射出的新光线方向。代码还是没有什么变化，只是将调用方式换了。\n// src/main.rs fn ray_color(r: \u0026Ray, world: \u0026dyn Hittable, depth: i32) - Color { if depth  0 { return Color::zero(); } if let Some(hit_record) = world.hit(r, 0.001, f64::INFINITY) { if let Some((scattered, attenuation)) = hit_record.material.scatter(\u0026r, \u0026hit_record) { return attenuation * ray_color(\u0026scattered, world, depth - 1); } else { return Color::zero(); } } let unit_direction = Vec3::unit_vector(r.direction); let t = 0.5 * (unit_direction.y + 1.0); return (1.0 - t) * Color::one() + t * Color::new(0.5, 0.7, 1.0); } 接着，我们需要创建不同的材质，然后再多创建两个球到场景中，将它们使用不同的材质来显示。\n// src/main.rs fn main() { // Image config  const ASPECT_RATIO: f64 = 16.0 / 9.0; const IMAGE_WIDTH: u64 = 600; const IMAGE_HEIGHT: u64 = ((IMAGE_WIDTH as f64) / ASPECT_RATIO) as u64; const SAMPLES_PER_PIXEL: u64 = 100; const MAX_DEPTH: i32 = 50; let mut world = HittableList::new(); // 创建不同的材质  let material_ground = Lambertian::new(Color::new(0.8, 0.8, 0.0)); let material_center = Lambertian::new(Color::new(0.7, 0.3, 0.3)); let material_left = Metal::new(Color::new(0.8, 0.8, 0.8)); let material_right = Metal::new(Color::new(0.8, 0.6, 0.2)); // World  world.add(Box::new(Sphere::new( Vec3::new(0.0, -100.5, -1.0), 100.0, material_ground, ))); world.add(Box::new(Sphere::new( Vec3::new(0.0, 0.0, -1.0), 0.5, material_center, ))); world.add(Box::new(Sphere::new( Vec3::new(-1.0, 0.0, -1.0), 0.5, material_left, ))); world.add(Box::new(Sphere::new( Vec3::new(1.0, 0.0, -1.0), 0.5, material_right, ))); // Camera config  let cam = Camera::new(); // Render  let mut rng = rand::thread_rng(); let mut image_file_string = String::new(); image_file_string.push_str(\u0026format!(\"P3\\n{} {}\\n255\\n\", IMAGE_WIDTH, IMAGE_HEIGHT)); for j in (0..=IMAGE_HEIGHT - 1).rev() { for i in 0..IMAGE_WIDTH { let mut pixel_color = Color::zero(); for _ in 0..SAMPLES_PER_PIXEL { let u_rand: f64 = rng.gen(); let v_rand: f64 = rng.gen(); let u = (i as f64 + u_rand) / (IMAGE_WIDTH - 1) as f64; let v = (j as f64 + v_rand) / (IMAGE_HEIGHT - 1) as f64; let r = cam.get_ray(u, v); pixel_color += ray_color(\u0026r, \u0026world, MAX_DEPTH); } image_file_string.push_str(\u0026format!( \"{}\", color::get_color_string(pixel_color, SAMPLES_PER_PIXEL) )); } } println!(\"{}\", image_file_string); } 然后 cargo run --release  shiny_metal.ppm，将产生下面的图\n与文章刚开始的图不太一样，这是因为，现在渲染出来的是闪亮的金属材质，我们可以加入另一个参数，控制金属的模糊感，使它不那么亮。它的原理就是在原来反射的点，进行一个随机。\n修改 Metal 的实现，加入一个参数 fuzz，来控制模糊的程度，最大值为 1.0。下面代码中，在计算 scattered 的时候，将 fuzz 加入到了运算逻辑中。\n// src/material.rs pub struct Metal { pub albedo: Color, pub fuzz: f64, } impl Metal { pub fn new(color: Color, fuzz: f64) - Self { Self { albedo: color, fuzz: if fuzz  1.0 { fuzz } else { 1.0 }, } } } impl Material for Metal { fn scatter(\u0026self, r_in: \u0026Ray, hit_record: \u0026HitRecord) - Option(Ray, Color) { let unit_ray_direction = Vec3::unit_vector(r_in.direction); let reflected = Vec3::reflect(unit_ray_direction, hit_record.normal); let scattered = Ray::new( hit_record.p, reflected + self.fuzz * Vec3::random_in_unit_sphere(), ); let attenuation = self.albedo; if Vec3::dot(scattered.direction, hit_record.normal)  0.0 { Some((scattered, attenuation)) } else { None } } } 然后在 main 函数中创建 Metal 材质时，传入模糊参数值。\n// src/main.rs  let material_left = Metal::new(Color::new(0.8, 0.8, 0.8), 0.3); let material_right = Metal::new(Color::new(0.8, 0.6, 0.2), 1.0); 现在使用 cargo run --release  fuzzed_metal.ppm 生成的图，就是文章开头的图了。\n完整代码: https://github.com/moeif/rtiow-rs/tree/10\n","wordCount":"994","inLanguage":"en","datePublished":"2021-12-04T12:44:15+08:00","dateModified":"2021-12-04T12:44:15+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/ray-tracing-in-one-week-rs-10/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+Rust 光线追踪 10: 材质
+</h1>
+<div class=post-meta><span title="2021-12-04 12:44:15 +0800 CST">December 4, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>在前面的文章中，我们渲染出来的图片使用的是漫反射的材质。不同的材质，可以简单理解为对于光线的影响不同，这里的影响包括如何吸收，如何散射等。在这一节，我们将加入另一种材质，金属材质。</p>
+<p>最终的渲染图如下</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1001.png alt>
+</p>
+<p>首先要做的是将材质（Material）相关的代码抽象出来。新建一个 material.rs 的文件，代码如下。</p>
+<p>代码大概的含义是将 Material 作为一个 Trait，里面有一个 <code>scatter</code> 方法，这个方法决定了光线如何散射，对于不同的材质，实现自己不同的散射方式。</p>
+<p><code>Lambertian</code> 是漫反射材质的逻辑，里面的变量 <code>scatter_direction</code> 就是我们之前的逻辑中的光线散射方向，在这里还加入了另一个东西，就是判断这个方向的值是否接近于0，如果是，那么直接使用光线打到的点的法线作为方向。有了方向，有了原光线打到的点，就可以产生一条新的从打到的点，到新方向的光线，也就是 <code>scattered</code> 变量。<code>attenuation</code> 是原光线打到的点的颜色，对于漫反射来说，也就是当前材质的颜色，这个值也会返回。</p>
+<p><code>Metal</code> 是金属材质的实现，对于金属材质来说，会比漫反射散射更多的光线，所以看起来会闪亮亮的。散射的原理如下</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1002.jpg alt>
+</p>
+<p>其中, V 是入射光线，N 是标准化的法线，而红色的向量，就是反射光线的方向，它 = v + 2b。这里的 V 不一定是标准化的。b 的长度是 V 点乘 N，因为 V 是向内的，所以这里需要一个负号，将它进行反向，最后的公式就是</p>
+<p>$反射光线 = V - 2 * (V \cdot N) * N$</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::color::Color;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::hittable::HitRecord;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::ray::Ray;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::vec3::Vec3;
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>trait</span> Material {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span>;
+}
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Lambertian</span> {
+    <span style=color:#66d9ef>pub</span> albedo: <span style=color:#a6e22e>Color</span>,
+}
+
+<span style=color:#66d9ef>impl</span> Lambertian {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(color: <span style=color:#a6e22e>Color</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self { albedo: <span style=color:#a6e22e>color</span> }
+    }
+}
+
+<span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Lambertian {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, _: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> scatter_direction <span style=color:#f92672>=</span> hit_record.normal <span style=color:#f92672>+</span> Vec3::random_unit_vector();
+        <span style=color:#66d9ef>if</span> scatter_direction.near_zero() {
+            scatter_direction <span style=color:#f92672>=</span> hit_record.normal;
+        }
+
+        <span style=color:#66d9ef>let</span> scattered: <span style=color:#a6e22e>Ray</span> <span style=color:#f92672>=</span> Ray::new(hit_record.p, scatter_direction);
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> self.albedo;
+        Some((scattered, attenuation))
+    }
+}
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Metal</span> {
+    <span style=color:#66d9ef>pub</span> albedo: <span style=color:#a6e22e>Color</span>,
+}
+
+<span style=color:#66d9ef>impl</span> Metal {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(color: <span style=color:#a6e22e>Color</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self {
+            albedo: <span style=color:#a6e22e>color</span>,
+        }
+    }
+}
+
+<span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Metal {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> unit_ray_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r_in.direction);
+        <span style=color:#66d9ef>let</span> reflected <span style=color:#f92672>=</span> Vec3::reflect(unit_ray_direction, hit_record.normal);
+        <span style=color:#66d9ef>let</span> scattered <span style=color:#f92672>=</span> Ray::new(
+            hit_record.p,
+            reflected,
+        );
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> self.albedo;
+        <span style=color:#66d9ef>if</span> Vec3::dot(scattered.direction, hit_record.normal) <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0.0</span> {
+            Some((scattered, attenuation))
+        } <span style=color:#66d9ef>else</span> {
+            None
+        }
+    }
+}
+</code></pre></div><p>上面代码中用到的两个东西是在 vec3.rs 中，一个是 Lambertian 实现中的 <code>near_zero()</code> 函数。一个是 Metal 实现中的 <code>reflect</code> 函数。代码加到 vec3.rs 中。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/vec3.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>near_zero</span>(<span style=color:#f92672>&amp;</span>self) -&gt; <span style=color:#66d9ef>bool</span> {
+    <span style=color:#66d9ef>let</span> border: <span style=color:#66d9ef>f64</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>1e-8</span>;
+    self.x.abs() <span style=color:#f92672>&lt;</span> border <span style=color:#f92672>&amp;&amp;</span> self.y.abs() <span style=color:#f92672>&lt;</span> border <span style=color:#f92672>&amp;&amp;</span> self.z.abs() <span style=color:#f92672>&lt;</span> border
+}
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>reflect</span>(v: <span style=color:#a6e22e>Vec3</span>, n: <span style=color:#a6e22e>Vec3</span>) -&gt; <span style=color:#a6e22e>Vec3</span> {
+    v <span style=color:#f92672>-</span> <span style=color:#ae81ff>2.0</span> <span style=color:#f92672>*</span> Vec3::dot(v, n) <span style=color:#f92672>*</span> n
+}
+</code></pre></div><p>材质抽象完，还需要修改光线打到的点的数据，之前只记录了打到哪个位置，这个位置的法线方向是什么等，现在还需要将打到的点的材质，也加进去，修改 hittable.rs，在 <code>HitRecord</code> 中加入材质相关的记录</p>
+<p>在这里，使用了引用的形式来记录打到时的点的材质信息，所上诉人需要生命周期相关的东西。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/hittable.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::material::Material;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::ray::Ray;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::vec3::Vec3;
+
+<span style=color:#75715e>#[derive(Copy, Clone)]</span>
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>HitRecord</span><span style=color:#f92672>&lt;&#39;</span><span style=color:#a6e22e>a</span><span style=color:#f92672>&gt;</span> {
+    <span style=color:#66d9ef>pub</span> p: <span style=color:#a6e22e>Vec3</span>,
+    <span style=color:#66d9ef>pub</span> normal: <span style=color:#a6e22e>Vec3</span>,
+    <span style=color:#66d9ef>pub</span> material: <span style=color:#66d9ef>&amp;</span><span style=color:#f92672>&#39;</span><span style=color:#a6e22e>a</span> <span style=color:#a6e22e>dyn</span> Material,
+    <span style=color:#66d9ef>pub</span> t: <span style=color:#66d9ef>f64</span>,
+    <span style=color:#66d9ef>pub</span> front_face: <span style=color:#66d9ef>bool</span>,
+}
+
+<span style=color:#66d9ef>impl</span><span style=color:#f92672>&lt;&#39;</span><span style=color:#a6e22e>a</span><span style=color:#f92672>&gt;</span> HitRecord<span style=color:#f92672>&lt;&#39;</span><span style=color:#a6e22e>a</span><span style=color:#f92672>&gt;</span> {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(p: <span style=color:#a6e22e>Vec3</span>, t: <span style=color:#66d9ef>f64</span>, outward_normal: <span style=color:#a6e22e>Vec3</span>, r: <span style=color:#a6e22e>Ray</span>, material: <span style=color:#66d9ef>&amp;</span><span style=color:#f92672>&#39;</span><span style=color:#a6e22e>a</span> <span style=color:#a6e22e>dyn</span> Material) -&gt; <span style=color:#a6e22e>Self</span> {
+        <span style=color:#66d9ef>let</span> front_face <span style=color:#f92672>=</span> Vec3::dot(r.direction, outward_normal) <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0.0</span>;
+        <span style=color:#66d9ef>let</span> normal <span style=color:#f92672>=</span> <span style=color:#66d9ef>if</span> front_face {
+            outward_normal
+        } <span style=color:#66d9ef>else</span> {
+            <span style=color:#f92672>-</span>outward_normal
+        };
+
+        Self {
+            p,
+            normal,
+            t,
+            front_face,
+            material: <span style=color:#a6e22e>material</span>,
+        }
+    }
+}
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>trait</span> Hittable {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>hit</span>(<span style=color:#f92672>&amp;</span>self, r: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, t_min: <span style=color:#66d9ef>f64</span>, t_max: <span style=color:#66d9ef>f64</span>) -&gt; Option<span style=color:#f92672>&lt;</span>HitRecord<span style=color:#f92672>&gt;</span>;
+}
+</code></pre></div><p>接下来一步就是将材质加入到具体的物体中，也就是我们之前的球体 Sphere。一个物体可以使用不同的材质，所以这里使用了泛型的方式来实现。代码与之前没有什么变化，只是加入了材质，并且在被 hit 时，将材质传给 HitRecord。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/sphere.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::hittable::{HitRecord, Hittable};
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::material::Material;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::ray::Ray;
+<span style=color:#66d9ef>use</span> <span style=color:#66d9ef>crate</span>::vec3::Vec3;
+
+<span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Sphere</span><span style=color:#f92672>&lt;</span>M: <span style=color:#a6e22e>Material</span><span style=color:#f92672>&gt;</span> {
+    <span style=color:#66d9ef>pub</span> center: <span style=color:#a6e22e>Vec3</span>,
+    <span style=color:#66d9ef>pub</span> radius: <span style=color:#66d9ef>f64</span>,
+    <span style=color:#66d9ef>pub</span> material: <span style=color:#a6e22e>M</span>,
+}
+
+<span style=color:#66d9ef>impl</span><span style=color:#f92672>&lt;</span>M: <span style=color:#a6e22e>Material</span><span style=color:#f92672>&gt;</span> Sphere<span style=color:#f92672>&lt;</span>M<span style=color:#f92672>&gt;</span> {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(cen: <span style=color:#a6e22e>Vec3</span>, r: <span style=color:#66d9ef>f64</span>, material: <span style=color:#a6e22e>M</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self {
+            center: <span style=color:#a6e22e>cen</span>,
+            radius: <span style=color:#a6e22e>r</span>,
+            material,
+        }
+    }
+}
+
+<span style=color:#66d9ef>impl</span><span style=color:#f92672>&lt;</span>M: <span style=color:#a6e22e>Material</span><span style=color:#f92672>&gt;</span> Hittable <span style=color:#66d9ef>for</span> Sphere<span style=color:#f92672>&lt;</span>M<span style=color:#f92672>&gt;</span> {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>hit</span>(<span style=color:#f92672>&amp;</span>self, r: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, t_min: <span style=color:#66d9ef>f64</span>, t_max: <span style=color:#66d9ef>f64</span>) -&gt; Option<span style=color:#f92672>&lt;</span>HitRecord<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> oc <span style=color:#f92672>=</span> r.origin <span style=color:#f92672>-</span> self.center;
+        <span style=color:#66d9ef>let</span> a <span style=color:#f92672>=</span> r.direction.length_squared();
+        <span style=color:#66d9ef>let</span> half_b <span style=color:#f92672>=</span> Vec3::dot(oc, r.direction);
+        <span style=color:#66d9ef>let</span> c <span style=color:#f92672>=</span> oc.length_squared() <span style=color:#f92672>-</span> self.radius <span style=color:#f92672>*</span> self.radius;
+        <span style=color:#66d9ef>let</span> result <span style=color:#f92672>=</span> half_b <span style=color:#f92672>*</span> half_b <span style=color:#f92672>-</span> a <span style=color:#f92672>*</span> c;
+        <span style=color:#66d9ef>if</span> result <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>0.0</span> {
+            <span style=color:#66d9ef>return</span> None;
+        }
+
+        <span style=color:#66d9ef>let</span> sqrtd <span style=color:#f92672>=</span> result.sqrt();
+
+        <span style=color:#75715e>// 找到光线打到球面最近的点，有可能光线会穿透球体，与两个点相交，
+</span><span style=color:#75715e></span>        <span style=color:#75715e>// 但是远的点会被近的面遮住，我们看不到，所以这里使用近的点就可以了
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> root <span style=color:#f92672>=</span> (<span style=color:#f92672>-</span>half_b <span style=color:#f92672>-</span> sqrtd) <span style=color:#f92672>/</span> a;
+        <span style=color:#66d9ef>if</span> root <span style=color:#f92672>&lt;</span> t_min <span style=color:#f92672>||</span> t_max <span style=color:#f92672>&lt;</span> root {
+            root <span style=color:#f92672>=</span> (<span style=color:#f92672>-</span>half_b <span style=color:#f92672>+</span> sqrtd) <span style=color:#f92672>/</span> a;
+            <span style=color:#66d9ef>if</span> root <span style=color:#f92672>&lt;</span> t_min <span style=color:#f92672>||</span> t_max <span style=color:#f92672>&lt;</span> root {
+                <span style=color:#66d9ef>return</span> None;
+            }
+        }
+
+        <span style=color:#66d9ef>let</span> t <span style=color:#f92672>=</span> root;
+        <span style=color:#66d9ef>let</span> p <span style=color:#f92672>=</span> r.at(t);
+        <span style=color:#66d9ef>let</span> outward_normal <span style=color:#f92672>=</span> (p <span style=color:#f92672>-</span> self.center) <span style=color:#f92672>/</span> self.radius;
+
+        <span style=color:#66d9ef>let</span> hit_rec <span style=color:#f92672>=</span> HitRecord::new(p, t, outward_normal, <span style=color:#f92672>*</span>r, <span style=color:#f92672>&amp;</span>self.material);
+        <span style=color:#66d9ef>return</span> Some(hit_rec);
+    }
+}
+</code></pre></div><p>最后是修改 main.rs。首先修改 <code>ray_color</code> 函数，将之前里面的漫反射代码去掉，换成调用材质的 <code>scatter</code> 函数来获取打到点的颜色和散射出的新光线方向。代码还是没有什么变化，只是将调用方式换了。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/main.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>ray_color</span>(r: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, world: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>dyn</span> Hittable, depth: <span style=color:#66d9ef>i32</span>) -&gt; <span style=color:#a6e22e>Color</span> {
+    <span style=color:#66d9ef>if</span> depth <span style=color:#f92672>&lt;=</span> <span style=color:#ae81ff>0</span> {
+        <span style=color:#66d9ef>return</span> Color::zero();
+    }
+
+    <span style=color:#66d9ef>if</span> <span style=color:#66d9ef>let</span> Some(hit_record) <span style=color:#f92672>=</span> world.hit(r, <span style=color:#ae81ff>0.001</span>, <span style=color:#66d9ef>f64</span>::INFINITY) {
+        <span style=color:#66d9ef>if</span> <span style=color:#66d9ef>let</span> Some((scattered, attenuation)) <span style=color:#f92672>=</span> hit_record.material.scatter(<span style=color:#f92672>&amp;</span>r, <span style=color:#f92672>&amp;</span>hit_record) {
+            <span style=color:#66d9ef>return</span> attenuation <span style=color:#f92672>*</span> ray_color(<span style=color:#f92672>&amp;</span>scattered, world, depth <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>);
+        } <span style=color:#66d9ef>else</span> {
+            <span style=color:#66d9ef>return</span> Color::zero();
+        }
+    }
+
+    <span style=color:#66d9ef>let</span> unit_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r.direction);
+    <span style=color:#66d9ef>let</span> t <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span> <span style=color:#f92672>*</span> (unit_direction.y <span style=color:#f92672>+</span> <span style=color:#ae81ff>1.0</span>);
+    <span style=color:#66d9ef>return</span> (<span style=color:#ae81ff>1.0</span> <span style=color:#f92672>-</span> t) <span style=color:#f92672>*</span> Color::one() <span style=color:#f92672>+</span> t <span style=color:#f92672>*</span> Color::new(<span style=color:#ae81ff>0.5</span>, <span style=color:#ae81ff>0.7</span>, <span style=color:#ae81ff>1.0</span>);
+}
+</code></pre></div><p>接着，我们需要创建不同的材质，然后再多创建两个球到场景中，将它们使用不同的材质来显示。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/main.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>main</span>() {
+    <span style=color:#75715e>// Image config
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>const</span> ASPECT_RATIO: <span style=color:#66d9ef>f64</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>16.0</span> <span style=color:#f92672>/</span> <span style=color:#ae81ff>9.0</span>;
+    <span style=color:#66d9ef>const</span> IMAGE_WIDTH: <span style=color:#66d9ef>u64</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>600</span>;
+    <span style=color:#66d9ef>const</span> IMAGE_HEIGHT: <span style=color:#66d9ef>u64</span> <span style=color:#f92672>=</span> ((IMAGE_WIDTH <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>f64</span>) <span style=color:#f92672>/</span> ASPECT_RATIO) <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>u64</span>;
+    <span style=color:#66d9ef>const</span> SAMPLES_PER_PIXEL: <span style=color:#66d9ef>u64</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>100</span>;
+    <span style=color:#66d9ef>const</span> MAX_DEPTH: <span style=color:#66d9ef>i32</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>50</span>;
+
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> world <span style=color:#f92672>=</span> HittableList::new();
+    
+    <span style=color:#75715e>// 创建不同的材质
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>let</span> material_ground <span style=color:#f92672>=</span> Lambertian::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.0</span>));
+    <span style=color:#66d9ef>let</span> material_center <span style=color:#f92672>=</span> Lambertian::new(Color::new(<span style=color:#ae81ff>0.7</span>, <span style=color:#ae81ff>0.3</span>, <span style=color:#ae81ff>0.3</span>));
+    <span style=color:#66d9ef>let</span> material_left <span style=color:#f92672>=</span> Metal::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>));
+    <span style=color:#66d9ef>let</span> material_right <span style=color:#f92672>=</span> Metal::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.6</span>, <span style=color:#ae81ff>0.2</span>));
+
+    <span style=color:#75715e>// World
+</span><span style=color:#75715e></span>    world.add(Box::new(Sphere::new(
+        Vec3::new(<span style=color:#ae81ff>0.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>100.5</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>),
+        <span style=color:#ae81ff>100.0</span>,
+        material_ground,
+    )));
+    world.add(Box::new(Sphere::new(
+        Vec3::new(<span style=color:#ae81ff>0.0</span>, <span style=color:#ae81ff>0.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>),
+        <span style=color:#ae81ff>0.5</span>,
+        material_center,
+    )));
+
+    world.add(Box::new(Sphere::new(
+        Vec3::new(<span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>0.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>),
+        <span style=color:#ae81ff>0.5</span>,
+        material_left,
+    )));
+
+    world.add(Box::new(Sphere::new(
+        Vec3::new(<span style=color:#ae81ff>1.0</span>, <span style=color:#ae81ff>0.0</span>, <span style=color:#f92672>-</span><span style=color:#ae81ff>1.0</span>),
+        <span style=color:#ae81ff>0.5</span>,
+        material_right,
+    )));
+
+    <span style=color:#75715e>// Camera config
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>let</span> cam <span style=color:#f92672>=</span> Camera::new();
+
+    <span style=color:#75715e>// Render
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> rng <span style=color:#f92672>=</span> rand::thread_rng();
+    <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> image_file_string <span style=color:#f92672>=</span> String::new();
+    image_file_string.push_str(<span style=color:#f92672>&amp;</span>format!(<span style=color:#e6db74>&#34;P3\n{} {}\n255\n&#34;</span>, IMAGE_WIDTH, IMAGE_HEIGHT));
+    <span style=color:#66d9ef>for</span> j <span style=color:#66d9ef>in</span> (<span style=color:#ae81ff>0</span><span style=color:#f92672>..=</span>IMAGE_HEIGHT <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>).rev() {
+        <span style=color:#66d9ef>for</span> i <span style=color:#66d9ef>in</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>IMAGE_WIDTH {
+            <span style=color:#66d9ef>let</span> <span style=color:#66d9ef>mut</span> pixel_color <span style=color:#f92672>=</span> Color::zero();
+            <span style=color:#66d9ef>for</span> _ <span style=color:#66d9ef>in</span> <span style=color:#ae81ff>0</span><span style=color:#f92672>..</span>SAMPLES_PER_PIXEL {
+                <span style=color:#66d9ef>let</span> u_rand: <span style=color:#66d9ef>f64</span> <span style=color:#f92672>=</span> rng.gen();
+                <span style=color:#66d9ef>let</span> v_rand: <span style=color:#66d9ef>f64</span> <span style=color:#f92672>=</span> rng.gen();
+                <span style=color:#66d9ef>let</span> u <span style=color:#f92672>=</span> (i <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>f64</span> <span style=color:#f92672>+</span> u_rand) <span style=color:#f92672>/</span> (IMAGE_WIDTH <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>) <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>f64</span>;
+                <span style=color:#66d9ef>let</span> v <span style=color:#f92672>=</span> (j <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>f64</span> <span style=color:#f92672>+</span> v_rand) <span style=color:#f92672>/</span> (IMAGE_HEIGHT <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>) <span style=color:#66d9ef>as</span> <span style=color:#66d9ef>f64</span>;
+                <span style=color:#66d9ef>let</span> r <span style=color:#f92672>=</span> cam.get_ray(u, v);
+                pixel_color <span style=color:#f92672>+=</span> ray_color(<span style=color:#f92672>&amp;</span>r, <span style=color:#f92672>&amp;</span>world, MAX_DEPTH);
+            }
+
+            image_file_string.push_str(<span style=color:#f92672>&amp;</span>format!(
+                <span style=color:#e6db74>&#34;{}&#34;</span>,
+                color::get_color_string(pixel_color, SAMPLES_PER_PIXEL)
+            ));
+        }
+    }
+
+    println!(<span style=color:#e6db74>&#34;{}&#34;</span>, image_file_string);
+}
+</code></pre></div><p>然后 <code>cargo run --release > shiny_metal.ppm</code>，将产生下面的图</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1003.png alt>
+</p>
+<p>与文章刚开始的图不太一样，这是因为，现在渲染出来的是闪亮的金属材质，我们可以加入另一个参数，控制金属的模糊感，使它不那么亮。它的原理就是在原来反射的点，进行一个随机。</p>
+<p><img loading=lazy src=/postimages/rtiowrs/1004.jpg alt>
+</p>
+<p>修改 Metal 的实现，加入一个参数 <code>fuzz</code>，来控制模糊的程度，最大值为 1.0。下面代码中，在计算 <code>scattered</code> 的时候，将 <code>fuzz</code> 加入到了运算逻辑中。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/material.rs
+</span><span style=color:#75715e></span><span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>struct</span> <span style=color:#a6e22e>Metal</span> {
+    <span style=color:#66d9ef>pub</span> albedo: <span style=color:#a6e22e>Color</span>,
+    <span style=color:#66d9ef>pub</span> fuzz: <span style=color:#66d9ef>f64</span>,
+}
+
+<span style=color:#66d9ef>impl</span> Metal {
+    <span style=color:#66d9ef>pub</span> <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>new</span>(color: <span style=color:#a6e22e>Color</span>, fuzz: <span style=color:#66d9ef>f64</span>) -&gt; <span style=color:#a6e22e>Self</span> {
+        Self {
+            albedo: <span style=color:#a6e22e>color</span>,
+            fuzz: <span style=color:#a6e22e>if</span> fuzz <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>1.0</span> { fuzz } <span style=color:#66d9ef>else</span> { <span style=color:#ae81ff>1.0</span> },
+        }
+    }
+}
+
+<span style=color:#66d9ef>impl</span> Material <span style=color:#66d9ef>for</span> Metal {
+    <span style=color:#66d9ef>fn</span> <span style=color:#a6e22e>scatter</span>(<span style=color:#f92672>&amp;</span>self, r_in: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>Ray</span>, hit_record: <span style=color:#66d9ef>&amp;</span><span style=color:#a6e22e>HitRecord</span>) -&gt; Option<span style=color:#f92672>&lt;</span>(Ray, Color)<span style=color:#f92672>&gt;</span> {
+        <span style=color:#66d9ef>let</span> unit_ray_direction <span style=color:#f92672>=</span> Vec3::unit_vector(r_in.direction);
+        <span style=color:#66d9ef>let</span> reflected <span style=color:#f92672>=</span> Vec3::reflect(unit_ray_direction, hit_record.normal);
+        <span style=color:#66d9ef>let</span> scattered <span style=color:#f92672>=</span> Ray::new(
+            hit_record.p,
+            reflected <span style=color:#f92672>+</span> self.fuzz <span style=color:#f92672>*</span> Vec3::random_in_unit_sphere(),
+        );
+        <span style=color:#66d9ef>let</span> attenuation <span style=color:#f92672>=</span> self.albedo;
+        <span style=color:#66d9ef>if</span> Vec3::dot(scattered.direction, hit_record.normal) <span style=color:#f92672>&gt;</span> <span style=color:#ae81ff>0.0</span> {
+            Some((scattered, attenuation))
+        } <span style=color:#66d9ef>else</span> {
+            None
+        }
+    }
+}
+</code></pre></div><p>然后在 main 函数中创建 Metal 材质时，传入模糊参数值。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-rust data-lang=rust><span style=color:#75715e>// src/main.rs
+</span><span style=color:#75715e></span> <span style=color:#66d9ef>let</span> material_left <span style=color:#f92672>=</span> Metal::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.8</span>), <span style=color:#ae81ff>0.3</span>);
+<span style=color:#66d9ef>let</span> material_right <span style=color:#f92672>=</span> Metal::new(Color::new(<span style=color:#ae81ff>0.8</span>, <span style=color:#ae81ff>0.6</span>, <span style=color:#ae81ff>0.2</span>), <span style=color:#ae81ff>1.0</span>);
+</code></pre></div><p>现在使用 <code>cargo run --release > fuzzed_metal.ppm</code> 生成的图，就是文章开头的图了。</p>
+<p>完整代码: <a href=https://github.com/moeif/rtiow-rs/tree/10>https://github.com/moeif/rtiow-rs/tree/10</a></p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/rust%E5%AE%9E%E7%8E%B0%E5%85%89%E7%BA%BF%E8%BF%BD%E8%B8%AA/>Rust实现光线追踪</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/this-week-in-moeif-24/>
+<span class=title>« Prev Page</span>
+<br>
+<span>This Week In Moeif 24</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/compile-aseprite-for-apple-m1/>
+<span class=title>Next Page »</span>
+<br>
+<span>编译 Apple Silicon 版本 Aseprite</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on twitter" href="https://twitter.com/intent/tweet/?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f&hashtags=Rust%e5%ae%9e%e7%8e%b0%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f&title=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8&summary=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8&source=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f&title=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on whatsapp" href="https://api.whatsapp.com/send?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share Rust 光线追踪 10: 材质 on telegram" href="https://telegram.me/share/url?text=Rust%20%e5%85%89%e7%ba%bf%e8%bf%bd%e8%b8%aa%2010%3a%20%e6%9d%90%e8%b4%a8&url=https%3a%2f%2fblog.moeif.com%2fposts%2fray-tracing-in-one-week-rs-10%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

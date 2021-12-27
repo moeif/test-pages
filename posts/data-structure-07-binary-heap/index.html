@@ -1,0 +1,516 @@
+<!doctype html><html lang=en dir=auto>
+<head><meta charset=utf-8>
+<meta http-equiv=x-ua-compatible content="IE=edge">
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=robots content="index, follow">
+<title>二叉堆 | 萌一小栈</title>
+<meta name=keywords content="数据结构与算法">
+<meta name=description content="今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。
+还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。
+再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。
+如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。
+接下来我们就开始说二叉堆的细节，插入节点，删除节点。
+插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。
+ 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。
+找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值
+上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值
+上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。
+以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。
+// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.">
+<meta name=author content="fred">
+<link rel=canonical href=https://blog.moeif.com/posts/data-structure-07-binary-heap/>
+<meta name=google-site-verification content="XYZabc">
+<meta name=yandex-verification content="XYZabc">
+<meta name=msvalidate.01 content="XYZabc">
+<link crossorigin=anonymous href=/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css integrity="sha256-yIlj/i15RiAA/Q+xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as=style>
+<link rel=preload href=/images/favicon.svg as=image>
+<script defer crossorigin=anonymous src=/assets/js/highlight.min.7680afc38aa6b15ddf158a4f3780b7b1f7dde7e91d26f073e6229bb7a0793c92.js integrity="sha256-doCvw4qmsV3fFYpPN4C3sffd5+kdJvBz5iKbt6B5PJI=" onload=hljs.initHighlightingOnLoad()></script>
+<link rel=icon href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=16x16 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=icon type=image/png sizes=32x32 href=https://blog.moeif.com/images/favicon.svg>
+<link rel=apple-touch-icon href=https://blog.moeif.com/favicon.svg>
+<link rel=mask-icon href=https://blog.moeif.com/favicon.svg>
+<meta name=theme-color content="#2e2e33">
+<meta name=msapplication-TileColor content="#2e2e33">
+<meta name=generator content="Hugo 0.89.2">
+<noscript>
+<style>#theme-toggle,.top-link{display:none}</style>
+<style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--hljs-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style>
+</noscript><meta property="og:title" content="二叉堆">
+<meta property="og:description" content="今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。
+还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。
+再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。
+如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。
+接下来我们就开始说二叉堆的细节，插入节点，删除节点。
+插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。
+ 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。
+找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值
+上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值
+上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。
+以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。
+// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://blog.moeif.com/posts/data-structure-07-binary-heap/"><meta property="og:image" content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts">
+<meta property="article:published_time" content="2019-12-30T18:01:45+08:00">
+<meta property="article:modified_time" content="2019-12-30T18:01:45+08:00"><meta property="og:site_name" content="萌一小栈">
+<meta name=twitter:card content="summary_large_image">
+<meta name=twitter:image content="https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E">
+<meta name=twitter:title content="二叉堆">
+<meta name=twitter:description content="今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。
+还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。
+再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。
+如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。
+接下来我们就开始说二叉堆的细节，插入节点，删除节点。
+插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。
+ 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。
+找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值
+上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值
+上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。
+以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。
+// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.">
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.moeif.com/posts/"},{"@type":"ListItem","position":2,"name":"二叉堆","item":"https://blog.moeif.com/posts/data-structure-07-binary-heap/"}]}</script>
+<script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"二叉堆","name":"二叉堆","description":"今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。\n还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。\n再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。\n如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。\n接下来我们就开始说二叉堆的细节，插入节点，删除节点。\n插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。\n 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。\n找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值\n上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值\n上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。\n以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。\n// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.","keywords":["数据结构与算法"],"articleBody":"今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。\n还记得我们之前学过的完全二叉树吗？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。\n再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。\n如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。\n接下来我们就开始说二叉堆的细节，插入节点，删除节点。\n插入节点 插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。\n 找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图  假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。\n找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)  节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图  上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值\n上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值\n上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。\n以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 TreeAlgo 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。\n// 定义节点的结构 public class Node { public int data; public Node parent = null; public Node left = null; public Node right = null; public Node(int data){ this.data = data; } } // 定义二叉堆操作类 using System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root); if(lastParentNode == null){ Console.WriteLine(\"Insert Root Node \" + data); root = new Node(data); }else{ Node newNode = new Node(data); if(lastParentNode.left == null){ // 如果左子树为空，则插入到左子树  lastParentNode.left = newNode; } else if(lastParentNode.right == null){ // 如果右子树为空，则插入到右子树  lastParentNode.right = newNode; }else{ Console.WriteLine(\"父节点错误，父节点左右子树都不为空，无法插入!\"); return; } newNode.parent = lastParentNode; Node opt = newNode; // 以最小堆的方式插入节点，即父节点小于等于子节点  // 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 = 即可  while(opt != null \u0026\u0026 opt.parent != null \u0026\u0026 opt.data int tmp = opt.data; opt.data = opt.parent.data; opt.parent.data = tmp; opt = opt.parent; } } } } // 运行刚才写的代码 using System; using System.Collections.Generic; class Program { static void Main(string[] args) { BinaryHeap bh = new BinaryHeap(); bh.Insert(1); bh.Insert(9); bh.Insert(22); bh.Insert(17); bh.Insert(11); bh.Insert(33); bh.Insert(27); bh.Insert(21); bh.Insert(19); TreeAlgo.LevelOrderTraversal(bh.root); } } // TreeAlgo 帮助类代码 using System; using System.Collections.Generic; public static class TreeAlgo { // 层序遍历树，打印出的内容，括号里面是父节点的值  public static void LevelOrderTraversal(Node root){ if(root == null){ return; } Queue q = new Queue(); q.Enqueue(root); while(q.Count  0){ Node currNode = q.Dequeue(); string msg =string.Format(\"{0}({1}) \", currNode.data, currNode.parent != null?currNode.parent.data.ToString():\"null\"); Console.WriteLine(msg); if(currNode.left != null){ q.Enqueue(currNode.left); } if(currNode.right != null){ q.Enqueue(currNode.right); } } } // 按层遍历，获取第 index 个节点  public static Node GetIndexOfNodeWithLevelOrder(Node root, int index){ if(root == null){ return null; } Queue q = new Queue(); q.Enqueue(root); int iIndex = 0; Node targetNode = null; while(q.Count  0){ Node currNode = q.Dequeue(); if(iIndex == index){ targetNode = currNode; break; } if(currNode.left != null){ q.Enqueue(currNode.left); } if(currNode.right != null){ q.Enqueue(currNode.right); } iIndex += 1; } return targetNode; } // 获取按层遍历时，最后一层的最后一个节点  public static Node GetLastNodeOfLevelOrder(Node root){ if(root == null){ return null; } Queue q = new Queue(); q.Enqueue(root); Node lastNode = null; while(q.Count  0){ lastNode = q.Dequeue(); if(lastNode.left != null){ q.Enqueue(lastNode.left); } if(lastNode.right != null){ q.Enqueue(lastNode.right); } } return lastNode; } // 按层序遍历，只要任何一个节点左子对为空，或右子树为空，则为要找的点（前提是这棵树必须为完全二叉树）  public static Node FindParentOfFartestLeftLocation(Node root){ if(root == null){ return null; } Queue q = new Queue(); q.Enqueue(root); Node targetNode = null; while(q.Count  0){ targetNode = q.Dequeue(); if(targetNode.left == null || targetNode.right == null){ break; } q.Enqueue(targetNode.left); q.Enqueue(targetNode.right); } return targetNode; } } 上面的代码可以自己使用C#运行一下看结果。下面我们继续说删除节点的操作。\n删除节点 删除节点，稍微复杂一点点，但也不是特别复杂，按下面的流程来操作即可\n 找到按层序遍历的最后一个节点，然后用最后一个节点的值，替换要删除节点的值。然后将最后一个节点值删除掉。看下面的图  上面的过程，我们已经将最后一个节点 21 替换到了要删除的节点 5 的位置，并且将原来 21 的节点从树中删除掉。但是现在的树不符合二叉堆的规则，所以我们需要浮动现在的 21 节点。\n浮动节点，将树调整为正确的二叉堆。删除节点时，节点的浮动有可能需要往下浮动，也有可能需要往上浮动。我们当前所讲的，都是按最小堆来操作的。如果 21 节点比父节点小，则要往上浮动。如果 21 节点比父节点大，则要往下浮动。  往上浮动，只要循环判断是否比父节点小即可，就像插入节点那样。而往下浮动，可能面对着两个又节点，所以要选择和两个子节点中值小的那个节点进行数据交换。显然，现在的 21 节点需要往下浮动，浮动到没有子节点，或者没有比当前节点小的节点位置。\n上图中，21 的子节点 9 和 11，需要和值更小的 9 进行交换\n上图中，21 换到了原来 9 的位置，发现还有子节点，所以继续判断。因为 17 比 21 小，所以需要继续交换。\n到此，发现没有更小的节点了，浮动完毕，整棵树符合二叉堆规则。\n以上就是删除节点的流程，下面我们用代码去实现。下面是加入了删除函数的 BinaryHeap类\nusing System; public class BinaryHeap { public Node root; public void Insert(int data){ Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root); if(lastParentNode == null){ Console.WriteLine(\"Insert Root Node \" + data); root = new Node(data); }else{ Node newNode = new Node(data); if(lastParentNode.left == null){ // 如果左子树为空，则插入到左子树  lastParentNode.left = newNode; } else if(lastParentNode.right == null){ // 如果右子树为空，则插入到右子树  lastParentNode.right = newNode; }else{ Console.WriteLine(\"父节点错误，父节点左右子树都不为空，无法插入!\"); return; } newNode.parent = lastParentNode; Node opt = newNode; // 以最小堆的方式插入节点，即父节点小于等于子节点  // 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 = 即可  while(opt != null \u0026\u0026 opt.parent != null \u0026\u0026 opt.data int tmp = opt.data; opt.data = opt.parent.data; opt.parent.data = tmp; opt = opt.parent; } } } public void Delete(int index){ // 1. 找到要删除的节点  Node optNode = TreeAlgo.GetIndexOfNodeWithLevelOrder(root, index); // 2. 按层序遍历，找到最后一层最后一个节点  Node lastNode = TreeAlgo.GetLastNodeOfLevelOrder(root); // 3. 使用最后一个节点的数据替换掉要删除节点的数据  optNode.data = lastNode.data; // 4. 把最后一层最后一个节点删除掉  if(lastNode.parent.left == lastNode){ lastNode.parent.left = null; }else if(lastNode.parent.right == lastNode){ lastNode.parent.right = null; } // 5. 要删除的节点数据已经被替换，现在需要根据数据浮动到正确的位置  // 首先要判断是往下浮动还是往上浮动，因为我们是按最小堆操作的，  // 所以要先判断当前节点是否比父节点 \"小\"，如果是，则要往上浮动，反之往下浮动  if(optNode.parent != null \u0026\u0026 optNode.data while(optNode.parent != null \u0026\u0026 optNode.data int tmp = optNode.data; optNode.data = optNode.parent.data; optNode.parent.data = tmp; optNode = optNode.parent; } } else{ // 尝试往下浮动  while(optNode.left != null || optNode.right != null){ Node compareNode = null; if(optNode.left != null \u0026\u0026 optNode.right != null){ if(optNode.left.data else{ compareNode = optNode.right; } } else{ if(optNode.left != null){ compareNode = optNode.left; }else if(optNode.right != null){ compareNode = optNode.right; } } // 往下浮动，交换数据  if(compareNode != null \u0026\u0026 optNode.data  compareNode.data){ int temp = optNode.data; optNode.data = compareNode.data; compareNode.data = temp; } optNode = compareNode; } } } } 上面的代码中，删除函数的参数传的是第几个节点。当然，你也可以改成删除某个特定值的节点，删除逻辑都是一样的。\n下面是运行的代码\nusing System; using System.Collections.Generic; class Program { static void Main(string[] args) { BinaryHeap bh = new BinaryHeap(); bh.Insert(1); bh.Insert(5); bh.Insert(6); bh.Insert(9); bh.Insert(11); bh.Insert(8); bh.Insert(15); bh.Insert(17); bh.Insert(21); TreeAlgo.LevelOrderTraversal(bh.root); bh.Delete(1); Console.WriteLine(\"------ Delete 1\"); TreeAlgo.LevelOrderTraversal(bh.root); } } 以上就是二叉堆插入和删除的逻辑。\n","wordCount":"746","inLanguage":"en","datePublished":"2019-12-30T18:01:45+08:00","dateModified":"2019-12-30T18:01:45+08:00","author":{"@type":"Person","name":"fred"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.moeif.com/posts/data-structure-07-binary-heap/"},"publisher":{"@type":"Organization","name":"萌一小栈","logo":{"@type":"ImageObject","url":"https://blog.moeif.com/images/favicon.svg"}}}</script>
+</head>
+<body id=top>
+<script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add('dark'):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove('dark'):window.matchMedia('(prefers-color-scheme: dark)').matches&&document.body.classList.add('dark')</script>
+<header class=header>
+<nav class=nav>
+<div class=logo>
+<a href=https://blog.moeif.com/ accesskey=h title="Moeif (Alt + H)">
+<img src=/images/favicon.svg alt=logo aria-label=logo height=35>Moeif</a>
+<span class=logo-switches>
+<button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+</button>
+</span>
+</div>
+<ul id=menu>
+<li>
+<a href=https://blog.moeif.com/archives/ title=Archives>
+<span>Archives</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/tags/ title=Tags>
+<span>Tags</span>
+</a>
+</li>
+<li>
+<a href=https://blog.moeif.com/about/ title=About>
+<span>About</span>
+</a>
+</li>
+<li>
+<a href=https://moeif.com title="Moeif Games">
+<span>Moeif Games</span>
+</a>
+</li>
+</ul>
+</nav>
+</header>
+<main class=main>
+<article class=post-single>
+<header class=post-header>
+<div class=breadcrumbs><a href=https://blog.moeif.com/>Home</a>&nbsp;»&nbsp;<a href=https://blog.moeif.com/posts/>Posts</a></div>
+<h1 class=post-title>
+二叉堆
+</h1>
+<div class=post-meta><span title="2019-12-30 18:01:45 +0800 CST">December 30, 2019</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;fred
+</div>
+</header>
+<div class=post-content><p>今天我们来说一下二叉堆(BinaryHeap)。堆是很有用的数据结构，例如后面会学到的优先队列，堆排序等，都和堆有关。操作系统中很多调度，也和堆有关。</p>
+<p>还记得我们之前学过的<a href=https://imoegirl.com/2019/12/21/data-structure-05-binary-tree/#%E4%BB%80%E4%B9%88%E6%98%AF%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91>完全二叉树吗</a>？如果不记得了，就需要先回去复习一下，因为二叉堆，首先是一棵完全二叉树，或者近似完全二叉树。</p>
+<p>再来说一下二叉堆的特性。二叉堆分为最小堆和最大堆。如果是最小堆，那么父节点的值，总是小于或等于任何一个子节点的值，通俗点就是把一棵树从上往下看，值在变大，下面的大于等于上面的。如果是最大堆，则是反过来，父节点的值，总是大于或等于任何一个子节点的值。</p>
+<p>如果要简单点记忆，那就是这棵树上的值按层来看，如果是从小到大，那就是最小堆，如果是从大到小，那就是最大堆。</p>
+<p>接下来我们就开始说二叉堆的细节，插入节点，删除节点。</p>
+<h2 id=插入节点>插入节点<a hidden class=anchor aria-hidden=true href=#插入节点>#</a></h2>
+<p>插入节点，其实也就是构建二叉堆的过程，语言描述流程如下。</p>
+<ol>
+<li>找到要插入的位置，这个位置就是当前这棵完全二叉树，最后一个位置 (不太好理解)。如果用代码流程来描述的话，就是按层遍历当前的树，如果遇到一个节点，左子树为空，或者又子树为空，或者左右子树都为空，那么，这个点就是要插入节点的父节点，而要插入的节点，将作为这个节点的左子树或右子树。看下面的图</li>
+</ol>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Uaf57ff2ed5ae46c8a15a8e5a30205793g.png alt=p001901_Binary-Heap-1>
+</p>
+<p>假设我们要在上面的堆中插入一个节点，按照上面代码流程中描述的，可以找到要插入节点的父节点，是11。</p>
+<ol start=2>
+<li>找到了要插入节点的父节点，还要判断这个父节点是左子树为空，还是右子树为空，还是都为空，如果左子树为空，则新点作为左子树，如果左子树不为空，则新点作为右子树。插入后的图如下(假设要插入的数值为3)</li>
+</ol>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ue05fd0d4b48d4be3b0aeb8a553db5d08H.png alt=p001902_Binary-Heap-2>
+</p>
+<ol start=3>
+<li>节点插入后，当前的树并不满足二叉堆的规则，所以还需要将新插入的点向上浮动。如果当前节点值小于父节点的值，则交换当前节点和父节点的值。然后再次判断，直到当前值不再小于父节点值，或者父节点值为空了，则位置调整完毕，整个插入流程也就结束了。看下面的流程图</li>
+</ol>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U9f1def5816f14efeaa318779f58000b3m.png alt=p001903_Binary-Heap-3>
+</p>
+<p>上图中，首先用 3 和 11 比较，因为 3 小于 11，所以交换两个节点的值</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U84369ee5821542b3b18dee3ade6a181ca.png alt=p001904_Binary-Heap-4>
+</p>
+<p>上图中，再次用 3 和父节点 5 比较，因为 3 小于 5，所以再次交换两个节点的值</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U23e249f056f94c8bad07c456b624d77e6.png alt=p001905_Binary-Heap-5>
+</p>
+<p>上图中，再次用 3 和父节点 1 比较，咦，3 不小于 1，所以不交换，节点调整结束。此时的树满足二叉堆的规则。</p>
+<p>以上就是整个插入节点的流程，下面我们用代码去实现一下。代码中的 <strong>TreeAlgo</strong> 类是我们为了方便写的一个帮助类，实现了层序打印和查找的一些方法。</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 定义节点的结构
+</span><span style=color:#75715e></span><span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Node</span> {
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>int</span> data;
+    <span style=color:#66d9ef>public</span> Node parent = <span style=color:#66d9ef>null</span>;
+    <span style=color:#66d9ef>public</span> Node left = <span style=color:#66d9ef>null</span>;
+    <span style=color:#66d9ef>public</span> Node right = <span style=color:#66d9ef>null</span>;
+
+    <span style=color:#66d9ef>public</span> Node(<span style=color:#66d9ef>int</span> data){
+        <span style=color:#66d9ef>this</span>.data = data;
+    }
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 定义二叉堆操作类
+</span><span style=color:#75715e></span><span style=color:#66d9ef>using</span> System;
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BinaryHeap</span> {
+    <span style=color:#66d9ef>public</span> Node root;
+
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> Insert(<span style=color:#66d9ef>int</span> data){
+        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);
+        <span style=color:#66d9ef>if</span>(lastParentNode == <span style=color:#66d9ef>null</span>){
+            Console.WriteLine(<span style=color:#e6db74>&#34;Insert Root Node &#34;</span> + data);
+            root = <span style=color:#66d9ef>new</span> Node(data);
+        }<span style=color:#66d9ef>else</span>{
+            Node newNode = <span style=color:#66d9ef>new</span> Node(data);
+            <span style=color:#66d9ef>if</span>(lastParentNode.left == <span style=color:#66d9ef>null</span>){ <span style=color:#75715e>// 如果左子树为空，则插入到左子树
+</span><span style=color:#75715e></span>                lastParentNode.left = newNode;
+            } <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span>(lastParentNode.right == <span style=color:#66d9ef>null</span>){ <span style=color:#75715e>// 如果右子树为空，则插入到右子树
+</span><span style=color:#75715e></span>                lastParentNode.right = newNode;
+            }<span style=color:#66d9ef>else</span>{
+                Console.WriteLine(<span style=color:#e6db74>&#34;父节点错误，父节点左右子树都不为空，无法插入!&#34;</span>);
+                <span style=color:#66d9ef>return</span>;
+            }
+
+            newNode.parent = lastParentNode;
+
+            Node opt = newNode;
+            <span style=color:#75715e>// 以最小堆的方式插入节点，即父节点小于等于子节点
+</span><span style=color:#75715e></span>            <span style=color:#75715e>// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>while</span>(opt != <span style=color:#66d9ef>null</span> &amp;&amp; opt.parent != <span style=color:#66d9ef>null</span> &amp;&amp; opt.data &lt;= opt.parent.data){
+                <span style=color:#66d9ef>int</span> tmp = opt.data;
+                opt.data = opt.parent.data;
+                opt.parent.data = tmp;
+                opt = opt.parent;
+            }
+        }
+    }
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// 运行刚才写的代码
+</span><span style=color:#75715e></span><span style=color:#66d9ef>using</span> System;
+<span style=color:#66d9ef>using</span> System.Collections.Generic;
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Program</span>
+{
+    <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> Main(<span style=color:#66d9ef>string</span>[] args)
+    {
+        BinaryHeap bh = <span style=color:#66d9ef>new</span> BinaryHeap();
+        bh.Insert(<span style=color:#ae81ff>1</span>);
+        bh.Insert(<span style=color:#ae81ff>9</span>);
+        bh.Insert(<span style=color:#ae81ff>22</span>);
+        bh.Insert(<span style=color:#ae81ff>17</span>);
+        bh.Insert(<span style=color:#ae81ff>11</span>);
+        bh.Insert(<span style=color:#ae81ff>33</span>);
+        bh.Insert(<span style=color:#ae81ff>27</span>);
+        bh.Insert(<span style=color:#ae81ff>21</span>);
+        bh.Insert(<span style=color:#ae81ff>19</span>);
+        TreeAlgo.LevelOrderTraversal(bh.root);
+    }
+}
+</code></pre></div><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#75715e>// TreeAlgo 帮助类代码
+</span><span style=color:#75715e></span><span style=color:#66d9ef>using</span> System;
+<span style=color:#66d9ef>using</span> System.Collections.Generic;
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>TreeAlgo</span> {
+    <span style=color:#75715e>// 层序遍历树，打印出的内容，括号里面是父节点的值
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> LevelOrderTraversal(Node root){
+        <span style=color:#66d9ef>if</span>(root == <span style=color:#66d9ef>null</span>){
+            <span style=color:#66d9ef>return</span>;
+        }
+
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+
+        <span style=color:#66d9ef>while</span>(q.Count &gt; <span style=color:#ae81ff>0</span>){
+            Node currNode = q.Dequeue();
+            <span style=color:#66d9ef>string</span> msg =<span style=color:#66d9ef>string</span>.Format(<span style=color:#e6db74>&#34;{0}({1}) &#34;</span>, currNode.data, currNode.parent != <span style=color:#66d9ef>null</span>?currNode.parent.data.ToString():<span style=color:#e6db74>&#34;null&#34;</span>);
+            Console.WriteLine(msg);
+            <span style=color:#66d9ef>if</span>(currNode.left != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(currNode.left);
+            }
+
+            <span style=color:#66d9ef>if</span>(currNode.right != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(currNode.right);
+            }
+        }
+    }
+
+    <span style=color:#75715e>// 按层遍历，获取第 index 个节点
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Node GetIndexOfNodeWithLevelOrder(Node root, <span style=color:#66d9ef>int</span> index){
+        <span style=color:#66d9ef>if</span>(root == <span style=color:#66d9ef>null</span>){
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>null</span>;
+        }
+
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+        <span style=color:#66d9ef>int</span> iIndex = <span style=color:#ae81ff>0</span>;
+        Node targetNode = <span style=color:#66d9ef>null</span>;
+        <span style=color:#66d9ef>while</span>(q.Count &gt; <span style=color:#ae81ff>0</span>){
+            Node currNode = q.Dequeue();
+            <span style=color:#66d9ef>if</span>(iIndex == index){
+                targetNode = currNode;
+                <span style=color:#66d9ef>break</span>;
+            }
+
+            <span style=color:#66d9ef>if</span>(currNode.left != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(currNode.left);
+            }
+
+            <span style=color:#66d9ef>if</span>(currNode.right != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(currNode.right);
+            }
+
+            iIndex += <span style=color:#ae81ff>1</span>;
+        }
+
+        <span style=color:#66d9ef>return</span> targetNode;
+    }
+
+    <span style=color:#75715e>// 获取按层遍历时，最后一层的最后一个节点
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Node GetLastNodeOfLevelOrder(Node root){
+        <span style=color:#66d9ef>if</span>(root == <span style=color:#66d9ef>null</span>){
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>null</span>;
+        }
+
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+        Node lastNode = <span style=color:#66d9ef>null</span>;
+        <span style=color:#66d9ef>while</span>(q.Count &gt; <span style=color:#ae81ff>0</span>){
+            lastNode = q.Dequeue();
+            <span style=color:#66d9ef>if</span>(lastNode.left != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(lastNode.left);
+            }
+
+            <span style=color:#66d9ef>if</span>(lastNode.right != <span style=color:#66d9ef>null</span>){
+                q.Enqueue(lastNode.right);
+            }
+        }
+
+        <span style=color:#66d9ef>return</span> lastNode;
+    }
+
+    <span style=color:#75715e>// 按层序遍历，只要任何一个节点左子对为空，或右子树为空，则为要找的点（前提是这棵树必须为完全二叉树）
+</span><span style=color:#75715e></span>    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>static</span> Node FindParentOfFartestLeftLocation(Node root){
+        <span style=color:#66d9ef>if</span>(root == <span style=color:#66d9ef>null</span>){
+            <span style=color:#66d9ef>return</span> <span style=color:#66d9ef>null</span>;
+        }
+
+        Queue&lt;Node&gt; q = <span style=color:#66d9ef>new</span> Queue&lt;Node&gt;();
+        q.Enqueue(root);
+        Node targetNode = <span style=color:#66d9ef>null</span>;
+
+        <span style=color:#66d9ef>while</span>(q.Count &gt; <span style=color:#ae81ff>0</span>){
+            targetNode = q.Dequeue();
+            <span style=color:#66d9ef>if</span>(targetNode.left == <span style=color:#66d9ef>null</span> || targetNode.right == <span style=color:#66d9ef>null</span>){
+                <span style=color:#66d9ef>break</span>;
+            }
+
+            q.Enqueue(targetNode.left);
+            q.Enqueue(targetNode.right);
+        }
+
+        <span style=color:#66d9ef>return</span> targetNode;
+    }
+}
+</code></pre></div><p>上面的代码可以自己使用C#运行一下看结果。下面我们继续说删除节点的操作。</p>
+<h2 id=删除节点>删除节点<a hidden class=anchor aria-hidden=true href=#删除节点>#</a></h2>
+<p>删除节点，稍微复杂一点点，但也不是特别复杂，按下面的流程来操作即可</p>
+<ol>
+<li>找到按层序遍历的最后一个节点，然后用最后一个节点的值，替换要删除节点的值。然后将最后一个节点值删除掉。看下面的图</li>
+</ol>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ua19acb8a431a4486a073b6a3c56090dfG.png alt=p001906_Binary-Heap-6>
+</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ucd6c0d0de79d4e90b3e54ce4cbe09aa5g.png alt=p001907_Binary-Heap-7>
+</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U9e2d852ae39b4722920550a12eac9ed0z.png alt=p001908_Binary-Heap-8>
+</p>
+<p>上面的过程，我们已经将最后一个节点 21 替换到了要删除的节点 5 的位置，并且将原来 21 的节点从树中删除掉。但是现在的树不符合二叉堆的规则，所以我们需要浮动现在的 21 节点。</p>
+<ol start=2>
+<li>浮动节点，将树调整为正确的二叉堆。删除节点时，节点的浮动有可能需要往下浮动，也有可能需要往上浮动。我们当前所讲的，都是按最小堆来操作的。如果 21 节点比父节点小，则要往上浮动。如果 21 节点比父节点大，则要往下浮动。</li>
+</ol>
+<p>往上浮动，只要循环判断是否比父节点小即可，就像插入节点那样。而往下浮动，可能面对着两个又节点，所以要选择和两个子节点中值小的那个节点进行数据交换。显然，现在的 21 节点需要往下浮动，浮动到没有子节点，或者没有比当前节点小的节点位置。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ubc207fab97b043c5a59fa266fcb594a1Y.png alt=p001909_Binary-Heap-9>
+</p>
+<p>上图中，21 的子节点 9 和 11，需要和值更小的 9 进行交换</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/Ub11b7535297f47bcb16a62020e9c8b05B.png alt=p001910_Binary-Heap-10>
+</p>
+<p>上图中，21 换到了原来 9 的位置，发现还有子节点，所以继续判断。因为 17 比 21 小，所以需要继续交换。</p>
+<p><img loading=lazy src=https://ae01.alicdn.com/kf/U82de104b50ef48a5bb01cbabd87acf20D.png alt=p001911_Binary-Heap-11>
+</p>
+<p>到此，发现没有更小的节点了，浮动完毕，整棵树符合二叉堆规则。</p>
+<p>以上就是删除节点的流程，下面我们用代码去实现。下面是加入了删除函数的 <strong>BinaryHeap类</strong></p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>using</span> System;
+
+<span style=color:#66d9ef>public</span> <span style=color:#66d9ef>class</span> <span style=color:#a6e22e>BinaryHeap</span> {
+    <span style=color:#66d9ef>public</span> Node root;
+
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> Insert(<span style=color:#66d9ef>int</span> data){
+        Node lastParentNode = TreeAlgo.FindParentOfFartestLeftLocation(root);
+        <span style=color:#66d9ef>if</span>(lastParentNode == <span style=color:#66d9ef>null</span>){
+            Console.WriteLine(<span style=color:#e6db74>&#34;Insert Root Node &#34;</span> + data);
+            root = <span style=color:#66d9ef>new</span> Node(data);
+        }<span style=color:#66d9ef>else</span>{
+            Node newNode = <span style=color:#66d9ef>new</span> Node(data);
+            <span style=color:#66d9ef>if</span>(lastParentNode.left == <span style=color:#66d9ef>null</span>){ <span style=color:#75715e>// 如果左子树为空，则插入到左子树
+</span><span style=color:#75715e></span>                lastParentNode.left = newNode;
+            } <span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span>(lastParentNode.right == <span style=color:#66d9ef>null</span>){ <span style=color:#75715e>// 如果右子树为空，则插入到右子树
+</span><span style=color:#75715e></span>                lastParentNode.right = newNode;
+            }<span style=color:#66d9ef>else</span>{
+                Console.WriteLine(<span style=color:#e6db74>&#34;父节点错误，父节点左右子树都不为空，无法插入!&#34;</span>);
+                <span style=color:#66d9ef>return</span>;
+            }
+
+            newNode.parent = lastParentNode;
+
+            Node opt = newNode;
+            <span style=color:#75715e>// 以最小堆的方式插入节点，即父节点小于等于子节点
+</span><span style=color:#75715e></span>            <span style=color:#75715e>// 如果是以最大堆的方式插入，则父节点要大于等于子节点 只要将 &lt;= 改为 &gt;= 即可
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>while</span>(opt != <span style=color:#66d9ef>null</span> &amp;&amp; opt.parent != <span style=color:#66d9ef>null</span> &amp;&amp; opt.data &lt;= opt.parent.data){
+                <span style=color:#66d9ef>int</span> tmp = opt.data;
+                opt.data = opt.parent.data;
+                opt.parent.data = tmp;
+                opt = opt.parent;
+            }
+        }
+    }
+
+    <span style=color:#66d9ef>public</span> <span style=color:#66d9ef>void</span> Delete(<span style=color:#66d9ef>int</span> index){
+        <span style=color:#75715e>// 1. 找到要删除的节点
+</span><span style=color:#75715e></span>        Node optNode = TreeAlgo.GetIndexOfNodeWithLevelOrder(root, index);
+
+        <span style=color:#75715e>// 2. 按层序遍历，找到最后一层最后一个节点
+</span><span style=color:#75715e></span>        Node lastNode = TreeAlgo.GetLastNodeOfLevelOrder(root);
+
+        <span style=color:#75715e>// 3. 使用最后一个节点的数据替换掉要删除节点的数据
+</span><span style=color:#75715e></span>        optNode.data = lastNode.data;
+
+        <span style=color:#75715e>// 4. 把最后一层最后一个节点删除掉
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span>(lastNode.parent.left == lastNode){
+            lastNode.parent.left = <span style=color:#66d9ef>null</span>;
+        }<span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span>(lastNode.parent.right == lastNode){
+            lastNode.parent.right = <span style=color:#66d9ef>null</span>;
+        }
+
+        <span style=color:#75715e>// 5. 要删除的节点数据已经被替换，现在需要根据数据浮动到正确的位置
+</span><span style=color:#75715e></span>        <span style=color:#75715e>// 首先要判断是往下浮动还是往上浮动，因为我们是按最小堆操作的，
+</span><span style=color:#75715e></span>        <span style=color:#75715e>// 所以要先判断当前节点是否比父节点 &#34;小&#34;，如果是，则要往上浮动，反之往下浮动
+</span><span style=color:#75715e></span>        <span style=color:#66d9ef>if</span>(optNode.parent != <span style=color:#66d9ef>null</span> &amp;&amp; optNode.data &lt; optNode.parent.data){
+            <span style=color:#66d9ef>while</span>(optNode.parent != <span style=color:#66d9ef>null</span> &amp;&amp; optNode.data &lt; optNode.parent.data){
+                <span style=color:#66d9ef>int</span> tmp = optNode.data;
+                optNode.data = optNode.parent.data;
+                optNode.parent.data = tmp;
+
+                optNode = optNode.parent;
+            }
+        }
+        <span style=color:#66d9ef>else</span>{
+            <span style=color:#75715e>// 尝试往下浮动
+</span><span style=color:#75715e></span>            <span style=color:#66d9ef>while</span>(optNode.left != <span style=color:#66d9ef>null</span> || optNode.right != <span style=color:#66d9ef>null</span>){
+                Node compareNode = <span style=color:#66d9ef>null</span>;
+                <span style=color:#66d9ef>if</span>(optNode.left != <span style=color:#66d9ef>null</span> &amp;&amp; optNode.right != <span style=color:#66d9ef>null</span>){
+                    <span style=color:#66d9ef>if</span>(optNode.left.data &lt; optNode.right.data){
+                        compareNode = optNode.left;
+                    }<span style=color:#66d9ef>else</span>{
+                        compareNode = optNode.right;
+                    }
+                }
+                <span style=color:#66d9ef>else</span>{
+                    <span style=color:#66d9ef>if</span>(optNode.left != <span style=color:#66d9ef>null</span>){
+                        compareNode = optNode.left;
+                    }<span style=color:#66d9ef>else</span> <span style=color:#66d9ef>if</span>(optNode.right != <span style=color:#66d9ef>null</span>){
+                        compareNode = optNode.right;
+                    }
+                }
+
+                <span style=color:#75715e>// 往下浮动，交换数据
+</span><span style=color:#75715e></span>                <span style=color:#66d9ef>if</span>(compareNode != <span style=color:#66d9ef>null</span> &amp;&amp; optNode.data &gt; compareNode.data){
+                    <span style=color:#66d9ef>int</span> temp = optNode.data;
+                    optNode.data = compareNode.data;
+                    compareNode.data = temp;
+                }
+
+                optNode = compareNode;
+            }
+        }
+
+    }
+}
+</code></pre></div><p>上面的代码中，删除函数的参数传的是第几个节点。当然，你也可以改成删除某个特定值的节点，删除逻辑都是一样的。</p>
+<p>下面是运行的代码</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-csharp data-lang=csharp><span style=color:#66d9ef>using</span> System;
+<span style=color:#66d9ef>using</span> System.Collections.Generic;
+
+<span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Program</span>
+{
+    <span style=color:#66d9ef>static</span> <span style=color:#66d9ef>void</span> Main(<span style=color:#66d9ef>string</span>[] args)
+    {
+        BinaryHeap bh = <span style=color:#66d9ef>new</span> BinaryHeap();
+        bh.Insert(<span style=color:#ae81ff>1</span>);
+        bh.Insert(<span style=color:#ae81ff>5</span>);
+        bh.Insert(<span style=color:#ae81ff>6</span>);
+        bh.Insert(<span style=color:#ae81ff>9</span>);
+        bh.Insert(<span style=color:#ae81ff>11</span>);
+        bh.Insert(<span style=color:#ae81ff>8</span>);
+        bh.Insert(<span style=color:#ae81ff>15</span>);
+        bh.Insert(<span style=color:#ae81ff>17</span>);
+        bh.Insert(<span style=color:#ae81ff>21</span>);
+
+        TreeAlgo.LevelOrderTraversal(bh.root);
+
+        bh.Delete(<span style=color:#ae81ff>1</span>);
+
+        Console.WriteLine(<span style=color:#e6db74>&#34;------ Delete 1&#34;</span>);
+        TreeAlgo.LevelOrderTraversal(bh.root);
+    }
+}
+</code></pre></div><p>以上就是二叉堆插入和删除的逻辑。</p>
+</div>
+<footer class=post-footer>
+<ul class=post-tags>
+<li><a href=https://blog.moeif.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/>数据结构与算法</a></li>
+</ul>
+<nav class=paginav>
+<a class=prev href=https://blog.moeif.com/posts/unity-basis-01-clock/>
+<span class=title>« Prev Page</span>
+<br>
+<span>制作一个会动的时钟</span>
+</a>
+<a class=next href=https://blog.moeif.com/posts/algo-knuth-shuffle/>
+<span class=title>Next Page »</span>
+<br>
+<span>一个公平的洗牌算法 | Knuth-Shuffle</span>
+</a>
+</nav>
+<div class=share-buttons>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on twitter" href="https://twitter.com/intent/tweet/?text=%e4%ba%8c%e5%8f%89%e5%a0%86&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f&hashtags=%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e4%b8%8e%e7%ae%97%e6%b3%95"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM195.519 424.544c135.939.0 210.268-112.643 210.268-210.268.0-3.218.0-6.437-.153-9.502 14.406-10.421 26.973-23.448 36.935-38.314-13.18 5.824-27.433 9.809-42.452 11.648 15.326-9.196 26.973-23.602 32.49-40.92-14.252 8.429-30.038 14.56-46.896 17.931-13.487-14.406-32.644-23.295-53.946-23.295-40.767.0-73.87 33.104-73.87 73.87.0 5.824.613 11.494 1.992 16.858-61.456-3.065-115.862-32.49-152.337-77.241-6.284 10.881-9.962 23.601-9.962 37.088.0 25.594 13.027 48.276 32.95 61.456-12.107-.307-23.448-3.678-33.41-9.196v.92c0 35.862 25.441 65.594 59.311 72.49-6.13 1.686-12.72 2.606-19.464 2.606-4.751.0-9.348-.46-13.946-1.38 9.349 29.426 36.628 50.728 68.965 51.341-25.287 19.771-57.164 31.571-91.8 31.571-5.977.0-11.801-.306-17.625-1.073 32.337 21.15 71.264 33.41 112.95 33.41z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f&title=%e4%ba%8c%e5%8f%89%e5%a0%86&summary=%e4%ba%8c%e5%8f%89%e5%a0%86&source=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM160.461 423.278V197.561h-75.04v225.717h75.04zm270.539.0V293.839c0-69.333-37.018-101.586-86.381-101.586-39.804.0-57.634 21.891-67.617 37.266v-31.958h-75.021c.995 21.181.0 225.717.0 225.717h75.02V297.222c0-6.748.486-13.492 2.474-18.315 5.414-13.475 17.767-27.434 38.494-27.434 27.135.0 38.007 20.707 38.007 51.037v120.768H431zM123.448 88.722C97.774 88.722 81 105.601 81 127.724c0 21.658 16.264 39.002 41.455 39.002h.484c26.165.0 42.452-17.344 42.452-39.002-.485-22.092-16.241-38.954-41.943-39.002z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on reddit" href="https://reddit.com/submit?url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f&title=%e4%ba%8c%e5%8f%89%e5%a0%86"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zM446 265.638c0-22.964-18.616-41.58-41.58-41.58-11.211.0-21.361 4.457-28.841 11.666-28.424-20.508-67.586-33.757-111.204-35.278l18.941-89.121 61.884 13.157c.756 15.734 13.642 28.29 29.56 28.29 16.407.0 29.706-13.299 29.706-29.701.0-16.403-13.299-29.702-29.706-29.702-11.666.0-21.657 6.792-26.515 16.578l-69.105-14.69c-1.922-.418-3.939-.042-5.585 1.036-1.658 1.073-2.811 2.761-3.224 4.686l-21.152 99.438c-44.258 1.228-84.046 14.494-112.837 35.232-7.468-7.164-17.589-11.591-28.757-11.591-22.965.0-41.585 18.616-41.585 41.58.0 16.896 10.095 31.41 24.568 37.918-.639 4.135-.99 8.328-.99 12.576.0 63.977 74.469 115.836 166.33 115.836s166.334-51.859 166.334-115.836c0-4.218-.347-8.387-.977-12.493 14.564-6.47 24.735-21.034 24.735-38.001zM326.526 373.831c-20.27 20.241-59.115 21.816-70.534 21.816-11.428.0-50.277-1.575-70.522-21.82-3.007-3.008-3.007-7.882.0-10.889 3.003-2.999 7.882-3.003 10.885.0 12.777 12.781 40.11 17.317 59.637 17.317 19.522.0 46.86-4.536 59.657-17.321 3.016-2.999 7.886-2.995 10.885.008 3.008 3.011 3.003 7.882-.008 10.889zm-5.23-48.781c-16.373.0-29.701-13.324-29.701-29.698.0-16.381 13.328-29.714 29.701-29.714 16.378.0 29.706 13.333 29.706 29.714.0 16.374-13.328 29.698-29.706 29.698zM160.91 295.348c0-16.381 13.328-29.71 29.714-29.71 16.369.0 29.689 13.329 29.689 29.71.0 16.373-13.32 29.693-29.689 29.693-16.386.0-29.714-13.32-29.714-29.693z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on facebook" href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H342.978V319.085h66.6l12.672-82.621h-79.272v-53.617c0-22.603 11.073-44.636 46.58-44.636H425.6v-70.34s-32.71-5.582-63.982-5.582c-65.288.0-107.96 39.569-107.96 111.204v62.971h-72.573v82.621h72.573V512h-191.104c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on whatsapp" href="https://api.whatsapp.com/send?text=%e4%ba%8c%e5%8f%89%e5%a0%86%20-%20https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f"><svg viewBox="0 0 512 512"><path d="M449.446.0C483.971.0 512 28.03 512 62.554v386.892C512 483.97 483.97 512 449.446 512H62.554c-34.524.0-62.554-28.03-62.554-62.554V62.554c0-34.524 28.029-62.554 62.554-62.554h386.892zm-58.673 127.703c-33.842-33.881-78.847-52.548-126.798-52.568-98.799.0-179.21 80.405-179.249 179.234-.013 31.593 8.241 62.428 23.927 89.612l-25.429 92.884 95.021-24.925c26.181 14.28 55.659 21.807 85.658 21.816h.074c98.789.0 179.206-80.413 179.247-179.243.018-47.895-18.61-92.93-52.451-126.81zM263.976 403.485h-.06c-26.734-.01-52.954-7.193-75.828-20.767l-5.441-3.229-56.386 14.792 15.05-54.977-3.542-5.637c-14.913-23.72-22.791-51.136-22.779-79.287.033-82.142 66.867-148.971 149.046-148.971 39.793.014 77.199 15.531 105.329 43.692 28.128 28.16 43.609 65.592 43.594 105.4-.034 82.149-66.866 148.983-148.983 148.984zm81.721-111.581c-4.479-2.242-26.499-13.075-30.604-14.571-4.105-1.495-7.091-2.241-10.077 2.241-2.986 4.483-11.569 14.572-14.182 17.562-2.612 2.988-5.225 3.364-9.703 1.12-4.479-2.241-18.91-6.97-36.017-22.23C231.8 264.15 222.81 249.484 220.198 245s-.279-6.908 1.963-9.14c2.016-2.007 4.48-5.232 6.719-7.847 2.24-2.615 2.986-4.484 4.479-7.472 1.493-2.99.747-5.604-.374-7.846-1.119-2.241-10.077-24.288-13.809-33.256-3.635-8.733-7.327-7.55-10.077-7.688-2.609-.13-5.598-.158-8.583-.158-2.986.0-7.839 1.121-11.944 5.604-4.105 4.484-15.675 15.32-15.675 37.364.0 22.046 16.048 43.342 18.287 46.332 2.24 2.99 31.582 48.227 76.511 67.627 10.685 4.615 19.028 7.371 25.533 9.434 10.728 3.41 20.492 2.929 28.209 1.775 8.605-1.285 26.499-10.833 30.231-21.295 3.732-10.464 3.732-19.431 2.612-21.298-1.119-1.869-4.105-2.99-8.583-5.232z"/></svg>
+</a>
+<a target=_blank rel="noopener noreferrer" aria-label="share 二叉堆 on telegram" href="https://telegram.me/share/url?text=%e4%ba%8c%e5%8f%89%e5%a0%86&url=https%3a%2f%2fblog.moeif.com%2fposts%2fdata-structure-07-binary-heap%2f"><svg viewBox="2 2 28 28"><path d="M26.49 29.86H5.5a3.37 3.37.0 01-2.47-1 3.35 3.35.0 01-1-2.47V5.48A3.36 3.36.0 013 3 3.37 3.37.0 015.5 2h21A3.38 3.38.0 0129 3a3.36 3.36.0 011 2.46V26.37a3.35 3.35.0 01-1 2.47 3.38 3.38.0 01-2.51 1.02zm-5.38-6.71a.79.79.0 00.85-.66L24.73 9.24a.55.55.0 00-.18-.46.62.62.0 00-.41-.17q-.08.0-16.53 6.11a.59.59.0 00-.41.59.57.57.0 00.43.52l4 1.24 1.61 4.83a.62.62.0 00.63.43.56.56.0 00.4-.17L16.54 20l4.09 3A.9.9.0 0021.11 23.15zM13.8 20.71l-1.21-4q8.72-5.55 8.78-5.55c.15.0.23.0.23.16a.18.18.0 010 .06s-2.51 2.3-7.52 6.8z"/></svg>
+</a>
+</div>
+</footer>
+</article>
+</main>
+<link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js onload=renderMathInElement(document.body)></script>
+<script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1}]})})</script>
+<script>var _hmt=_hmt||[];(function(){var a=document.createElement("script"),b;a.src="https://hm.baidu.com/hm.js?da9253be08586e454189323668956d43",b=document.getElementsByTagName("script")[0],b.parentNode.insertBefore(a,b)})()</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X4M6RGQGH"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date),gtag('config','G-7X4M6RGQGH')</script></body>
+</html>

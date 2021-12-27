@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>游戏开发 on 萌一小栈</title>
+    <link>https://blog.moeif.com/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/</link>
+    <description>Recent content in 游戏开发 on 萌一小栈</description>
+    <image>
+      <url>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://blog.moeif.com/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 01 Dec 2021 21:12:47 +0800</lastBuildDate><atom:link href="https://blog.moeif.com/tags/%E6%B8%B8%E6%88%8F%E5%BC%80%E5%8F%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>编译 Apple Silicon 版本 Aseprite</title>
+      <link>https://blog.moeif.com/posts/compile-aseprite-for-apple-m1/</link>
+      <pubDate>Wed, 01 Dec 2021 21:12:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/compile-aseprite-for-apple-m1/</guid>
+      <description>&lt;p&gt;编译苹果 M1 芯片版本的 Aseprite，步骤如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《音乐与僵尸：Zombie Rhythm》开发日志</title>
+      <link>https://blog.moeif.com/posts/zombie-rhythm-devlog/</link>
+      <pubDate>Tue, 12 Oct 2021 12:43:47 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/zombie-rhythm-devlog/</guid>
+      <description>&lt;p&gt;《音乐与僵尸：Zombie Rhythm》经过了一个多月的开发，终于上线了。这是一个融合了丧尸和音乐节奏的休闲游戏。这篇文章就聊一下这个游戏的整个开发过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>《我在美国学游戏设计》笔记</title>
+      <link>https://blog.moeif.com/posts/game-design-note/</link>
+      <pubDate>Mon, 27 Sep 2021 15:35:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/game-design-note/</guid>
+      <description>&lt;p&gt;从情感体验出发，探索出最合适的机制来表达情感。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>如何开发一个问答类游戏</title>
+      <link>https://blog.moeif.com/posts/how-to-make-a-quiz-game/</link>
+      <pubDate>Sun, 29 Aug 2021 12:19:40 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/how-to-make-a-quiz-game/</guid>
+      <description>问答类游戏，在开发过程中还算是比较简单的一个分类，核心的内容就是问题与答案。抽象来讲，问题可能是文字，也可以是图片，也可以是声音等等，而对应玩家可以选择的答案，也可以不同的表现形式。例如看电影海报猜电影名字，听音乐片段猜歌曲等等
+【诗仙与诗魔】，是一个诗词挑战类游戏，本质上也算是一个答类游戏，问题变成了某一首诗中的某一句，而答案就是从给定的类似诗句中选择正确的那一句。接下来我将从技术有角度来解析一下这个游戏的整个开发过程。
+这个游戏现在可以直接从商店下载体验，在 AppStore 或 TapTap 搜索 诗仙与诗魔 即可找到。
+这个游戏现在可以直接从商店下载体验，在 AppStore 或 TapTap 搜索 诗仙与诗魔 即可找到。
+iOS 下载连接: https://apps.apple.com/app/id1583234447
+Android 下载连接: https://www.taptap.com/app/222178
+先解析一下这个游戏，诗仙与诗魔有三种玩法，独自练习，就是关卡模式。无尽冲榜，就是不断地累积得分，然后进行排行榜。匹配挑战，是可以与其他玩家进行联网匹配的玩法，这一个涉及到服务器部分的开发。
+客户端的部分   客户端在启动后，会先去一个固定的域名，拉取一些必要的配置信息，例如服务器的状态，排行榜和匹配服务器的连接地址，服务器的状态等等。这个可以自己根据需求配置各种各样的信息，只有这些必要的信息拉到后，游戏才会继续下一步。
+  接下来会从本地尝试读取用户数据，如果本地没有，则会从服务器尝试请求，如果服务器也没有，则认为这是一个新玩家。弹出玩家昵称输入界面，玩家确定后，会将用户的ID和昵称等数据发到服务器，并且在本地存档，然后就会进入游戏。如果本地没有用户数据，但是服务器有，就会使用服务器保存的用户数据，进行数据恢复，然后在本地存档。
+  接下来就进入了主界面，可以选择三种不同的玩法。先说一下诗词数据。诗词数据是使用 flatbuffers 存储在游戏包里的。每一个记录，保存了一首诗的ID，名字，作者，内容等。游戏启动后，会读取所有的诗词数据，进行结构化存储。每一首诗，会创建一个 Poem 对象，里面保存了这首诗的内容，以及额外的数据，例如这首诗有几句，每一句的字数，这些数据会用于随机生成问题，以及根据字数，从其他诗词中选择类似的诗句，用作答案。
+关卡模式，就是罗列出诗词配置表中的每一首诗，作为一个关卡，当玩家作答完毕后，会记录所用时间。在关卡界面，所以看到每一首作答过的诗词所用的时间。
+无尽冲榜，首先进入时会消耗体力，对于每一个新玩家，会给予默认300体力，还有2个复活道具，5个刷新道具。在冲榜模式中，每一首诗会有10秒的倒计时，在过程中，玩家可以选择使用一个刷新道具，换一首诗作答，以此不终断冲榜过程。冲榜结束后，会给出得分，客户端会得得分提交到服务器。对于头衔，是由得分计算出来的，这个直接在客户端计算。游戏没有作作弊方面的处理，对于这个游戏来说，没什么必要。如果失败，则必须消耗一个复活道具，才能继续从失败的地方继续冲榜。如果道具或体力不足，则可以通完看广告获得。
+匹配挑战，匹配挑战同样会消耗体力，进入后，首先会向服务器发送匹配消息，服务器会在根据匹配的等待时间，根据玩家的 elo 分值，进行实力相当的匹配，如果最后没有真实玩家，则会匹配一个机器人，与玩家一起玩。每一局匹配挑战由10首诗构成，由哪10首诗，以及每一首诗的可选择答案，则由服务器生成，以此保证两个玩家使用的挑战数据是一致的，保证公平性。
+匹配挑战的分得计算，每一首诗为1000分，如果答错，则0分。如果答对，先得500分，剩下的500分，根据作答速度，剩余时间的百分比，进行得分。得分由服务器计算，一定程度上受网络影响。
+  服务器的部分 服务器可以分为三部分，服务器及用户基础数据，排行榜，匹配，这三部分是使用不同的方式实现的。
+  服务器及用户基础数据 这一部分使用 aws 的 DynamoDB、Lambda、 API gateway 实现的。通过API gateway 调用 lambda 读写 DynamoDB的数据，可以根据网上一些视频教程来操作来下。逻辑很简单，主要是配置各种权限的时候稍微麻烦一点，也还好。
+  排行榜 排行榜放在了 aws 的免费 ec2上，因为游戏的量不大，所以免费的也够用，数据直接放在了 Redis 中，API 逻辑是使用 Rust 来写的。</description>
+    </item>
+    
+    <item>
+      <title>Unity 2D 游戏背景适配</title>
+      <link>https://blog.moeif.com/posts/unity-2d-bg-adaptive/</link>
+      <pubDate>Sun, 22 Aug 2021 20:57:04 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-2d-bg-adaptive/</guid>
+      <description>&lt;p&gt;在开发2D游戏的时候，不同的设备分辨率下，经常需要将背景以高或以宽来适配。如果以高适配，即背景图的高度填充整个屏幕，然后去缩放宽度。最终效果图如下&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity Sprites Full-Rect 和 Tight 设置</title>
+      <link>https://blog.moeif.com/posts/unity-sprite-full-rect-tight/</link>
+      <pubDate>Sat, 21 Aug 2021 15:27:38 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-sprite-full-rect-tight/</guid>
+      <description>&lt;p&gt;在开发2D游戏的时候，对于图片的 Mesh Type 设置我们应该选择 &lt;strong&gt;Full Rect&lt;/strong&gt; 还是 &lt;strong&gt;Tight&lt;/strong&gt; 呢？&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入 Topon 报错解决</title>
+      <link>https://blog.moeif.com/posts/solve-topon-ad-build-error/</link>
+      <pubDate>Sun, 25 Apr 2021 20:16:59 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/solve-topon-ad-build-error/</guid>
+      <description>&lt;p&gt;最近在接入Topon广告聚合SDK是，导出XCode工程后，编译报了一堆错误，搞了好久，这里记录一下解决过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity XCode 自动设置签名</title>
+      <link>https://blog.moeif.com/posts/unity-xcode-auto-signing/</link>
+      <pubDate>Fri, 12 Mar 2021 19:01:01 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-xcode-auto-signing/</guid>
+      <description>&lt;p&gt;Unity ios导出XCode工程后，通常需要手动设置签名，就像下图中的样子。只要简单的两部设置，就可以自动选择我们想要的签名。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入 Sigmob SDK</title>
+      <link>https://blog.moeif.com/posts/sigmob-sdk-for-unity/</link>
+      <pubDate>Wed, 06 Jan 2021 22:03:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/sigmob-sdk-for-unity/</guid>
+      <description>&lt;p&gt;在 Unity 项目中接入Sigmob 时，遇到很多问题，他们的文档写的也不是很清楚，特别是对于 Android 开发没有很深入了解的情况，读起来很困难，这篇博客记录了详细的 Sigmob 广告 sdk 接入过程。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>理解 Boids</title>
+      <link>https://blog.moeif.com/posts/understanding-boids/</link>
+      <pubDate>Mon, 30 Nov 2020 18:01:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/understanding-boids/</guid>
+      <description>Boids 可以理解为类似鸟群的东西，就是多个个体之间的相互作用。在游戏开发中经常会用到。例如 RTS 游戏，控制一个坦克战队，如何保持行进方向的一致性，以及坦克之间互相有一定有间隔，又不会间隔太大，这里就可以使用 Boids 相关的理论来实现。
+在众多这方面的文章中，基本上会涉及到三个方面，跟随、分离、聚合。跟随，就是说整个群体有一个行进的大方向。分离，则是个体与个体之间有一定的间隔，不至于发生碰撞。而聚合，就是个体不能离群体太远，不能脱离群体。
+ 对于上面提到的三个方面，简单来说，就是一个力的叠加。
+ 跟随 一个鸟群往哪个方向飞，可以假设有一只领头的鸟，其他的鸟跟随这只鸟的方向。知道领头的鸟的方向，知道自己当前的飞行方向，就可以计算出应该向中个方向施加一个力，可以使自己的方向，偏向于领头的鸟的方向。
+分离 分离，是要保证个体之间不要离的太近，不要发生碰撞。先考虑两个物体的情况，假设要使物体 A 远离物体 B，只要从 B，向 A 施加一个推力，就可以将 A 推离 B。那如果 A 要同时和 B 与 C 保持距离呢？一样的，只需要从 B 和 C 分别向 A 施加一个推力，这两个的合力，就是 A 远离 B 和 C 的方向。同理，不管 A 要与多少个物体保持距离，只需要从每个物体出发，向 A 的方向施加一个力，就可以将 A 推开。
+上面只考虑了 A 远离其他物体的情况，如果每一个物体都要与其他物体保持距离呢？一样的，只需要从每一个其他物体，向自己的方向施加一个力，这个合力，就是自己运动的方向。
+聚合 为了保证个体不脱离群体，还需要一个聚合力。就是将个体自身，推向群体中心的力。
+ 分离的力和聚合的力一定程度上抵消，从而达到个体之间即保持了距离，又保证了每一个体不脱离群体。
+ 下面的代码是我的一个小游戏项目中的，其中只用到了分离和聚合。只要懂了原理，就可以根据具体的情况灵活变通，达到自己想要的效果即可。
+using UnityEngine; using System.Collections.Generic; using System.Collections; public class GamePlayFlock : MonoBehaviour { public static List&amp;lt;GamePlayFlock&amp;gt; flockList = new List&amp;lt;GamePlayFlock&amp;gt;(); public static void StartAllFlock() { for(int i = 0; i &amp;lt; flockList.</description>
+    </item>
+    
+    <item>
+      <title>Apk 上架前的签名操作</title>
+      <link>https://blog.moeif.com/posts/apk-signature/</link>
+      <pubDate>Thu, 05 Nov 2020 14:09:29 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/apk-signature/</guid>
+      <description>&lt;p&gt;在 APK 包上传到一些应用市场时，通常要求开发者对 APK 进行签名，下面记录一下签名步骤。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity 接入友盟SDK</title>
+      <link>https://blog.moeif.com/posts/unity-umeng-sdk/</link>
+      <pubDate>Sun, 16 Aug 2020 10:56:24 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-umeng-sdk/</guid>
+      <description>友盟游戏统计 SDK 可以很方便的统计一些游戏数据。使用他们的自定义事件，来统计自己项目关心的数据。现在接入 SDK 已经比以前方便了很多，不需要再导出 Android 工程去修改 Java。下面将一步一步详细说明。
+要使用友盟 SDK，一共有以下几步
+ 在友盟后面新建应用 在友盟后面建立自定义事件 下载并导入 SDK 调用 SDK  1. 在友盟后面新建应用 首先注册账号，然后进入友盟工作台。↓ https://www.umeng.com/
+然后点击上面的产品，移动统计 ↓
+点击添加应用 ↓
+然后填写应用信息，下面是我随便填的，根据自己的应用信息填写即可（随便填也没关系）↓
+点击注册后，将跳到下面的页面，这里我们只要关注这个 AppKey 即可，其他的不用管。这个 AppKey 会在 Unity 中用到 ↓
+2. 自定义事件 建立好了应用后，就要想好我们想要统计哪些数据。例如，有多少用户点了开始游戏，有多少用户点了 观看广告，有多少用户观看广告结束，等等，这些都可以统计。
+所谓的统计，也就是使用自定义的事件名，在不同的地方调用一下友盟的代码。所以接下来我们就建立自己想要统计的数据事件。
+在应用页面，点击我们刚才新建的应用 ↓
+然后依次点击 设置 -&amp;gt; 事件 -&amp;gt; 手工添加 ↓
+我们下面先定义一个统计游戏开始的事件，事件 ID 是这个事件的唯一表示，会在 SDK 调用时用到，显示名称是让我们自己知道这个事件是干嘛的。然后点击确定 ↓
+添加完后的事件，会显示在事件列表中。接下来我们再添加一个统计事件，例如游戏结束。↓
+现在我们已经有了两个事件，当然，还可以添加更多，统计更多数据。这里为了演示，就只添加两个。↓
+3. 下载并导入 SDK 建立好了事件，就可以在项目中使用了，首先要将友盟的 SDK 导入工程中。去友盟的 SDK 页面下载 SDK https://developer.umeng.com/sdk/u3d，这里我们下载 Unity3D 的。
+下载下来的是一个 ZIP 压缩包，解压后，依次找到里面的 Unity3D -&amp;gt; analytics -&amp;gt; analytics_unit3d_x.</description>
+    </item>
+    
+    <item>
+      <title>游戏项目资源管理</title>
+      <link>https://blog.moeif.com/posts/u3d-game-resources-managemant/</link>
+      <pubDate>Sat, 25 Apr 2020 18:57:08 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/u3d-game-resources-managemant/</guid>
+      <description>在游戏开发的过程中，整个项目的资源管理是很重要的一部分。涉及到与美术、策划等同事的协作，以及资源的打包，和后续运行时资源的更新，加载，卸载，内存管理等方面。规划好资源的的各个目录存放，以及资源的分类，会为后续的开发工作节省不少时间。这一篇博客主要来聊一下到资源的存放问题，而 AssetBundle 打包，以及运行时的更新和资源管理，将在后面的博客中详细说明。
+资源类型 一个游戏项目，涉及到的资源主要有 配置数据、图片、模型、材质、Shader、字体、音频、视频、动画Clip、Prefab、Animator Controller、Timeline、场景文件、Lua脚本 等。
+关于协作 首先说一下协作问题。在游戏开发的过程中，美术的同学需要将资源直接提交到建立好的项目中的指定目录中，一般来说，提交到哪个目录，是由程序的同学来决定，具体哪个目录，要根据后续的资源打包以及管理等方面决定。美术的同学提交的资源一般就是模型、动画、贴图等。
+而配置数据，则通常由策划同学来提交。配置数据的方式有很多种，常用的例如 Excel，有的项目是直接将原始的 Excel 文件放到工程中，而有的是将 Excel 数据转成其他格式再放到项目中。改表由策划同学来着手操作，在配表的过程中，除了数值，可能也会涉及到一些资源路径，例如有一些图片，是要动态加载的，那么路径也就配在某个模块的相关配置表中。而这些路径配在表中的资源，通常也由策划同学根据不同的系统来操作资源的位置。当然，首先会有一个父目录，在这个父目录下，策划的同学可以自由操作资源的位置，然后将资源的路径配置在数据表中。
+还有一个很重要的部分是UI，对于UI来说，如果不打图集，放入项目目录中的都是一个一个的散图，则可以由UI部分的同学直接将UI的图提交到指定的UI父目录下，父目录下的子目录，根据不同的模块来划分，共用的同可以放到一个公用的目录中。对于图的移动操作，都要在 Unity 中进行操作，防止 Prefab 上的图片引用丢失。如果UI使用 TexturePacker 这类工具打成一张图集，则可以由程序同学来做，在开发某个模块时，顺便将对应UI的图打成一张图集，原始的UI图就不必放到工程中，放在外部的一个美术的资源目录即可。
+资源存放 接下来，就说一下各个资源怎么去划分。在运行时，需要手动加载的资源，一般有下面这些，Prefab、图片、音频、视频、动画Clip、Animator Controller、配置数据 等，Prefab 这个不用多说。而图片，主要是UI上的一些动态的图，例如头像，或者其他一些需要根据数值，来显示不同的图。动画Clip 可以做成动态加载，也可以直接放到动画状态机中，根据实际情况决定。Animator Controller 也要根据情况决定。配置数据一般需要动态加载。而像 Prefab中用到的材质，贴图等，一般不需要我们手动加载，我们只需要加载 Prefab 即可。
+这些需要动态加载的资源，我们可以放在一个父目录下，例如这个目录就叫 Prefabs，然后在 Prefabs 下面建立各个子目录，或者多级子目录来存放不同的资源。如下图
+上面的图中只是大概划分了一下，每一个目录下，都可以再次建立子目录，子目录下还可以再细分子目录，具体还需要根据实际项目来划分。
+上面图中的目录，是用于存放那些我们需要动态加载的资源，还有一些不需要我们动态加载的资源，例如美术同学上传的原始FBX，以及模型使用到的材质，贴图等等。对于这些资源，我们可以再建立一个目录，例如叫做 RawResources。在这个目录下，我们也需要清晰地去划分子目录，要清楚地知道哪一个目录放了什么资源，哪一些 Prefab 会引用这些资源，后面写 Bundle 打包模块时，可能会用得到。
+关于 AssetBundle 问题 在打包 AssetBundle 时，Unity是可以自己处理依赖关系，例如我们可以不用管 RawResources 中的东西，只把 Prefabs 目录下的资源打包，而Prefab引用的原始资源，例如贴图，材质等，会自动打进Bundle，不需要我们手动管理。但是这样有一个问题是，对于共用的资源，会造成重复包含。看下面的图
+上面的图中，两个 Prefab 引用了同一个材质，而材质，引用了一张贴图。如果我们将 PrefabA 和 PrefabB 分别打成一个Bundle，而让 Unity 自己处理依赖打包关系，那么就会出现 PrefabA 所在的 Bundle 中包含了材质和贴图，而 PrefabB 所在的 Bundle 中，也包含了材质和贴图。这样就造成了 Bundle 文件占用空间变大，在运行时，占用内存变大。</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 半兰伯特、高光反射、BlinnPhone</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-05/</link>
+      <pubDate>Thu, 19 Mar 2020 21:50:16 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-05/</guid>
+      <description>写 Shader，到底是在做什么？Shader 就像一个拥有魔法的黑箱，我们最终从它那里得到的，是像素的颜色。而得到的是什么样的像素颜色，则取决于我们丢进黑箱里的是什么东西，以及使用的魔法咒语是什么。丢进同样的东西，使用不同的魔法咒语，得到的像素颜色也是不一样的。输入顶点的坐标，光线方向，以及自定义的颜色，使用不同的计算方式，得到的像素颜色是不一样的。使用同样的计算方式，丢进一个纯色颜色值，和丢进一张纹理，得到的像素，也是不一样的。
+如果把整个 Shader 比作一个函数，那么顶点位置，自定义的颜色值，纹理，灯光等这些就相当于函数的输入参数，而 Shader 中写的各种计算，用的各种算法，都是对输入的那些参数进行操作，而最终生成的，就是颜色值，也就是相当于函数的返回值。把 Shader 想的简单一点，就是输入需要的东西，进行计算，得到像素值。
+这篇博客，还是关于光照模型的，接下来我们首先总结一下常用的光照模型。
+Lambert (兰伯特) 光照模型 在之前的博客中说了漫反射的实现，实现漫反射用到的模型，叫做 Lambert (兰伯特) 光照模型。Lambert 实现出来的效果，一旦入射光向量与材质表面的角度大于90度，那么得到的漫反射颜色就会全部变为黑色，没有任何明暗变化效果。
+Lambert 光照模型公式: 最终颜色 = 直射光颜色 * 漫反射颜色 * max(0, dot(光源方向, 法线方向))
+其中，直射光颜色，漫反射颜色，都是我们自定义的变量。
+Half Lambert (半兰伯特) 光照模型 Half Lambert 是在 Lambert 模型的基础上，做了微调，也就是将光源方向与法线方向的点乘结果，从原来[-1, 1]，映射为 [0, 1]，这样原来背光面，也会有明暗效果。
+Half Lambert 光照模型公式: 最终颜色 = 直射光颜色 * 漫反射颜色 * (dot(光源方向, 法线方向) * 0.5 + 0.5)
+Specular (高光反射) 这里的高光反射使用了 Phone 模型，的原理很简单，想象一束光射向某个点，然后反射出去，我们的眼睛同样看向那个点，当我们的眼睛看向那个点的方向，与光线反射的方向，越接近时，进入我们眼睛的反射光则越多，也就是更亮。看下面的图
+很明显，当视野方向与光的反射方向夹角越小时，也就是说进入眼睛的光越多，所以那个点也就会越亮，这就是高光反射的原理。所以高光反射，实现起来也就很简单了，只要拿到视野方向，拿到直射光的反射方向，就可以求出最终的颜色值。
+Specular 光照模型公式: 最终颜色 = 直射光颜色 * 反射光颜色 * pow(max(0, dot(反射光方向, 视野方向)), 光泽度(gloss)) + 漫反射颜色 + 环境光颜色</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 光照模型和漫反射</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-04/</link>
+      <pubDate>Sun, 15 Mar 2020 11:54:30 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-04/</guid>
+      <description>在之前的文章中写的Shader，呈现出来的物体样子是一个平面2D的状态，即使物体是3D的，那是因为，我们还没有将灯光加入到Shader的运算中。现在，我们将介绍灯光相关的东西，最后呈现出和 Unity Diffuse Shader 一样的效果。
+什么是光照模型 光照模型，简单理解就是一种运算，或者说一个公式，计算的结果，决定了一个点受到光照时，所表现出来的效果。例如，光照在木板上，和照在一面镜子上，我们所看到的效果是不一样的，照在镜子上，很大一部分光会被镜子反射，而木板，却不会反射那么多光。
+进入摄相机的光线分类 在游戏中，我们可以将进入摄相机的光分为 高光反射、漫反射、自发光等。像上面说的镜子反射了大部分光，就是高光反射，现实中比较光滑的表面，受到光照时，都会产生这种效果，很亮。而光线照在木头上，就是漫反射，其实是木头先吸收了光，然后向周围散射出去，这个就不会很亮。而自发光，就是字面意思，自身是一个发光体。这里大概知道这些词是什么就可以，不必深究里面的原理。
+这一篇博客，接下来我们将在Shader中实现一下漫反射。实现漫反射，可以在顶点函数中，这叫做逐顶点光照。也可以在片元函数中实现，这叫做逐片元光照。在顶点函数中实现，也就是对每一个顶点都进行一次光照的计算，而在片元函数中也就是对每一像素执行光照计算，所以，在片元函数中实现相对来说要更耗费一点性能。
+在顶点函数中实现漫反射 漫反射的计算公式是 最终颜色=直射光颜色 * max(0, dot(光线，法线))，也就是使用 Directional Light 的颜色 乘 光线发射方向 与顶点法线方向的夹角，dot函数就是点乘，结果就是夹角。有一点要注意的是，dot中的 光线 和 法线 都是单位向量，也就是我们要对其进行标准化。max函数是取最大值，也就是说，如果dot计算出来的结果小于0，那就取0。
+看下面的代码，注意看注释，从上往下每一个注释都要看
+Shader &amp;#34;iMoeGirl/04-DiffuseVertex&amp;#34; { SubShader { Pass { // 要使用光照，首先要定义一下LightMode，这里我们使用ForwardBase， // 这里先不用管意思，只要照着写上就行 Tags { &amp;#34;LightMode&amp;#34; = &amp;#34;ForwardBase&amp;#34; } CGPROGRAM // 这里我们将 Unity 一些预定义的Shader代码包含进来， // 里面有我们需要的东西，场景中第一个Directional Light的信息（后面用来做计算） #include &amp;#34;Lighting.cginc&amp;#34; #pragma vertex vert #pragma fragment frag // 根据共识，要计算最终顶点的颜色，需要法线数据，所以这里将法线从Application传到顶点处理函数中 struct a2v { float4 vertex: POSITION; float3 normal: NORMAL; // NORMAL就是法线语义，之前的文章说过 }; struct v2f { float4 position: SV_POSITION; fixed3 color : COLOR; // 这个颜色就是在顶点函数中计算完的顶点的漫反射颜色，传到片元函数中 }; // 把光照的计算放在顶点函数中，所以叫做顶点光照 v2f vert(a2v v) { // 定义一个数据传送结构体（传送到片元函数中） v2f f; f.</description>
+    </item>
+    
+    <item>
+      <title>Unity UGUI RGB通道分离抖动</title>
+      <link>https://blog.moeif.com/posts/unity-ugui-tiktok-effect/</link>
+      <pubDate>Sun, 08 Mar 2020 22:18:03 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-ugui-tiktok-effect/</guid>
+      <description>&lt;p&gt;今天我们要在 UGUI 上实现图片RGB通道分离抖动效果，先看最终效果图&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 使用Struct传递数据</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-03/</link>
+      <pubDate>Sat, 07 Mar 2020 14:02:26 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-03/</guid>
+      <description>上一篇博客 说了在 CGPROGRAM 中写代码、顶点处理函数、片元处理函数、以及在两个函数之间传递简单的数据、从 ShaderLab 属性到CG数据类型之间的联系等。这一篇博将稍详细一点说一下 Shader 的基本知识，以及在顶点和片元函数之间传递更多的数据。
+Shader的基本理解 简单来说，Shader 决定了一个模型最终呈现在屏幕上的样子。一个模型由很多顶点构成，而每一个顶点，都会经过 Shader 中的顶点处理函数，这个过程，就是从应用将数据传递到顶点处理函数，顶点函数需要将顶点从模型空间转换到屏幕空间，或者说是裁剪空间，也可以简单理解为从 3 维空间转换到屏幕上的 2 维空间。在这个过程中，还可以做一些其他对顶点的操作。
+顶点数据经过顶点处理函数处理后，接下来就返回，然后传给片元处理函数，到了这一步，面对的，就是像素，也就是每一个像素的颜色值。在这里，可以根据自己的需求，对每一个像素做处理，例如做高斯模糊，RGB通道分离，等等，各种各样的效果。
+向 Shader 传递更多的数据 在之前的博客文章中，我们只是将顶点的坐标传给了Shader，但是我们还需要其他的数据，例如法线，例如切线，纹理坐标等等。接下来，我们将使用结构体来存储要传递的数据，看下面的代码
+Shader &amp;#34;iMoeGirl/03-Shader&amp;#34; { Properties { _MainColor(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) } SubShader { Pass { CGPROGRAM float4 _MainColor; #pragma vertex vert #pragma fragment frag // 这里定义一个结构体，封装需要从应用传到顶点函数的数据 struct a2v { float4 vertex : POSITION; // 顶点坐标 float3 normal : NORMAL; // 顶点法线 float4 textcoord : TEXCOORD0; // 第一套纹理坐标(可以有多套) }; // 这里定义另一个结构体，封装从顶点函数传到片元函数的数据 struct v2f { float4 position : SV_POSITION; float3 temp : COLOR0; }; // 顶点处理函数，传入的是a2v结构体，返回的是要传到片元函数的v2f结构体 v2f vert(a2v v){ v2f result; result.</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader |  属性、顶点与片元函数</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-02/</link>
+      <pubDate>Mon, 02 Mar 2020 22:46:56 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-02/</guid>
+      <description>上一篇博客 介绍了Shader的基本结构，这里我们继续来说Shader的编写，也就是要在 CGPROGRAM 中写代码。首先我们把之前的Shader结构代码复制过来。
+Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 // 这里定义一些属性，可以显示在UI面板上用于调节 Properties { // 属性名(&amp;#34;Inspector面板上显示出来的属性名&amp;#34;, 属性类型) = 默认值 _Color(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) _Vector(&amp;#34;向量类型&amp;#34;, Vector) = (1, 2, 3, 4) _Int(&amp;#34;整型&amp;#34;, Int) = 11111 _Float(&amp;#34;浮点型&amp;#34;, Float) = 12.11 _Range(&amp;#34;范围类型&amp;#34;, Range(100, 1000)) = 128 _Tex2D(&amp;#34;贴图类型&amp;#34;, 2D) = &amp;#34;white&amp;#34;{} _Cube(&amp;#34;立方体贴图类型&amp;#34;, Cube) = &amp;#34;white&amp;#34;{} _Tex3D(&amp;#34;3D纹理&amp;#34;, 3D) = &amp;#34;white&amp;#34;{} } // 子 Shader，可以写多个，显卡运行时， // 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个， // 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader SubShader { // 至少有一个Pass，相当于一个方法 Pass { // 在Pass块里写Shader代码 CGPROGRAM // 使用 CG语言编写Shader ENDCG } } // 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案 Fallback &amp;#34;VertexLit&amp;#34; } 怎样使用 Properties 中定义的属性 Unity3D定义Shader属性所使用的语法，和CG所使用的说法是不一样的，所以我们要在一个Pass中使用Properties中定义的属性，需要在Pass中再以CG的语法再写一遍，其实就是变量名相同，而数据类型不同，在Shader在编译的时候，就会自动将两个变量关联起来。看下面的代码</description>
+    </item>
+    
+    <item>
+      <title>Unity Shader | 基础</title>
+      <link>https://blog.moeif.com/posts/unity-shader-basis-01/</link>
+      <pubDate>Mon, 24 Feb 2020 22:14:04 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-shader-basis-01/</guid>
+      <description>MeshFilter 存储一个Mesh（网格，模型的网格，模型的三角面顶点信息）
+MeshRenderer 用于渲染一个物体的外观，数据来源于MeshFilter
+Material 材质包含两部分，贴图和Shader
+OpenGL DirectX 直接与显卡交互图形渲染库，可以理解为应用程序与显卡之间的桥梁，为应用程序提供一些渲染接口，用于渲染。
+Shader Shader可以理解为是一种渲染命令，由opengl或DX进行解析，用于控制图形的渲染。
+GLSL/HLSL/CG shader编程语言，GLSL面向OpenGL，HLSL面向DirectX，CG是Nvidia公司出的，跨平台的shader编程语言。
+ShaderLab 我们在Unitiy中写Shader用的语言是ShaderLab，可以理解为Unity为了方便使用者写Shader而创造的一种新的Shader语言，最后其实都会在底层被翻译成GLSL或HLSL或CG。
+Unity中的Shader分类 Shader的中文名叫做着色器
+ 表面着色器，Surface Shader 顶点/片元着色器，Vertex/Fragment Shader 固定功能着色器，Fixed function Shader (在现代硬件上基本已被弃用)  表面着色器可以理解为是对顶点/片元着色器的一种封装，它帮我们处理了很多渲染上比较麻烦的事情。而顶点/片元着色器就相对更灵活一些，也就是说很多东西要自己处理，相对来说要写的代码更多一些。进一步讲，使用顶点/片元着色器能实现的效果，使用表面着色器并不一定能实现，或者说，并不一定那么方便地实现。
+Unity Shader 结构 Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 Properties { // 这里定义一些属性，可以显示在UI面板上用于调节 } SubShader { // 子 Shader，可以写多个，显卡运行时， // 从第一个SubShader开始，如果第一个里面的效果都支持，则使用第一个， // 如果发现这个SubShader里面某些效果不支持，则自动运行下一个SubShader } // 如果发现所有的SubShader都不支持，则使用Fallback，相当于后备方案 Fallback &amp;#34;VertexLit&amp;#34; } Unity Shader 属性类型 Shader &amp;#34;iMoeGirl/MyShader&amp;#34; { // Shader 名字 // 这里定义一些属性，可以显示在UI面板上用于调节 Properties { // 属性名(&amp;#34;Inspector面板上显示出来的属性名&amp;#34;, 属性类型) = 默认值 _Color(&amp;#34;颜色类型&amp;#34;, Color) = (1,1,1,1) _Vector(&amp;#34;向量类型&amp;#34;, Vector) = (1, 2, 3, 4) _Int(&amp;#34;整型&amp;#34;, Int) = 11111 _Float(&amp;#34;浮点型&amp;#34;, Float) = 12.</description>
+    </item>
+    
+    <item>
+      <title>使用 Unity 实现漂亮的数学曲面(下)</title>
+      <link>https://blog.moeif.com/posts/unity-basis-03-math-curve2/</link>
+      <pubDate>Thu, 16 Jan 2020 15:51:00 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-03-math-curve2/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://imoegirl.com/2020/01/10/unity-basis-03-math-curve1/&#34;&gt;上一篇博客&lt;/a&gt;我们实现了一些简单的数学曲面，这一节我们将继续更复杂的数学曲面展示，所有资源完全承接上一篇内容。&lt;/p&gt;
+&lt;h2 id=&#34;25-创建一个涟漪效果&#34;&gt;2.5 创建一个涟漪效果&lt;/h2&gt;
+&lt;p&gt;先来看一下最终要实现的效果图&lt;/p&gt;
+&lt;p&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;&lt;/p&gt;
+&lt;p&gt;我们一步一步来实现这个效果。首先，要创建一个基于到原点距离正弦波。而这个距离，我们使用毕达哥拉斯定理也就是勾股定理 $a^2 + b^2 = c^2$ 。对于这个效果来说，我们是基于XZ坐标来求Y坐标的，所以也就是 $\sqrt{x^2 + z^2}$ 。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用 Unity 实现漂亮的数学曲面(上)</title>
+      <link>https://blog.moeif.com/posts/unity-basis-03-math-curve1/</link>
+      <pubDate>Fri, 10 Jan 2020 10:51:45 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-03-math-curve1/</guid>
+      <description>这篇博客是上一篇 使用Unity3D展示Sin函数动画 的续篇，在上一篇的基础上，来实现更复杂的效果。在文章最后会有完整的 C# 代码和 Shader 代码，先来看一下最终的效果图
+由于篇幅太长，所以将分为上下两部分，现在开始第一部分的内容。
+ 先将上一节 使用Unity3D展示Sin函数动画 的资源准备好，可以按下面的步骤手动建立，也可以直接导入上一节内容的完整 Unity 资源包，点这里下载
+ 使用Unity的Cube做成一个Prefab 新建一个 Shader，命名为 ColoredPoint，Shader 的代码为上一篇博客的 Shader 新建一个材质，命名为 ColoredPoint，并使用第2步中创建的Shader C# 逻辑代码，也使用上一篇博客中的完整代码，在本文中会有很多修改   接下来，我们开始新的内容。
+1 在不同的效果函数之间切换 在上一篇博客中我们实现了Sine函数的展示，现在要加入更多函数的展示，为了方便在运行状态可以随时切换到其他函数，我们需要把每一种类型的展示放在独立的函数中。
+1.1 将 Sine 函数的表示放在独立函数中 首先在 Graph 脚本中添加一个新的函数 float SineFunction(float x, float t) {}，这个函数将用于展示 $f(x,t) = sin(π(x + t))$。然后我们需要将函数体的内容填写进去，代码如下
+float SineFunction(float x, float t) { Mathf.Sin(Mathf.PI * (x + t)); } 然后把 Update 函数里的代码改为调用我们新添加的函数
+void Update () { for (int i = 0; i &amp;lt; points.</description>
+    </item>
+    
+    <item>
+      <title>使用Unity3D展示Sin函数动画</title>
+      <link>https://blog.moeif.com/posts/unity-sine-visualization/</link>
+      <pubDate>Mon, 06 Jan 2020 13:05:08 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-sine-visualization/</guid>
+      <description>&lt;p&gt;今天我们要实现的东西，就是下面这个动图的效果。使用代码控制方块的坐标，来展示 &lt;code&gt;Sin&lt;/code&gt; 函数。方块的颜色变化，是随着坐标变化而动态改变的，我们会写一个超简单的 &lt;code&gt;Shader&lt;/code&gt; 来实现。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>制作一个会动的时钟</title>
+      <link>https://blog.moeif.com/posts/unity-basis-01-clock/</link>
+      <pubDate>Mon, 06 Jan 2020 11:02:32 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-basis-01-clock/</guid>
+      <description>这是 Unity 基础系列教程的第一篇博客。我们将由浅入深，一步一步学习Unity及游戏开发相关的东西。整个系列教程所使用的Unity版本为 2018.4 及以上就可以，如果要使用特殊版本，则会在文中指出。
+今天要做的是一个能够实时显示当前时间的时钟，就是下面这个东东。
+1 首先建立一个新工程 首先打开Unity，创建一个新工程，名字自己定，例如 Clock 就可以。默认打开后，Unity 默认布局是下面图的样子。
+你也可以更新布局，例如换成同时显示View和Game视图的布局，只需要点击编辑器最右上角的那个按钮，然后选择 2 by 3 即可成为下面图的样子。
+下面是分辨率的设置，一般游戏开发中，会使用一个基准分辨率，很多游戏采用的是 16:9 的模式。这个在 Game 视图中设置，看下面的图，选择 16:9 即可
+1.1 创建一个 GameObject 默认的场景中，会包含两个 GameObject，一个是主相机 MainCamera， 一个是灯光 Directional Light。这两个东西保持默认就好，现在我们创建一个新的物体，在 Hierarchy 面板右键，然后 Create Empty，或者通过菜单栏 GameObject/Create Empty都可以，这样就会在Hierarchy 面板上看到我们新建的物体，然后对这个物体重命名为 Clock，并且把它的位置置为 (0,0,0)。看下面的图
+1.2 创建时钟的表盘 创建表盘，我们使用 Unity 默认的物体 Cylinder，然后改变它的大小，使其成为我们的表盘。首先，通过右键 Hierarchy 空白处，或者通过菜单栏 GameObject 中的 3D Object/Cylinder 选项，来创建一个 Cylinder，就是一个圆柱体。
+Cylinder 默认已经有了很多组件，Mesh Filter、Capsule Collider、MeshRenderer。默认我们不需要物理模拟方面的东西，所以我们先把 Capsule Collider 这个碰撞器给删掉，通过右键这个组件，Remove Component 即可。
+然后我们改变园柱体的大小，因为表盘是一个圆盘形状的东西，所以我们把圆柱体压平，也就是改变y轴的大小始可。把圆柱体 Scale 设置为 (10, 0.1, 10)，如下图。</description>
+    </item>
+    
+    <item>
+      <title>梦开始的地方</title>
+      <link>https://blog.moeif.com/posts/a-game-project-0-start/</link>
+      <pubDate>Sun, 08 Dec 2019 14:44:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/a-game-project-0-start/</guid>
+      <description>经历过很多项目，遇到和解决过很多问题，但是没有没有以文字的形式总结过。所以这个系列，我打算从客户端的视角，去总结一个游戏项目从开始到上线，整个过程中的一些事情，人员之间的配合，客户端一些重要模块的实现，开发过程中遇到的问题等等。
+一个项目的开始，可能始于某一个人的某一个微小的想法，经过一段时间的构思，然后到达公司层面，在经过很多人的会议讨论，市场调研，等等，觉得方案可行，然后就是立项，准备进入开发阶段。这个过程不是一两天完成的，可能经历了很长时间。这个阶段，也会大概预计项目周期，项目成本，什么时候上线，盈利情况预估等等。
+一旦确认了项目开发，策划方面会先行，进行项目的具体设计，开会讨论，确定方案等等。
+然后美术也会根据项目的方向，做一些可以看的东西，可能这些东西最终不会进到版本中，但是现阶段是需要的。
+至于程序呢？这个阶段可能就开始搭框架了，做一些与具体游戏逻辑没有太大关联的，框架层面的模块，例如资源管理啦，网络通信啦，等等。
+这个阶段可能会持续一段时间，然后就会逐渐进入更加规范和流程化的游戏逻辑开发。不同的程序写不同的游戏模块。
+在前期开发过程中，可能会有很多东西做出来了，然后效果不太好，就被砍掉了，或者整个设计变化很大，基本上等于这个模块推到重来，这都是很正常的情况。不管是美术，策划，和程序，都会有这种情况发生，不过随着游戏的开发进度，这种情况会越来越少。
+从开发到上线，游戏会经历很多测试版本，可能有公司内部测试版本，外部小规模测试版本，外部大规模测试版本，付费测试版本等等。每一次版本测试，都会得到很多信息，用于调整和改善游戏内容。经过几轮测试以及测试后的版本打磨，整个项目会越来越接近上线版本。
+当然，在一切顺利的情况下，游戏最终会提交上线。然后就是后期的运营，以及上线后的版本迭代，内容更新，Bug 修复等等。
+这大概就是一个游戏项目的完整生命周期。</description>
+    </item>
+    
+    <item>
+      <title>浅谈Unity3D音频可视化效果原理</title>
+      <link>https://blog.moeif.com/posts/unity-audio-visualization/</link>
+      <pubDate>Wed, 04 Dec 2019 16:08:42 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-audio-visualization/</guid>
+      <description>&lt;p&gt;在游戏开发中，你是否也想将音乐旋律变为漂亮的图形显示？就像这样的效果。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>怎样在Unity中Reload原生插件</title>
+      <link>https://blog.moeif.com/posts/reload-native-unity-plugins/</link>
+      <pubDate>Sun, 01 Dec 2019 01:05:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/reload-native-unity-plugins/</guid>
+      <description>这是一篇翻译文章，原文来自 how-to-reload-native-plugins-in-unity
+在Unity编辑器使用原生插件，Dll之类的，经常会遇到一个问题，替换插件时，Unity会提示正在使用，无法替换，这是因为Unity一旦点了Play，加载了Dll，就不会去卸载。
+要解决这个问题也很简单，那就是先关掉Unity，然后替换Dll，然后再打开Unity。对于插件的使用者，倒不是什么大问题，但是如果你是插件的开发者，需要频繁的修改和测试插件，那就有点悲惨了。
+这篇博客将介绍一个我认为不错的解决方案，有很多开发者已经实现了这个或者类似的解决方案，但是在Google或者Github上很难找到。
+TLDR 我写了一个200行的代码，在OnAwake时，会加载所有的Dll，在OnDestroy时会卸载所有的Dll，我们自己去管理Dll的加载和卸载，就可以做到停止Play时，卸载掉所有的Dll，这样就可以在不关闭Unity的情况下，替换Dll。
+要做到这个，就不能用 PInvoke 去调用，而是用类似的方式，达到相同的目的。
+完整的工程代码在 Github。但是我们只需要一个文件就可以 NativePluginLoader.cs
+如何使用:   将 NativePluginLoader.cs 放到你的工程中
+  在场景中新建一个GameObject，然后挂载 NativePluginLoader.cs
+  定义一个类，用于声明所有的插件方法，例如命名为 FooPlugin，然后给这个类赋予 PluginAttr 属性
+  给 delegate 添加 PluginFunctionAttr 属性，示例代码如下
+// C# 代码 [PluginAttr(&amp;#34;my_cool_plugin&amp;#34;)] public static class FooPlugin { [PluginFunctionAttr(&amp;#34;sum&amp;#34;)] public static Sum sum = null; public delegate float Sum(float a, float b); // 原生方法的 delegate } void CoolFunc() { float s = FooPlugin.sum(1.0, 2.</description>
+    </item>
+    
+    <item>
+      <title>浅谈在Unity3D中使用CriWare播放声音</title>
+      <link>https://blog.moeif.com/posts/unity-criware/</link>
+      <pubDate>Sat, 30 Nov 2019 19:17:25 +0800</pubDate>
+      
+      <guid>https://blog.moeif.com/posts/unity-criware/</guid>
+      <description>在游戏开发中的音频解决方案，CriWare 是不错的选择，很多游戏大作也在使用。为什么使用CriWare呢？对于游戏运行时，可以显著提高加载速度和减小包体大小。而对于音频制作上，可以很方便地做更多的效果，例如多音源的避让等。
+今天我们就来浅浅地聊一下在 Unity3D 中使用 CriWare 播放声音，以及声音的管理等问题。
+音频文件由做音频的同学使用CriWare的软件去制作，最终导出的文件是以acb或awb为扩展名的文件。如果采用的是Memory的形式，则导出的acb文件。
+对于开发来说，首先要知道两个东西，一个是CueSheet，一个是CueName。在音频制作的时候，多个音频可以打成一个组，每一个音频的名字，就是CueName，而这个组，就是CueSheet。我们要播放一个声音，首先要知道声音的名字，就是CueName，还要知道它所在的组，因为要加载到内存中。即使要播放组中的一个音频，也是要把整个组加载到内存中的。
+所以在制作时，音频那边的同学要规划好，哪些音频要在同一个组，哪些音频要在另外的组。当然，可以一个音频一个组，但是打成组可以做很多事情，这个等我请教一个音频那边的同学再补充。
+先将声音播放出来   首先把CriWare插件导入到Unity中
+  将做好的声音ACB文件放入StreamingAssets目录中
+  新建一个空物体，然后挂载CriAtom组件如下图
+CriAtom 用于管理CueSheet，只有将CueSheet加入到CriAtom中，才能播放其中的某一个音频。将CueSheet加入到CriAtom中，意味着这个CueSheet会被加载到内存中，移除CueSheet，则会从内存中卸载。
+上图中每点击 Add CueSheet，就可以填入一个新的CueSheet，Name字段就是ACB文件的名字(不带扩展名)，ACB File字段填写ACB文件名字(带扩展名)。例如上图中我已经填了一个示例。
+  新建一个空物体，然后挂载 CriAtomSource 组件。这个组件，可以理解为Unity的AudioSource，就是用来播声音的。
+上图中，CueSheet字段，填写要播放的音源，所在的CueSheet名(不带扩展名)，而CueName，就填写要播放的声音的名字。这些名字，都是做音频的同学定好的。勾选上 Play On Start，然后运行Unity，就可以听到声音。
+   上面只是实现了声音能够播出来，要在真正的项目中使用，还需要管理声音，下面将说一下大概的思路。
+ 声音管理器 基本思路是这样的，首先有一个声音管理器我们称为AudioManager，提供接口播放声音，停止声音，暂停声音，恢复声音，播放完毕，CueSheet加载卸载。外面模块调用AudioManager去控制声音。
+调用 AudioManager 播放声音的接口时，会生成一个新的对象, GameObject，挂载一个脚本，我们称为 AudioPlayer，这个 AudioPlayer 中会动态的挂载 CriAudioSource，然后将我们要播放的CueSheet，CueName这些值通过AudioManager传进去，设置 CriAudioSource 参数，然后调用 CriAudioSource的 Play 函数。
+当调用 AudioManager 的播放声音接口时，AudioManager 会动态记录这个 CueSheet 是否已经添加到 CriAtom 中，如果没有，则会添加，这时，CriAtom会去加载声音文件到内存中。
+AudioManager 在声音播放完，或者 GameObject 被销毁时，需要调用 AudioManager 的播放完毕接口，用于计数。这个计数，是为了让 AudioManager 知道一个CueSheet中，是否还有声音在播放，如果没有了，则要动态将 CueSheet 从 CriAtom 中移除掉，释放内存。</description>
+    </item>
+    
+  </channel>
+</rss>
